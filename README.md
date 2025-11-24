@@ -1,67 +1,44 @@
-# Proyecto-Intermodular
-💡 IDEA BASE: Gestor de reservas de profesionales técnicos
+# 🚗💨 MIDNIGHT CUSTOMS - Proyecto Final DAW
 
-Una plataforma web donde los usuarios puedan buscar, contactar y reservar técnicos (electricistas, fontaneros, informáticos, pintores, mecánicos, etc.) para servicios a domicilio.
+Bienvenido al repositorio de **Midnight Customs**. Este es nuestro Proyecto Intermodular de final de ciclo.
 
-🧩 FUNCIONALIDADES PRINCIPALES (requisitos funcionales básicos)
+## 🎯 ¿De qué va esto?
+Vamos a crear una aplicación web para un **taller de personalización de vehículos de alta gama**.
+No es el típico taller de "cambio de aceite". La idea es digitalizar el proceso de **tuning**, permitiendo a los clientes **visualizar cómo quedará su coche** antes de gastar dinero.
 
-Registro y login de usuarios
+**Inspiración:** Estética *Underground* / *GTA V Benny's Motor Works*, pero usando **piezas y coches reales**.
 
-Dos tipos de usuario:
-🔹 Cliente: persona que busca un técnico.
-🔹 Técnico: profesional que ofrece servicios.
+### 🌟 Funcionalidades Clave (MVP)
+1.  **Catálogo Visual:** Ver coches reales modificados.
+2.  **El Configurador (La Joya):** El usuario elige un coche, le cambia las llantas, el color y la suspensión, y ve el resultado al momento (Visualización 2D por capas).
+3.  **Gestión de Taller (Admin):** El mecánico recibe el pedido, ve qué piezas necesita y gestiona la cita.
 
-Perfil del técnico
+---
 
-Nombre, especialidad (electricidad, fontanería, carpintería…), zona de trabajo, precio por hora, valoraciones.
+## 🛠️ Tecnologías (Stack)
+Vamos a usar un stack moderno pero sencillo para no complicarnos:
 
-Buscador / Filtro de profesionales
+* **Frontend (La Cara):** React.js (con Vite) + Tailwind CSS (para el diseño Neón/Dark).
+* **Backend (El Cerebro):** Node.js + Express.
+* **Base de Datos:** MySQL (Para guardar usuarios, coches y pedidos).
+* **Imágenes:** Archivos locales o Cloudinary.
 
-Búsqueda por ubicación, tipo de servicio o disponibilidad.
+---
 
-Sistema de reservas
+## 📂 Estructura del Proyecto
+Para no liarnos, el proyecto tiene solo dos carpetas principales:
 
-El cliente elige técnico, fecha y hora → el técnico confirma o rechaza.
-
-Agenda o calendario de reservas.
-
-Sistema de valoraciones
-
-Los clientes pueden puntuar y dejar comentarios después del servicio.
-
-Mensajería interna o contacto
-
-Chat básico o formulario para coordinar detalles del trabajo.
-
-Panel de administración (opcional)
-
-Gestión de usuarios, servicios y estadísticas.
-
-🧠 POSIBLES MEJORAS / EXTRAS (para nota alta)
-
-Integrar geolocalización para ver técnicos cercanos.
-
-Añadir pasarela de pago simulada (por ejemplo, marcar trabajos como “pagados”).
-
-Panel con estadísticas de trabajos realizados o ingresos del técnico.
-
-Notificaciones por correo cuando una reserva se confirme o cancele.
-
-Opción de subir fotos del trabajo realizado.
-
-🛠️ TECNOLOGÍAS RECOMENDADAS
-
-Frontend: HTML, CSS, JavaScript, Bootstrap o Tailwind
-Backend: PHP (Laravel si lo controlas) o Node.js (Express)
-Base de datos: MySQL
-Control de versiones: GitHub
-Despliegue: Vercel / Render / Host local
-
-📚 ESTRUCTURA DE MÓDULOS INTEGRADOS (según PIDAW)
-Módulo DAW	Aplicación en el proyecto
-Desenvolupament web en entorn servidor	Gestión de reservas, autenticación, CRUD de técnicos
-Desenvolupament web en entorn client	Validaciones, búsqueda dinámica, filtros, interfaz
-Bases de dades	Tablas: usuarios, técnicos, servicios, reservas, valoraciones
-Disseny d’interfícies web	Mockups, UI intuitiva, responsive
-Desplegament d’aplicacions web	Subida a servidor / hosting
-Gestió de projectes	Uso de Trello o Notion, planificación ágil
+```text
+midnight-customs/
+├── backend/            # Todo lo del Servidor
+│   ├── server.js       # Archivo principal (Arranca la API)
+│   ├── database.js     # Conexión a MySQL
+│   ├── routes.js       # Las rutas (login, getCoches...)
+│   └── tablas.sql      # Copia de seguridad de la estructura de la BD
+│
+└── frontend/           # Todo lo de la Web (React)
+    ├── src/
+    │   ├── pages/      # Pantallas (Home, Login, Garaje, Admin)
+    │   ├── components/ # Piezas sueltas (Navbar, Botones)
+    │   └── assets/     # Las fotos de los coches y piezas (.png)
+    └── ...
