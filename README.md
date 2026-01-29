@@ -1,16 +1,16 @@
-MIDNIGHT CUSTOMS - Proyecto Final DAW
+## MIDNIGHT CUSTOMS - Proyecto Final DAW
 
 Bienvenido al repositorio de Midnight Customs. Este es nuestro Proyecto Intermodular de final de ciclo para el Grado Superior de Desarrollo de Aplicaciones Web (DAW).
 
-📑 Análisis de Estrategia: Midnight Customs
+ ## Análisis de Estrategia: Midnight Customs
 
 Realizar el proyecto mediante PHP nativo y Vanilla JS es una excelente forma de consolidar los conocimientos del ciclo. Esta estrategia nos otorga un control total del código sin depender de frameworks complejos, permitiendo una defensa técnica mucho más sólida y profunda.
 
-🏎️ Sobre el Proyecto
+ Sobre el Proyecto
 
 Vamos a crear una aplicación web para un taller de personalización de vehículos de alta gama. La idea es digitalizar el proceso de tuning, permitiendo a los clientes visualizar cómo quedará su coche antes de realizar cualquier inversión real.
 
-✨ Funcionalidades Clave
+## Funcionalidades Clave
 
 Catálogo Visual: Exposición de coches reales ya modificados por el taller para inspirar a los clientes.
 
@@ -18,7 +18,7 @@ El Configurador: El usuario elige un coche, le cambia las llantas, el color y la
 
 Gestión de Taller (Admin): El mecánico recibe el pedido, visualiza la configuración elegida por el cliente y gestiona la cita y el estado actual del vehículo.
 
-🛠️ Tecnologías (Stack)
+## Tecnologías (Stack)
 
 Hemos elegido un stack sólido, nativo y eficiente que garantiza el máximo rendimiento:
 
@@ -30,7 +30,7 @@ Base de Datos: MySQL para la persistencia de usuarios, catálogo de piezas, coch
 
 Servidor: Apache (entorno XAMPP en desarrollo).
 
-📂 Estructura del Proyecto
+## Estructura del Proyecto
 
 El proyecto está organizado de forma modular para facilitar el mantenimiento y la escalabilidad:
 
@@ -56,7 +56,7 @@ midnight-customs/
 └── admin_panel.php         # Gestión del taller para el administrador
 
 
-🚀 Instalación Local
+## Instalación Local
 
 Para poner en marcha el proyecto en tu entorno de desarrollo, sigue estos pasos:
 
