@@ -1,21 +1,19 @@
-# 🚗💨 MIDNIGHT CUSTOMS - Proyecto Final DAW
+# MIDNIGHT CUSTOMS - Proyecto Final DAW
 
 Bienvenido al repositorio de **Midnight Customs**. Este es nuestro Proyecto Intermodular de final de ciclo.
 
-## 🎯 ¿De qué va esto?
+## 
 Vamos a crear una aplicación web para un **taller de personalización de vehículos de alta gama**.
 No es el típico taller de "cambio de aceite". La idea es digitalizar el proceso de **tuning**, permitiendo a los clientes **visualizar cómo quedará su coche** antes de gastar dinero.
 
-**Inspiración:** Estética *Underground* / *GTA V Benny's Motor Works*, pero usando **piezas y coches reales**.
-
-### 🌟 Funcionalidades Clave (MVP)
+###  Funcionalidades Clave (MVP)
 1.  **Catálogo Visual:** Ver coches reales modificados.
 2.  **El Configurador (La Joya):** El usuario elige un coche, le cambia las llantas, el color y la suspensión, y ve el resultado al momento (Visualización 2D por capas).
 3.  **Gestión de Taller (Admin):** El mecánico recibe el pedido, ve qué piezas necesita y gestiona la cita.
 
 ---
 
-## 🛠️ Tecnologías (Stack)
+##  Tecnologías (Stack)
 Vamos a usar un stack moderno pero sencillo para no complicarnos:
 
 * **Frontend (La Cara):** React.js (con Vite) + Tailwind CSS (para el diseño Neón/Dark).
@@ -25,8 +23,8 @@ Vamos a usar un stack moderno pero sencillo para no complicarnos:
 
 ---
 
-## 📂 Estructura del Proyecto
-Para no liarnos, el proyecto tiene solo dos carpetas principales:
+##  Estructura del Proyecto
+El proyecto tiene solo dos carpetas principales:
 
 ```text
 midnight-customs/
