@@ -33,7 +33,7 @@ Servidor: Apache (entorno XAMPP en desarrollo).
 ## Estructura del Proyecto
 
 El proyecto está organizado de forma modular para facilitar el mantenimiento y la escalabilidad:
-
+\\
 midnight-customs/
 ├── assets/                 # Recursos estáticos
 │   ├── css/                # Estilos (style.css)
@@ -54,7 +54,7 @@ midnight-customs/
 ├── configurator.php        # Herramienta de personalización visual
 ├── garage.php              # Proyectos guardados por el usuario
 └── admin_panel.php         # Gestión del taller para el administrador
-
+\\
 
 ## Instalación Local
 
