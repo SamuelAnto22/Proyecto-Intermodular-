@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurador - Midnight Customs</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>MIDNIGHT CUSTOMS</h1>
+            </div>
+            <ul class="menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="configurador.html">Configurador</a></li>
+                <li><a href="garaje.html">Mi Garaje</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="configurador-page">
+        <h2>Configura tu Coche</h2>
+        
+        <div class="configurador-container">
+            <!-- Visualización del coche -->
+            <div class="vista-coche">
+                <canvas id="cocheCanvas" width="800" height="600"></canvas>
+            </div>
+
+            <!-- Panel de opciones -->
+            <div class="panel-opciones">
+                <h3>Personalización</h3>
+                
+                <div class="opcion-grupo">
+                    <label>Modelo:</label>
+                    <select id="modelo">
+                        <option value="bmw_m3">BMW M3</option>
+                        <option value="audi_rs6">Audi RS6</option>
+                        <option value="mercedes_amg">Mercedes AMG GT</option>
+                    </select>
+                </div>
+
+                <div class="opcion-grupo">
+                    <label>Color:</label>
+                    <select id="color">
+                        <option value="negro">Negro Midnight</option>
+                        <option value="blanco">Blanco Perlado</option>
+                        <option value="rojo">Rojo Racing</option>
+                        <option value="azul">Azul Metalizado</option>
+                    </select>
+                </div>
+
+                <div class="opcion-grupo">
+                    <label>Llantas:</label>
+                    <select id="llantas">
+                        <option value="sport_19">Sport 19"</option>
+                        <option value="racing_20">Racing 20"</option>
+                        <option value="custom_21">Custom 21"</option>
+                    </select>
+                </div>
+
+                <div class="opcion-grupo">
+                    <label>Suspensión:</label>
+                    <select id="suspension">
+                        <option value="deportiva">Deportiva (-30mm)</option>
+                        <option value="competicion">Competición (-50mm)</option>
+                        <option value="stock">Stock (Original)</option>
+                    </select>
+                </div>
+
+                <button class="btn-primary" id="guardarConfig">Guardar Configuración</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Midnight Customs - Proyecto Final DAW</p>
+    </footer>
+
+    <script src="assets/js/configurador.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - Midnight Customs</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>MIDNIGHT CUSTOMS - ADMIN</h1>
+            </div>
+            <ul class="menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="configurador.html">Configurador</a></li>
+                <li><a href="garaje.html">Mi Garaje</a></li>
+                <li><a href="admin.html">Admin</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="admin-container">
+        <h2>Gestión de Pedidos</h2>
+        
+        <table class="tabla-pedidos">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Modelo</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="pedidos-body">
+                <!-- Se cargarán dinámicamente -->
+                <tr>
+                    <td colspan="6">Cargando pedidos...</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Midnight Customs - Proyecto Final DAW</p>
+    </footer>
+
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>

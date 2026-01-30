@@ -1,74 +1,53 @@
 ## MIDNIGHT CUSTOMS - Proyecto Final DAW
 
-Bienvenido al repositorio de Midnight Customs. Este es nuestro Proyecto Intermodular de final de ciclo para el Grado Superior de Desarrollo de Aplicaciones Web (DAW).
+¡Hola! Este es el proyecto de Midnight Customs. Lo hemos hecho para el Proyecto Intermodular de final de ciclo de DAW (Desarrollo de Aplicaciones Web).
 
- ## Análisis de Estrategia: Midnight Customs
+La idea es sencilla: un sitio donde puedas "tunear" coches de alta gama de forma visual antes de gastarte la pasta de verdad.
 
-Realizar el proyecto mediante PHP nativo y Vanilla JS es una excelente forma de consolidar los conocimientos del ciclo. Esta estrategia nos otorga un control total del código sin depender de frameworks complejos, permitiendo una defensa técnica mucho más sólida y profunda.
+## ¿De qué va esto?
 
- Sobre el Proyecto
+Es una web para un taller de personalización de coches. Queremos que el cliente pueda ver cómo queda su coche cambiando cuatro cosas básicas:
+- **Catálogo**: Para ver lo que ya hemos hecho y pillar ideas.
+- **Configurador**: El plato fuerte. Eliges un coche, le cambias las llantas, el color y la altura, y lo ves en directo (usando fotos PNG con transparencias).
+- **Panel de Admin**: Para que el mecánico vea lo que ha pedido el cliente y no se vuelva loco.
 
-Vamos a crear una aplicación web para un taller de personalización de vehículos de alta gama. La idea es digitalizar el proceso de tuning, permitiendo a los clientes visualizar cómo quedará su coche antes de realizar cualquier inversión real.
+## Tecnologías que hemos usado
 
-## Funcionalidades Clave
+No nos hemos querido liar con frameworks raros, así que hemos ido a lo que sabemos:
+- **HTML, CSS y JavaScript (a pelo)**: Para que el configurador vaya rápido y se entienda bien el código.
+- **PHP**: Para guardar los usuarios y los coches en la base de datos.
+- **MySQL**: Donde guardamos todo el lío de los pedidos y configuraciones.
+- **XAMPP**: Para hacerlo rular en local.
 
-Catálogo Visual: Exposición de coches reales ya modificados por el taller para inspirar a los clientes.
+## Estructura de carpetas (cómo está organizado)
 
-El Configurador: El usuario elige un coche, le cambia las llantas, el color y la suspensión, viendo el resultado al momento mediante un sistema de visualización 2D por capas (PNG transparentes).
+Aquí te explico dónde está cada cosa por si te pierdes:
 
-Gestión de Taller (Admin): El mecánico recibe el pedido, visualiza la configuración elegida por el cliente y gestiona la cita y el estado actual del vehículo.
+- `/cliente`: Todo lo que se ve en el navegador (el diseño).
+  - `/assets`:
+    - `/css`: Los estilos de la web.
+    - `/js`: Los archivos de JavaScript (lógica del configurador, etc).
+    - `/img`: Las fotos de los coches, las llantas y demás.
+- `/servidor`: El "cerebro" de la web.
+  - `/api`: Los archivos PHP que conectan con la base de datos.
+  - `/includes`: Cosas que repetimos mucho, como la conexión a la base de datos.
+  - `/sql`: El archivo para crear las tablas de la base de datos.
 
-## Tecnologías (Stack)
+## Cómo hacerlo funcionar en tu PC
 
-Hemos elegido un stack sólido, nativo y eficiente que garantiza el máximo rendimiento:
+1. Instala **XAMPP**.
+2. Mete la carpeta del proyecto en `C:/xampp/htdocs/`.
+3. Abre **phpMyAdmin** y crea una base de datos que se llame `midnight_customs` (o lo que quieras).
+4. Importa el archivo que está en `servidor/sql/schema.sql`.
+5. Cambia los datos de conexión en `servidor/includes/db.php` si le has puesto contraseña al MySQL.
+6. Entra en `http://localhost/Proyecto-Intermodular-/cliente/index.html` y ¡listo!
 
-Frontend: HTML5, CSS3 y JavaScript Vanilla para toda la lógica interactiva del configurador.
+## Cosas que queremos mejorar (si nos da tiempo)
 
-Backend: PHP para la gestión de sesiones de usuario, seguridad y lógica de negocio en el servidor.
+- [ ] Meter más modelos de coches y más tipos de llantas.
+- [ ] Que se puedan descargar las fotos del coche tuneado.
+- [ ] Poner un sistema de login más seguro.
+- [ ] Que la web se vea bien en el móvil (ahora está pensada para PC).
 
-Base de Datos: MySQL para la persistencia de usuarios, catálogo de piezas, coches y proyectos guardados.
-
-Servidor: Apache (entorno XAMPP en desarrollo).
-
-## Estructura del Proyecto
-
-El proyecto está organizado de forma modular para facilitar el mantenimiento y la escalabilidad:
-\\
-midnight-customs/
-├── assets/                 # Recursos estáticos
-│   ├── css/                # Estilos (style.css)
-│   ├── js/                 # Lógica del configurador (main.js)
-│   └── img/                # Capas PNG de coches y piezas
-│
-├── includes/               # Trozos de código reutilizables (PHP)
-│   ├── db.php              # Conexión a la base de datos MySQL
-│   ├── auth.php            # Control de sesiones y seguridad
-│   ├── header.php          # Menú de navegación común
-│   └── footer.php          # Pie de página común
-│
-├── sql/                    # Base de Datos
-│   └── schema.sql          # Script de creación de tablas iniciales
-│
-├── index.php               # Pantalla principal (Landing Page)
-├── login.php               # Formulario de acceso de usuarios
-├── configurator.php        # Herramienta de personalización visual
-├── garage.php              # Proyectos guardados por el usuario
-└── admin_panel.php         # Gestión del taller para el administrador
-\\
-
-## Instalación Local
-
-Para poner en marcha el proyecto en tu entorno de desarrollo, sigue estos pasos:
-
-Clonar el repositorio dentro de la carpeta htdocs de vuestra instalación de XAMPP.
-
-Importar la base de datos: Accede a phpMyAdmin y carga el archivo situado en sql/schema.sql.
-
-Configurar la conexión: Ajusta las credenciales de acceso a la base de datos en el archivo includes/db.php si es necesario.
-
-Acceder a la web: Abre tu navegador y dirígete a http://localhost/midnight-customs.
-
-Desarrollado para el Proyecto Final de DAW.
-
-Acceder a http://localhost/midnight-customs.
+Hecho con ganas para el proyecto final de DAW.
 
