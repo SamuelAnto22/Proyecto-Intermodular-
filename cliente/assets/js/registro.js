@@ -42,7 +42,7 @@ function mostrarMensajes() {
  * Insertar un mensaje visual encima del formulario.
  */
 function mostrarAlerta(texto, tipo) {
-    const loginBox = document.querySelector('.login-box');
+    const loginBox = document.querySelector('.caja-auth');
     if (!loginBox) return;
 
     const existente = loginBox.querySelector('.alerta-msg');
