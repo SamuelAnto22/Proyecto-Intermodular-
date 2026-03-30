@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Configurador de vehículos de Midnight Customs. Personaliza tu coche y guarda tu configuración.">
+    <meta name="description"
+        content="Configurador de vehículos de Midnight Customs. Personaliza tu coche y guarda tu configuración.">
     <title>Configurador | Midnight Customs</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/animaciones.css">
     <style>
-        .configurador-page { padding: 2rem 5%; }
+        .configurador-page {
+            padding: 2rem 5%;
+        }
+
         .configurador-container {
             display: grid;
             grid-template-columns: 1fr 340px;
@@ -17,6 +22,7 @@
             max-width: 1300px;
             margin: 0 auto;
         }
+
         .vista-coche {
             background: var(--fondo-tarjeta);
             border: 1px solid var(--borde-tarjeta);
@@ -28,11 +34,13 @@
             justify-content: center;
             min-height: 500px;
         }
+
         canvas {
             width: 100%;
             height: auto;
             border-radius: 8px;
         }
+
         .panel-opciones {
             background: var(--fondo-tarjeta);
             border: 1px solid var(--borde-tarjeta);
@@ -42,6 +50,7 @@
             position: sticky;
             top: 100px;
         }
+
         .panel-opciones h3 {
             color: var(--color1);
             text-shadow: 0 0 10px var(--brillo1);
@@ -50,9 +59,11 @@
             font-size: 1.6rem;
             margin-bottom: 1.5rem;
         }
+
         .opcion-grupo {
             margin-bottom: 1.4rem;
         }
+
         .opcion-grupo label {
             display: block;
             color: var(--gris);
@@ -61,10 +72,11 @@
             text-transform: uppercase;
             margin-bottom: 0.4rem;
         }
+
         .opcion-grupo select {
             width: 100%;
             padding: 0.85rem 1rem;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--borde-tarjeta);
             border-radius: 8px;
             color: var(--blanco);
@@ -75,21 +87,28 @@
             cursor: pointer;
             box-sizing: border-box;
         }
+
         .opcion-grupo select:focus {
             border-color: var(--color1);
             box-shadow: 0 0 10px var(--brillo1);
         }
-        .opcion-grupo select option { background: #12121e; color: var(--blanco); }
+
+        .opcion-grupo select option {
+            background: #12121e;
+            color: var(--blanco);
+        }
+
         #guardarConfig {
             width: 100%;
             padding: 1rem;
             font-size: 1.1rem;
             margin-top: 1rem;
         }
+
         #mensajeGuardado {
             display: none;
-            background: rgba(82,226,82,0.12);
-            border: 1px solid rgba(82,226,82,0.3);
+            background: rgba(82, 226, 82, 0.12);
+            border: 1px solid rgba(82, 226, 82, 0.3);
             border-radius: 8px;
             padding: 0.75rem 1rem;
             color: #80ff80;
@@ -97,10 +116,11 @@
             margin-top: 1rem;
             text-align: center;
         }
+
         #mensajeError {
             display: none;
-            background: rgba(226,82,82,0.12);
-            border: 1px solid rgba(226,82,82,0.3);
+            background: rgba(226, 82, 82, 0.12);
+            border: 1px solid rgba(226, 82, 82, 0.3);
             border-radius: 8px;
             padding: 0.75rem 1rem;
             color: #ff8080;
@@ -108,18 +128,26 @@
             margin-top: 1rem;
             text-align: center;
         }
+
         @media (max-width: 900px) {
-            .configurador-container { grid-template-columns: 1fr; }
-            .panel-opciones { position: static; }
+            .configurador-container {
+                grid-template-columns: 1fr;
+            }
+
+            .panel-opciones {
+                position: static;
+            }
         }
     </style>
 </head>
+
 <body>
     <header class="cabecera-principal">
         <div class="logo">
             <a href="index.html">
                 <img src="assets/img/icon-Photoroom.png" alt="Logotipo de Midnight Customs">
-                <span style="color:var(--color1);margin-right:5px;">Midnight</span><span style="color:var(--color2);">Customs</span>
+                <span style="color:var(--color1);margin-right:5px;">Midnight</span><span
+                    style="color:var(--color2);">Customs</span>
             </a>
         </div>
         <button class="boton-menu" aria-label="Abrir menú">☰</button>
@@ -130,7 +158,8 @@
                 <li><a href="proyectos.html">Proyectos</a></li>
                 <li><a href="nosotros.html">Nosotros</a></li>
                 <li><a href="contacto.html">Contacto</a></li>
-                <li><a href="configurador.html" class="activo boton-neon" style="padding:8px 18px;font-size:0.95rem;">🔧 Configurador</a></li>
+                <li><a href="configurador.html" class="activo boton-neon" style="padding:8px 18px;font-size:0.95rem;">🔧
+                        Configurador</a></li>
                 <li><a href="garaje.html">Mi Garaje</a></li>
                 <li><a href="login.html">Login</a></li>
             </ul>
@@ -143,9 +172,36 @@
         </div>
 
         <div class="configurador-container">
-            <!-- Canvas de visualización -->
+            <!-- Visor de visualización -->
             <div class="vista-coche">
-                <canvas id="cocheCanvas" width="800" height="600"></canvas>
+                <div id="coche-visor"
+                    style="position: relative; width: 100%; max-width: 800px; height: 400px; display: flex; align-items: center; justify-content: center;">
+                    <br>
+                    <div id="contenedor-suspension"
+                        style="position: relative; width: 640px; height: 360px; transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);">
+                        <!-- La carrocería (z-index: 2). Se añade object-fit:contain y object-position:bottom para normalizar el recorte diferente entre el rojo y el azul -->
+                        <img id="capa-carroceria" src="assets/img/mini-rojo.png" alt="Mini Cooper Carrocería"
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom; z-index: 2; filter: drop-shadow(0 20px 20px rgba(0,0,0,0.8));">
+
+                        <!-- Añadimos object-fit: contain y forzamos proporciones cuadradas (width = height) para no deformar -->
+                        <img id="capa-rueda-delantera" src="assets/img/rueda-clasica.png" alt="Rueda Delantera"
+                            style="position: absolute; top: 62px; left: -79px; width: 445px; height: 304px; z-index: 3; object-fit: contain; border-radius: 50%;">
+                        <img id="capa-rueda-trasera" src="assets/img/rueda-clasica.png" alt="Rueda Trasera"
+                            style="position: absolute; top: 62px; left: 282px; width: 445px; height: 304px; z-index: 3; object-fit: contain; border-radius: 50%;">
+
+                    </div>
+                    <style>
+                        @keyframes rotarV {
+                            from {
+                                transform: rotate(0deg);
+                            }
+
+                            to {
+                                transform: rotate(360deg);
+                            }
+                        }
+                    </style>
+                </div>
             </div>
 
             <!-- Panel de opciones -->
@@ -155,29 +211,25 @@
                 <div class="opcion-grupo">
                     <label for="modelo">Modelo</label>
                     <select id="modelo">
-                        <option value="bmw_m3">BMW M3</option>
-                        <option value="audi_rs6">Audi RS6</option>
-                        <option value="mercedes_amg">Mercedes AMG GT</option>
+                        <option value="mini_cooper">Mini Cooper</option>
                     </select>
                 </div>
 
                 <div class="opcion-grupo">
                     <label for="color">Color</label>
                     <select id="color">
-                        <option value="negro">Negro Midnight</option>
-                        <option value="blanco">Blanco Perlado</option>
-                        <option value="rojo">Rojo Racing</option>
-                        <option value="azul">Azul Metalizado</option>
-                        <option value="morado">Morado Neon</option>
+                        <option value="rojo">Rojo (Default)</option>
+                        <option value="azul">Azul</option>
+                        <option value="verde">Verde</option>
                     </select>
                 </div>
 
                 <div class="opcion-grupo">
                     <label for="llantas">Llantas</label>
                     <select id="llantas">
-                        <option value="sport_19">Sport 19"</option>
-                        <option value="racing_20">Racing 20"</option>
-                        <option value="custom_21">Custom 21"</option>
+                        <option value="clasica">Clásica</option>
+                        <option value="deportiva">Deportiva</option>
+                        <option value="competicion">Competición</option>
                     </select>
                 </div>
 
@@ -192,7 +244,8 @@
 
                 <button class="boton-neon" id="guardarConfig">💾 Guardar Configuración</button>
                 <div id="mensajeGuardado">✅ ¡Configuración guardada!</div>
-                <div id="mensajeError">⚠ Debes iniciar sesión para guardar. <a href="login.html" style="color:var(--color2);">Ir al login</a></div>
+                <div id="mensajeError">⚠ Debes iniciar sesión para guardar. <a href="login.html"
+                        style="color:var(--color2);">Ir al login</a></div>
             </div>
         </div>
     </main>
@@ -201,4 +254,5 @@
     <script src="assets/js/main.js"></script>
     <script src="assets/js/configurador.js"></script>
 </body>
+
 </html>
