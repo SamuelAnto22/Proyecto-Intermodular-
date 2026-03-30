@@ -3,30 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configurador - Midnight Customs</title>
+    <meta name="description" content="Configurador de vehículos de Midnight Customs. Personaliza tu coche y guarda tu configuración.">
+    <title>Configurador | Midnight Customs</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/animaciones.css">
+    <style>
+        .configurador-page { padding: 2rem 5%; }
+        .configurador-container {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 2rem;
+            align-items: start;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .vista-coche {
+            background: var(--fondo-tarjeta);
+            border: 1px solid var(--borde-tarjeta);
+            border-radius: 12px;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 500px;
+        }
+        canvas {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .panel-opciones {
+            background: var(--fondo-tarjeta);
+            border: 1px solid var(--borde-tarjeta);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 100px;
+        }
+        .panel-opciones h3 {
+            color: var(--color1);
+            text-shadow: 0 0 10px var(--brillo1);
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 3px;
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+        }
+        .opcion-grupo {
+            margin-bottom: 1.4rem;
+        }
+        .opcion-grupo label {
+            display: block;
+            color: var(--gris);
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+        .opcion-grupo select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--borde-tarjeta);
+            border-radius: 8px;
+            color: var(--blanco);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+        .opcion-grupo select:focus {
+            border-color: var(--color1);
+            box-shadow: 0 0 10px var(--brillo1);
+        }
+        .opcion-grupo select option { background: #12121e; color: var(--blanco); }
+        #guardarConfig {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+        #mensajeGuardado {
+            display: none;
+            background: rgba(82,226,82,0.12);
+            border: 1px solid rgba(82,226,82,0.3);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: #80ff80;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        #mensajeError {
+            display: none;
+            background: rgba(226,82,82,0.12);
+            border: 1px solid rgba(226,82,82,0.3);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: #ff8080;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        @media (max-width: 900px) {
+            .configurador-container { grid-template-columns: 1fr; }
+            .panel-opciones { position: static; }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">
-                <h1>MIDNIGHT CUSTOMS</h1>
-            </div>
-            <ul class="menu">
+    <header class="cabecera-principal">
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/img/icon-Photoroom.png" alt="Logotipo de Midnight Customs">
+                <span style="color:var(--color1);margin-right:5px;">Midnight</span><span style="color:var(--color2);">Customs</span>
+            </a>
+        </div>
+        <button class="boton-menu" aria-label="Abrir menú">☰</button>
+        <nav class="navegacion-principal" id="navegacion-principal">
+            <ul>
                 <li><a href="index.html">Inicio</a></li>
-                <li><a href="configurador.html">Configurador</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="proyectos.html">Proyectos</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="configurador.html" class="activo boton-neon" style="padding:8px 18px;font-size:0.95rem;">🔧 Configurador</a></li>
                 <li><a href="garaje.html">Mi Garaje</a></li>
-                <li><a href="admin.html">Admin</a></li>
                 <li><a href="login.html">Login</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="configurador-page">
-        <h2>Configura tu Coche</h2>
-        
+        <div class="titulo-seccion" style="margin-bottom:2rem;">
+            <h1 id="titulo-configurador">Configura tu Coche</h1>
+        </div>
+
         <div class="configurador-container">
-            <!-- Visualización del coche -->
+            <!-- Canvas de visualización -->
             <div class="vista-coche">
                 <canvas id="cocheCanvas" width="800" height="600"></canvas>
             </div>
@@ -34,9 +151,9 @@
             <!-- Panel de opciones -->
             <div class="panel-opciones">
                 <h3>Personalización</h3>
-                
+
                 <div class="opcion-grupo">
-                    <label>Modelo:</label>
+                    <label for="modelo">Modelo</label>
                     <select id="modelo">
                         <option value="bmw_m3">BMW M3</option>
                         <option value="audi_rs6">Audi RS6</option>
@@ -45,17 +162,18 @@
                 </div>
 
                 <div class="opcion-grupo">
-                    <label>Color:</label>
+                    <label for="color">Color</label>
                     <select id="color">
                         <option value="negro">Negro Midnight</option>
                         <option value="blanco">Blanco Perlado</option>
                         <option value="rojo">Rojo Racing</option>
                         <option value="azul">Azul Metalizado</option>
+                        <option value="morado">Morado Neon</option>
                     </select>
                 </div>
 
                 <div class="opcion-grupo">
-                    <label>Llantas:</label>
+                    <label for="llantas">Llantas</label>
                     <select id="llantas">
                         <option value="sport_19">Sport 19"</option>
                         <option value="racing_20">Racing 20"</option>
@@ -64,7 +182,7 @@
                 </div>
 
                 <div class="opcion-grupo">
-                    <label>Suspensión:</label>
+                    <label for="suspension">Suspensión</label>
                     <select id="suspension">
                         <option value="deportiva">Deportiva (-30mm)</option>
                         <option value="competicion">Competición (-50mm)</option>
@@ -72,15 +190,15 @@
                     </select>
                 </div>
 
-                <button class="btn-primary" id="guardarConfig">Guardar Configuración</button>
+                <button class="boton-neon" id="guardarConfig">💾 Guardar Configuración</button>
+                <div id="mensajeGuardado">✅ ¡Configuración guardada!</div>
+                <div id="mensajeError">⚠ Debes iniciar sesión para guardar. <a href="login.html" style="color:var(--color2);">Ir al login</a></div>
             </div>
         </div>
     </main>
 
-    <footer>
-        <p>&copy; 2025 Midnight Customs - Proyecto Final DAW</p>
-    </footer>
-
+    <script src="assets/js/pie-pagina.js"></script>
+    <script src="assets/js/main.js"></script>
     <script src="assets/js/configurador.js"></script>
 </body>
 </html>

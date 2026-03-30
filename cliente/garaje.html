@@ -3,38 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Garaje - Midnight Customs</title>
+    <meta name="description" content="Mi Garaje — tus proyectos de coches guardados en Midnight Customs.">
+    <title>Mi Garaje | Midnight Customs</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/animaciones.css">
+    <style>
+        .garaje-container { padding: 2rem 5%; max-width: 1200px; margin: 0 auto; }
+        .garaje-container h2 {
+            font-size: 2.5rem;
+            color: var(--color1);
+            text-shadow: 0 0 10px var(--brillo1);
+            margin-bottom: 2rem;
+        }
+        .grid-proyectos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .tarjeta-garaje {
+            background: var(--fondo-tarjeta);
+            border: 1px solid var(--borde-tarjeta);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .tarjeta-garaje:hover {
+            transform: translateY(-4px);
+            border-color: var(--color1);
+        }
+        .tarjeta-garaje h3 {
+            color: var(--color2);
+            margin-bottom: 0.8rem;
+        }
+        .tarjeta-garaje p {
+            color: var(--gris);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .tarjeta-garaje .fecha {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.3);
+            margin-top: 1rem;
+        }
+        .btn-garaje-accion {
+            display: inline-block;
+            margin-top: 1rem;
+            margin-right: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            border: 1px solid var(--borde-tarjeta);
+            border-radius: 6px;
+            color: var(--blanco);
+            background: transparent;
+            cursor: pointer;
+            text-decoration: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .btn-garaje-accion:hover {
+            border-color: var(--color1);
+            background: rgba(192,82,226,0.15);
+        }
+        .btn-eliminar:hover { border-color: #ff5555; background: rgba(255,85,85,0.1); }
+        #mensajeVacio { color: var(--gris); font-size: 1rem; }
+        #mensajeVacio a { color: var(--color2); }
+    </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">
-                <h1>MIDNIGHT CUSTOMS</h1>
-            </div>
-            <ul class="menu">
+    <header class="cabecera-principal">
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/img/icon-Photoroom.png" alt="Logotipo de Midnight Customs">
+                <span style="color:var(--color1);margin-right:5px;">Midnight</span><span style="color:var(--color2);">Customs</span>
+            </a>
+        </div>
+        <button class="boton-menu" aria-label="Abrir menú">☰</button>
+        <nav class="navegacion-principal" id="navegacion-principal">
+            <ul>
                 <li><a href="index.html">Inicio</a></li>
-                <li><a href="configurador.html">Configurador</a></li>
-                <li><a href="garaje.html">Mi Garaje</a></li>
-                <li><a href="admin.html">Admin</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="proyectos.html">Proyectos</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="configurador.html" class="boton-neon" style="padding:8px 18px;font-size:0.95rem;">🔧 Configurador</a></li>
+                <li><a href="garaje.html" class="activo">Mi Garaje</a></li>
                 <li><a href="login.html">Login</a></li>
             </ul>
         </nav>
     </header>
 
-    <main class="garaje-container">
-        <h2>Mis Proyectos Guardados</h2>
-        
-        <div id="proyectos-lista" class="grid-proyectos">
-            <!-- Se cargarán dinámicamente los proyectos guardados -->
-            <p>No tienes proyectos guardados todavía. <a href="configurador.html">Crea uno aquí</a></p>
+    <main style="padding-top:100px;">
+        <div class="garaje-container">
+            <div class="titulo-seccion">
+                <h2 id="titulo-garaje">Mis Proyectos Guardados</h2>
+            </div>
+            <div id="proyectos-lista" class="grid-proyectos">
+                <p id="mensajeVacio">No tienes proyectos guardados todavía. <a href="configurador.html">Crea uno aquí</a></p>
+            </div>
         </div>
     </main>
 
-    <footer>
-        <p>&copy; 2025 Midnight Customs - Proyecto Final DAW</p>
-    </footer>
-
+    <script src="assets/js/pie-pagina.js"></script>
+    <script src="assets/js/main.js"></script>
     <script src="assets/js/garaje.js"></script>
 </body>
 </html>

@@ -3,55 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Midnight Customs - Inicio</title>
+    <meta name="description" content="Midnight Customs — Taller especializado en personalización de vehículos. Vinilado, potenciación, llantas, body kits e iluminación LED.">
+    <title>Midnight Customs | Inicio</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/animaciones.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">
-                <h1>MIDNIGHT CUSTOMS</h1>
-            </div>
-            <ul class="menu">
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="configurador.html">Configurador</a></li>
-                <li><a href="garaje.html">Mi Garaje</a></li>
-                <li><a href="admin.html">Admin</a></li>
+    <a href="#contenido-principal" class="saltar-enlace" style="position:absolute;top:-40px;left:0;background:#000;color:#fff;padding:8px;z-index:2000;">Saltar al contenido</a>
+
+    <header class="cabecera-principal">
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/img/icon-Photoroom.png" alt="Logotipo de Midnight Customs">
+                <span style="color:var(--color1);margin-right:5px;">Midnight</span><span style="color:var(--color2);">Customs</span>
+            </a>
+        </div>
+        <button class="boton-menu" aria-label="Abrir menú" aria-expanded="false">☰</button>
+        <nav class="navegacion-principal" id="navegacion-principal" aria-label="Navegación principal">
+            <ul>
+                <li><a href="index.html" class="activo">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="proyectos.html">Proyectos</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="configurador.html" class="boton-neon" style="padding:8px 18px;font-size:0.95rem;">🔧 Configurador</a></li>
                 <li><a href="login.html">Login</a></li>
             </ul>
         </nav>
     </header>
 
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h2>Personaliza tu coche de alta gama</h2>
-                <p>Visualiza tu proyecto antes de invertir un solo euro</p>
-                <a href="configurador.html" class="btn-primary">Empezar a Configurar</a>
+    <main id="contenido-principal">
+        <section class="portada">
+            <div class="contenedor-carga" id="loader">
+                <div class="girador-neon"></div>
+                <p>CARGANDO SISTEMAS...</p>
+            </div>
+            <div class="contenido-portada">
+                <div class="contenedor-logo">
+                    <h1 class="visualmente-oculto" id="titulo-portada">Midnight Customs</h1>
+                    <img src="assets/img/icon-Photoroom.png" class="logo-principal" alt="Logotipo gigante de Midnight Customs">
+                </div>
+                <p class="lema-portada">
+                    <span class="lema-linea">No creamos sueños.</span>
+                    <span class="lema-linea lema-destaque">Los cumplimos.</span>
+                </p>
+                <a href="servicios.html" class="boton-neon lema-cta">Descubre cómo</a>
             </div>
         </section>
 
-        <section class="galeria">
-            <h3>Nuestros Proyectos Recientes</h3>
-            <div class="grid-coches">
-                <div class="coche-card">
-                    <img src="assets/img/coches/coche1.png" alt="Proyecto 1">
-                    <p>BMW M3 - Midnight Edition</p>
-                </div>
-                <div class="coche-card">
-                    <img src="assets/img/coches/coche2.png" alt="Proyecto 2">
-                    <p>Audi RS6 - Black Shadow</p>
-                </div>
-                <div class="coche-card">
-                    <img src="assets/img/coches/coche3.png" alt="Proyecto 3">
-                    <p>Mercedes AMG GT - Custom</p>
-                </div>
+        <section class="servicios-inicio">
+            <div class="titulo-seccion">
+                <h2 id="titulo-servicios-inicio">Nuestros Servicios</h2>
             </div>
+            <div class="cuadricula cuadricula-fila">
+                <a href="servicios.html#vinilado" class="tarjeta-cristal tarjeta-servicio-inicio">
+                    <img src="https://www.areagraficadigital.es/images/galeria/o_1i1nc183j15sh32nhtk1bstboi1b.jpg" alt="Vinilado y pintura">
+                    <h3>Vinilado y pintura</h3>
+                    <p>Vinilos premium: mate, satinado, iridiscente o cromo.</p>
+                    <span class="tarjeta-enlace">Descubre más <span class="tarjeta-flecha">→</span></span>
+                </a>
+                <a href="servicios.html#motor" class="tarjeta-cristal tarjeta-servicio-inicio">
+                    <img src="https://cdn-s3.clubcorsavenezuela.com/original/2X/2/27e2b4d98a789cc7977b870dec0270fba0228314.jpeg" alt="Potenciación Motor">
+                    <h3>Potenciación Motor</h3>
+                    <p>Reprogramación ECU, escapes custom y turbinas híbridas.</p>
+                    <span class="tarjeta-enlace">Descubre más <span class="tarjeta-flecha">→</span></span>
+                </a>
+                <a href="servicios.html#llantas" class="tarjeta-cristal tarjeta-servicio-inicio">
+                    <img src="https://i.pinimg.com/736x/15/1a/81/151a819607a890b1aaa6b0c41cce7d92.jpg" alt="Llantas personalizadas">
+                    <h3>Llantas personalizadas</h3>
+                    <p>Airride, llantas forjadas y geometría a medida.</p>
+                    <span class="tarjeta-enlace">Descubre más <span class="tarjeta-flecha">→</span></span>
+                </a>
+                <a href="servicios.html#bodykits" class="tarjeta-cristal tarjeta-servicio-inicio">
+                    <img src="https://img.interempresas.net/fotos/2086977.jpeg" alt="Body Kits">
+                    <h3>Body Kits</h3>
+                    <p>Widebody, splitters, difusores y alerones GTR.</p>
+                    <span class="tarjeta-enlace">Descubre más <span class="tarjeta-flecha">→</span></span>
+                </a>
+                <a href="servicios.html#iluminacion" class="tarjeta-cristal tarjeta-servicio-inicio">
+                    <img src="https://img.freepik.com/fotos-premium/faro-coche-vista-macro-espacio-copia-lampara-led-o-xenon-primer-plano-ilustracion-3d-coche-moderno-prestigioso_161844-1189.jpg" alt="Iluminación LED">
+                    <h3>Iluminación LED</h3>
+                    <p>Underglow, ambient lighting y faros personalizados.</p>
+                    <span class="tarjeta-enlace">Descubre más <span class="tarjeta-flecha">→</span></span>
+                </a>
+            </div>
+        </section>
+
+        <section style="text-align:center; padding: 4rem 5%;">
+            <div class="titulo-seccion">
+                <h2 id="titulo-cta-config">¿Listo para configurar tu coche?</h2>
+            </div>
+            <p style="max-width:600px;margin:0 auto 2rem;">Usa nuestro configurador interactivo para visualizar las modificaciones de tu vehículo antes de solicitarlas.</p>
+            <a href="registro.html" class="boton-neon">Crear cuenta gratis</a>
+            <a href="configurador.html" class="boton-neon boton-secundario" style="margin-left:1rem;">Probar configurador</a>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2025 Midnight Customs - Proyecto Final DAW</p>
-    </footer>
+    <script src="assets/js/pie-pagina.js"></script>
+    <script src="assets/js/main.js"></script>
 </body>
 </html>
