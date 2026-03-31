@@ -1,7 +1,7 @@
 <?php
 // ============================================================
-// API: Guardar Configuración del Coche
-// POST   — guardar nueva configuración (JSON)
+// API: Gestión de Configuraciones del Coche
+// POST   — crear / actualizar / solicitar (según campo "accion")
 // GET    — obtener configuraciones del usuario logueado
 // DELETE — borrar una configuración por ID
 // ============================================================
@@ -12,12 +12,77 @@ require_once __DIR__ . '/../includes/db.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-// ─── POST: Guardar nueva configuración ───────────────────────
+// ─── POST: Crear, Actualizar o Solicitar ─────────────────────
 if ($method === 'POST') {
     requireLogin();
 
     $input = json_decode(file_get_contents('php://input'), true);
+    $accion = $input['accion'] ?? 'crear';
+    $userId = getUserId();
 
+    // ── Acción: SOLICITAR (cambiar estado del pedido) ────────
+    if ($accion === 'solicitar') {
+        $configId    = (int) ($input['configuracion_id'] ?? 0);
+        $nuevoEstado = trim($input['estado'] ?? '');
+
+        $estadosPermitidos = ['solicitado', 'pendiente'];
+
+        if ($configId <= 0 || !in_array($nuevoEstado, $estadosPermitidos, true)) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'message' => 'Datos no válidos.']);
+            exit;
+        }
+
+        $stmt = $pdo->prepare(
+            'UPDATE pedidos SET estado = ? WHERE configuracion_id = ? AND usuario_id = ?'
+        );
+        $stmt->execute([$nuevoEstado, $configId, $userId]);
+
+        if ($stmt->rowCount() === 0) {
+            http_response_code(404);
+            echo json_encode(['ok' => false, 'message' => 'Pedido no encontrado.']);
+            exit;
+        }
+
+        echo json_encode(['ok' => true, 'estado' => $nuevoEstado, 'message' => 'Estado actualizado.']);
+        exit;
+    }
+
+    // ── Acción: ACTUALIZAR (editar config existente) ─────────
+    if ($accion === 'actualizar') {
+        $id         = (int) ($input['id'] ?? 0);
+        $modelo     = trim($input['modelo']     ?? '');
+        $color      = trim($input['color']      ?? '');
+        $llantas    = trim($input['llantas']     ?? '');
+        $suspension = trim($input['suspension']  ?? '');
+
+        if ($id <= 0 || $modelo === '' || $color === '' || $llantas === '' || $suspension === '') {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Faltan campos obligatorios.']);
+            exit;
+        }
+
+        $stmt = $pdo->prepare(
+            'UPDATE configuraciones SET modelo = ?, color = ?, llantas = ?, suspension = ?
+             WHERE id = ? AND usuario_id = ?'
+        );
+        $stmt->execute([$modelo, $color, $llantas, $suspension, $id, $userId]);
+
+        if ($stmt->rowCount() === 0) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'Configuración no encontrada.']);
+            exit;
+        }
+
+        // Resetear estado del pedido a "pendiente" porque la config cambió
+        $stmt2 = $pdo->prepare('UPDATE pedidos SET estado = ? WHERE configuracion_id = ? AND usuario_id = ?');
+        $stmt2->execute(['pendiente', $id, $userId]);
+
+        echo json_encode(['success' => true, 'id' => $id, 'message' => 'Configuración actualizada.']);
+        exit;
+    }
+
+    // ── Acción: CREAR (nueva configuración — por defecto) ────
     $modelo     = trim($input['modelo']     ?? '');
     $color      = trim($input['color']      ?? '');
     $llantas    = trim($input['llantas']     ?? '');
@@ -28,8 +93,6 @@ if ($method === 'POST') {
         echo json_encode(['success' => false, 'message' => 'Faltan campos obligatorios.']);
         exit;
     }
-
-    $userId = getUserId();
 
     // Insertar configuración
     $stmt = $pdo->prepare(
@@ -84,7 +147,6 @@ if ($method === 'DELETE') {
 
     $userId = getUserId();
 
-    // Solo puede borrar sus propias configuraciones (o admin borra cualquiera)
     if (esAdmin()) {
         $stmt = $pdo->prepare('DELETE FROM configuraciones WHERE id = ?');
         $stmt->execute([$id]);

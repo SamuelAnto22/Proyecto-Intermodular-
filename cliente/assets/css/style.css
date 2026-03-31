@@ -119,6 +119,31 @@ p {
     box-shadow: 0 0 10px var(--brillo2);
 }
 
+/* Enlace de perfil en nav */
+#nav-perfil-link {
+    color: var(--color1) !important;
+    text-shadow: 0 0 8px var(--brillo1);
+}
+
+/* Botón cerrar sesión en nav */
+.nav-logout {
+    color: var(--blanco) !important;
+    border: 1px solid rgba(255,85,85,0.4);
+    border-radius: 6px;
+    padding: 4px 12px !important;
+    font-size: 0.9rem !important;
+    transition: border-color 0.3s, background 0.3s, color 0.3s !important;
+}
+
+.nav-logout:hover {
+    border-color: #ff5555 !important;
+    background: rgba(255,85,85,0.15) !important;
+    color: #ff7777 !important;
+}
+
+.nav-logout::after { display: none !important; }
+
+
 /* BOTONES */
 .boton-neon {
     display: inline-block;
@@ -159,6 +184,28 @@ p {
 .boton-secundario::before {
     background: var(--color2);
 }
+
+/* Variante compacta para el botón del nav */
+.boton-neon-nav {
+    padding: 5px 14px !important;
+    font-size: 0.82rem !important;
+    letter-spacing: 1px;
+    border-width: 1px;
+    box-shadow: 0 0 8px var(--brillo1);
+}
+
+/* Cuando el boton-neon-nav está activo, no expandir ni aplicar underline */
+.boton-neon-nav.activo {
+    padding: 5px 14px !important;
+    font-size: 0.82rem !important;
+    color: var(--blanco) !important;
+}
+
+.boton-neon-nav::after,
+.boton-neon-nav.activo::after {
+    display: none !important;
+}
+
 
 /* LAYOUT */
 main {

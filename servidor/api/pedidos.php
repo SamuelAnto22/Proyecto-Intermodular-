@@ -1,9 +1,9 @@
 <?php
 // ============================================================
 // API: Gestión de Pedidos (Admin)
-// GET    — listar todos los pedidos
-// PUT    — actualizar estado de un pedido
-// DELETE — eliminar un pedido
+// GET  — listar todos los pedidos
+// POST — actualizar estado de un pedido (accion: 'cambiar_estado')
+//        eliminar un pedido (accion: 'eliminar')
 // ============================================================
 
 require_once __DIR__ . '/../includes/header.php';
@@ -12,13 +12,15 @@ require_once __DIR__ . '/../includes/db.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-// ─── GET: Listar todos los pedidos ───────────────────────────
+// ─── GET: Listar todos los pedidos + estadísticas ────────────
 if ($method === 'GET') {
     requireAdmin();
 
+    // Pedidos con detalle
     $stmt = $pdo->query(
         'SELECT p.id,
                 u.nombre AS cliente,
+                u.email  AS cliente_email,
                 c.modelo,
                 c.color,
                 c.llantas,
@@ -32,50 +34,75 @@ if ($method === 'GET') {
     );
     $pedidos = $stmt->fetchAll();
 
-    echo json_encode(['ok' => true, 'data' => $pedidos]);
+    // Estadísticas
+    $totalClientes = $pdo->query("SELECT COUNT(*) FROM usuarios WHERE rol = 'cliente'")->fetchColumn();
+    $totalPedidos  = $pdo->query("SELECT COUNT(*) FROM pedidos")->fetchColumn();
+    $pendientes    = $pdo->query("SELECT COUNT(*) FROM pedidos WHERE estado = 'pendiente'")->fetchColumn();
+    $solicitados   = $pdo->query("SELECT COUNT(*) FROM pedidos WHERE estado = 'solicitado'")->fetchColumn();
+    $enProceso     = $pdo->query("SELECT COUNT(*) FROM pedidos WHERE estado = 'en proceso'")->fetchColumn();
+    $terminados    = $pdo->query("SELECT COUNT(*) FROM pedidos WHERE estado = 'terminado'")->fetchColumn();
+
+    echo json_encode([
+        'ok'   => true,
+        'data' => $pedidos,
+        'stats' => [
+            'total_clientes' => (int)$totalClientes,
+            'total_pedidos'  => (int)$totalPedidos,
+            'pendientes'     => (int)$pendientes,
+            'solicitados'    => (int)$solicitados,
+            'en_proceso'     => (int)$enProceso,
+            'terminados'     => (int)$terminados
+        ]
+    ]);
     exit;
 }
 
-// ─── PUT: Actualizar estado de un pedido ─────────────────────
-if ($method === 'PUT') {
+// ─── POST: Cambiar estado o eliminar pedido ──────────────────
+if ($method === 'POST') {
     requireAdmin();
 
     $input  = json_decode(file_get_contents('php://input'), true);
-    $id     = (int) ($input['id']     ?? 0);
-    $estado = trim($input['estado']   ?? '');
+    $accion = $input['accion'] ?? '';
 
-    $estadosValidos = ['pendiente', 'en proceso', 'terminado'];
+    // ── Cambiar estado ───────────────────────────────────────
+    if ($accion === 'cambiar_estado') {
+        $id     = (int) ($input['id']     ?? 0);
+        $estado = trim($input['estado']   ?? '');
 
-    if ($id <= 0 || !in_array($estado, $estadosValidos, true)) {
-        http_response_code(400);
-        echo json_encode(['ok' => false, 'message' => 'Datos no válidos. Estados: pendiente, en proceso, terminado.']);
+        $estadosValidos = ['pendiente', 'solicitado', 'en proceso', 'terminado'];
+
+        if ($id <= 0 || !in_array($estado, $estadosValidos, true)) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'message' => 'Datos no válidos.']);
+            exit;
+        }
+
+        $stmt = $pdo->prepare('UPDATE pedidos SET estado = ? WHERE id = ?');
+        $stmt->execute([$estado, $id]);
+
+        echo json_encode(['ok' => true, 'message' => 'Estado actualizado a: ' . $estado]);
         exit;
     }
 
-    $stmt = $pdo->prepare('UPDATE pedidos SET estado = ? WHERE id = ?');
-    $stmt->execute([$estado, $id]);
+    // ── Eliminar pedido ──────────────────────────────────────
+    if ($accion === 'eliminar') {
+        $id = (int) ($input['id'] ?? 0);
 
-    echo json_encode(['ok' => true, 'message' => 'Estado actualizado.']);
-    exit;
-}
+        if ($id <= 0) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'message' => 'ID no válido.']);
+            exit;
+        }
 
-// ─── DELETE: Eliminar un pedido ──────────────────────────────
-if ($method === 'DELETE') {
-    requireAdmin();
+        $stmt = $pdo->prepare('DELETE FROM pedidos WHERE id = ?');
+        $stmt->execute([$id]);
 
-    $input = json_decode(file_get_contents('php://input'), true);
-    $id    = (int) ($input['id'] ?? 0);
-
-    if ($id <= 0) {
-        http_response_code(400);
-        echo json_encode(['ok' => false, 'message' => 'ID no válido.']);
+        echo json_encode(['ok' => true, 'message' => 'Pedido eliminado.']);
         exit;
     }
 
-    $stmt = $pdo->prepare('DELETE FROM pedidos WHERE id = ?');
-    $stmt->execute([$id]);
-
-    echo json_encode(['ok' => true, 'message' => 'Pedido eliminado.']);
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'message' => 'Acción no reconocida.']);
     exit;
 }
 

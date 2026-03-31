@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mi Perfil — gestiona tus datos personales, cambia tu contraseña y accede a tu garaje en Midnight Customs.">
+    <title>Mi Perfil | Midnight Customs</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=4">
+    <link rel="stylesheet" href="assets/css/animaciones.css?v=4">
+    <style>
+        /* ── Layout principal ── */
+        .perfil-page {
+            padding: 2rem 5%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .perfil-hero {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            padding: 2.5rem;
+            background: var(--fondo-tarjeta);
+            border: 1px solid var(--borde-tarjeta);
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            animation: aparecerFadeIn 0.6s ease-out forwards;
+        }
+
+        .perfil-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color1), var(--color2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 0 25px var(--brillo1);
+            border: 3px solid var(--color2);
+        }
+
+        .perfil-hero-info h2 {
+            color: var(--color1);
+            text-shadow: 0 0 10px var(--brillo1);
+            margin-bottom: 0.3rem;
+            font-size: 2rem;
+        }
+
+        .perfil-hero-info p {
+            color: var(--gris);
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .perfil-badge {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 2px;
+            background: rgba(192,82,226,0.2);
+            border: 1px solid var(--color1);
+            color: var(--color2);
+        }
+
+        /* ── Grid de secciones ── */
+        .perfil-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .perfil-card {
+            background: var(--fondo-tarjeta);
+            border: 1px solid var(--borde-tarjeta);
+            border-radius: 14px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: border-color 0.3s;
+            animation: aparecerFadeIn 0.7s ease-out forwards;
+        }
+
+        .perfil-card:hover { border-color: rgba(192,82,226,0.35); }
+
+        .perfil-card-titulo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: var(--color2);
+            text-shadow: 0 0 8px var(--brillo2);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--borde-tarjeta);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ── Datos personales ── */
+        .dato-fila {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .dato-fila:last-child { border-bottom: none; }
+
+        .dato-label {
+            color: var(--gris);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .dato-valor {
+            color: var(--blanco);
+            font-size: 0.95rem;
+        }
+
+        /* ── Formulario cambio contraseña ── */
+        .campo-perfil {
+            margin-bottom: 1.2rem;
+        }
+
+        .campo-perfil label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gris);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .campo-perfil input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--borde-tarjeta);
+            border-radius: 8px;
+            color: var(--blanco);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .campo-perfil input:focus {
+            outline: none;
+            border-color: var(--color1);
+            box-shadow: 0 0 10px var(--brillo1);
+        }
+
+        .btn-perfil {
+            width: 100%;
+            padding: 0.9rem;
+            background: transparent;
+            border: 2px solid var(--color1);
+            border-radius: 8px;
+            color: var(--blanco);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px var(--brillo1);
+            margin-top: 0.5rem;
+        }
+
+        .btn-perfil:hover {
+            background: var(--color1);
+            box-shadow: 0 0 25px var(--brillo1);
+        }
+
+        /* ── Alerta inline ── */
+        .alerta-perfil {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        .alerta-perfil.exito {
+            background: rgba(50,200,50,0.15);
+            color: #33cc33;
+            border: 1px solid rgba(50,200,50,0.3);
+        }
+
+        .alerta-perfil.error {
+            background: rgba(255,50,50,0.15);
+            color: #ff4444;
+            border: 1px solid rgba(255,50,50,0.3);
+        }
+
+        /* ── Garaje minipreview ── */
+        .garaje-fullcard {
+            grid-column: 1 / -1;
+        }
+
+        .garaje-acceso-btns {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-garaje-ir {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: transparent;
+            border: 2px solid var(--color2);
+            border-radius: 8px;
+            color: var(--color2);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px var(--brillo2);
+        }
+
+        .btn-garaje-ir:hover {
+            background: var(--color2);
+            color: var(--fondo);
+            box-shadow: 0 0 20px var(--brillo2);
+        }
+
+        .btn-configurar-ir {
+            border-color: var(--color1);
+            color: var(--color1);
+            box-shadow: 0 0 10px var(--brillo1);
+        }
+
+        .btn-configurar-ir:hover {
+            background: var(--color1);
+            color: var(--blanco);
+            box-shadow: 0 0 20px var(--brillo1);
+        }
+
+        /* Mini tarjetas del garaje */
+        .garaje-mini-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .garaje-mini-tarjeta {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--borde-tarjeta);
+            border-radius: 10px;
+            padding: 1.2rem;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .garaje-mini-tarjeta:hover {
+            border-color: var(--color1);
+            transform: translateY(-3px);
+        }
+
+        .garaje-mini-tarjeta h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            color: var(--color2);
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .garaje-mini-tarjeta p {
+            font-size: 0.82rem;
+            color: var(--gris);
+            margin: 0.2rem 0;
+        }
+
+        .garaje-mini-estado {
+            display: inline-block;
+            margin-top: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .estado-pendiente { background: rgba(255,200,0,0.2); color: #ffcc00; border: 1px solid rgba(255,200,0,0.4); }
+        .estado-en-proceso { background: rgba(0,150,255,0.2); color: #5599ff; border: 1px solid rgba(0,150,255,0.4); }
+        .estado-completado { background: rgba(50,200,50,0.2); color: #33cc33; border: 1px solid rgba(50,200,50,0.4); }
+
+        #garaje-vacio {
+            color: var(--gris);
+            font-size: 1rem;
+            text-align: center;
+            padding: 1.5rem 0;
+        }
+
+        #garaje-vacio a { color: var(--color2); }
+
+        /* ── Loading ── */
+        .cargando-perfil {
+            text-align: center;
+            color: var(--gris);
+            padding: 3rem;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 3px;
+            font-size: 1.2rem;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .perfil-grid { grid-template-columns: 1fr; }
+            .garaje-fullcard { grid-column: 1; }
+            .perfil-hero { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header class="cabecera-principal">
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/img/icon-Photoroom.png" alt="Logotipo de Midnight Customs">
+                <span style="color:var(--color1);margin-right:5px;">Midnight</span><span style="color:var(--color2);">Customs</span>
+            </a>
+        </div>
+        <button class="boton-menu" aria-label="Abrir menú" aria-expanded="false">☰</button>
+        <nav class="navegacion-principal" id="navegacion-principal" aria-label="Navegación principal">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="proyectos.html">Proyectos</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="configurador.html" class="boton-neon boton-neon-nav">🔧 Configurador</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main style="padding-top: 110px;">
+        <div class="perfil-page">
+
+            <!-- Estado de carga inicial -->
+            <div id="perfil-loading" class="cargando-perfil">Cargando perfil...</div>
+
+            <!-- Contenido real (oculto hasta cargar) -->
+            <div id="perfil-contenido" style="display:none;">
+
+                <!-- Hero del perfil -->
+                <div class="perfil-hero">
+                    <div class="perfil-avatar">👤</div>
+                    <div class="perfil-hero-info">
+                        <h2 id="perfil-nombre-hero">—</h2>
+                        <p id="perfil-email-hero">—</p>
+                        <span class="perfil-badge" id="perfil-rol-hero">cliente</span>
+                    </div>
+                </div>
+
+                <!-- Grid de tarjetas -->
+                <div class="perfil-grid">
+
+                    <!-- Tarjeta: Datos personales -->
+                    <div class="perfil-card">
+                        <div class="perfil-card-titulo">📋 Mis datos</div>
+                        <div class="dato-fila">
+                            <span class="dato-label">Nombre</span>
+                            <span class="dato-valor" id="dato-nombre">—</span>
+                        </div>
+                        <div class="dato-fila">
+                            <span class="dato-label">Email</span>
+                            <span class="dato-valor" id="dato-email">—</span>
+                        </div>
+                        <div class="dato-fila">
+                            <span class="dato-label">Rol</span>
+                            <span class="dato-valor" id="dato-rol">—</span>
+                        </div>
+                        <div class="dato-fila">
+                            <span class="dato-label">Miembro desde</span>
+                            <span class="dato-valor" id="dato-fecha">—</span>
+                        </div>
+                        <div class="dato-fila">
+                            <span class="dato-label">Proyectos guardados</span>
+                            <span class="dato-valor" id="dato-num-configs">—</span>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta: Cambiar contraseña -->
+                    <div class="perfil-card">
+                        <div class="perfil-card-titulo">🔒 Cambiar contraseña</div>
+                        <div id="alerta-password" class="alerta-perfil"></div>
+                        <form id="form-password" novalidate>
+                            <div class="campo-perfil">
+                                <label for="password-actual">Contraseña actual</label>
+                                <input type="password" id="password-actual" placeholder="Tu contraseña actual" autocomplete="current-password">
+                            </div>
+                            <div class="campo-perfil">
+                                <label for="password-nuevo">Nueva contraseña</label>
+                                <input type="password" id="password-nuevo" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+                            </div>
+                            <div class="campo-perfil">
+                                <label for="password-confirm">Confirmar nueva contraseña</label>
+                                <input type="password" id="password-confirm" placeholder="Repite la nueva contraseña" autocomplete="new-password">
+                            </div>
+                            <button type="submit" class="btn-perfil" id="btn-cambiar-pass">Actualizar contraseña</button>
+                        </form>
+                    </div>
+
+                    <!-- Tarjeta: Mi garaje (ocupa todo el ancho) -->
+                    <div class="perfil-card garaje-fullcard">
+                        <div class="perfil-card-titulo">🚗 Mi Garaje</div>
+
+                        <div class="garaje-acceso-btns">
+                            <a href="garaje.html" class="btn-garaje-ir">🚗 Ver garaje completo</a>
+                            <a href="configurador.html" class="btn-garaje-ir btn-configurar-ir">🔧 Crear nueva config</a>
+                        </div>
+
+                        <div id="garaje-mini-grid" class="garaje-mini-grid">
+                            <p id="garaje-vacio" style="display:none;">
+                                No tienes proyectos guardados todavía.
+                                <a href="configurador.html">¡Crea tu primera configuración!</a>
+                            </p>
+                        </div>
+                    </div>
+
+                </div><!-- /perfil-grid -->
+            </div><!-- /perfil-contenido -->
+
+            <!-- Sin sesión -->
+            <div id="perfil-sin-sesion" style="display:none; text-align:center; padding: 4rem 0;">
+                <p style="font-size:1.2rem; color:var(--gris);">Debes iniciar sesión para ver tu perfil.</p>
+                <a href="login.html" class="boton-neon" style="margin-top:1rem;">Iniciar sesión</a>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="assets/js/pie-pagina.js?v=4"></script>
+    <script src="assets/js/main.js?v=4"></script>
+    <script>
+    // ── perfil.js (inline) ──────────────────────────────────
+    const API = '/Proyecto-Intermodular-/servidor/api';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        cargarPerfil();
+
+        document.getElementById('form-password').addEventListener('submit', function(e) {
+            e.preventDefault();
+            cambiarPassword();
+        });
+    });
+
+    function cargarPerfil() {
+        fetch(`${API}/perfil.php`)
+            .then(r => {
+                if (r.status === 401) {
+                    // No hay sesión
+                    document.getElementById('perfil-loading').style.display = 'none';
+                    document.getElementById('perfil-sin-sesion').style.display = 'block';
+                    return null;
+                }
+                return r.json();
+            })
+            .then(data => {
+                if (!data) return;
+
+                document.getElementById('perfil-loading').style.display = 'none';
+                document.getElementById('perfil-contenido').style.display = 'block';
+
+                const u = data.usuario;
+
+                // Hero
+                document.getElementById('perfil-nombre-hero').textContent = u.nombre;
+                document.getElementById('perfil-email-hero').textContent  = u.email;
+                document.getElementById('perfil-rol-hero').textContent    = u.rol.toUpperCase();
+
+                // Datos
+                document.getElementById('dato-nombre').textContent  = u.nombre;
+                document.getElementById('dato-email').textContent   = u.email;
+                document.getElementById('dato-rol').textContent     = u.rol.charAt(0).toUpperCase() + u.rol.slice(1);
+                document.getElementById('dato-fecha').textContent   = formatFecha(u.created_at);
+                document.getElementById('dato-num-configs').textContent = data.garaje.length;
+
+                // Garaje mini
+                renderGarajeMini(data.garaje);
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('perfil-loading').textContent = 'Error al cargar el perfil.';
+            });
+    }
+
+    function renderGarajeMini(configs) {
+        const grid = document.getElementById('garaje-mini-grid');
+        const vacio = document.getElementById('garaje-vacio');
+
+        if (!configs || configs.length === 0) {
+            vacio.style.display = 'block';
+            return;
+        }
+
+        // Mostrar máximo 3 en el perfil
+        const mostrar = configs.slice(0, 3);
+        mostrar.forEach(c => {
+            const card = document.createElement('div');
+            card.className = 'garaje-mini-tarjeta';
+
+            const estado = c.pedido_estado || 'pendiente';
+            const claseEstado = `estado-${estado.replace(' ', '-')}`;
+
+            card.innerHTML = `
+                <h4>${c.modelo}</h4>
+                <p>🎨 ${c.color}</p>
+                <p>🔧 ${c.suspension}</p>
+                <p>🛞 ${c.llantas}</p>
+                <span class="garaje-mini-estado ${claseEstado}">${capitalizarPrimera(estado)}</span>
+            `;
+            grid.appendChild(card);
+        });
+
+        // Si hay más de 3, mostrar enlace "ver todos"
+        if (configs.length > 3) {
+            const verMas = document.createElement('div');
+            verMas.className = 'garaje-mini-tarjeta';
+            verMas.style.display = 'flex';
+            verMas.style.alignItems = 'center';
+            verMas.style.justifyContent = 'center';
+            verMas.innerHTML = `<a href="garaje.html" style="color:var(--color2);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;text-decoration:none;">+${configs.length - 3} más →</a>`;
+            grid.appendChild(verMas);
+        }
+    }
+
+    function cambiarPassword() {
+        const actual   = document.getElementById('password-actual').value;
+        const nuevo    = document.getElementById('password-nuevo').value;
+        const confirm  = document.getElementById('password-confirm').value;
+        const alerta   = document.getElementById('alerta-password');
+        const btn      = document.getElementById('btn-cambiar-pass');
+
+        // Validación client-side rápida
+        if (!actual || !nuevo || !confirm) {
+            mostrarAlertaPerfil('Rellena todos los campos.', 'error');
+            return;
+        }
+        if (nuevo !== confirm) {
+            mostrarAlertaPerfil('Las contraseñas nuevas no coinciden.', 'error');
+            return;
+        }
+        if (nuevo.length < 8) {
+            mostrarAlertaPerfil('La nueva contraseña debe tener al menos 8 caracteres.', 'error');
+            return;
+        }
+
+        btn.textContent = 'Actualizando...';
+        btn.disabled = true;
+
+        fetch(`${API}/perfil.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                password_actual: actual,
+                password_nuevo: nuevo,
+                password_confirm: confirm
+            })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.ok) {
+                mostrarAlertaPerfil(data.message, 'exito');
+                document.getElementById('form-password').reset();
+            } else {
+                mostrarAlertaPerfil(data.message || 'Error desconocido.', 'error');
+            }
+        })
+        .catch(() => mostrarAlertaPerfil('Error de conexión.', 'error'))
+        .finally(() => {
+            btn.textContent = 'Actualizar contraseña';
+            btn.disabled = false;
+        });
+    }
+
+    function mostrarAlertaPerfil(texto, tipo) {
+        const el = document.getElementById('alerta-password');
+        el.textContent = texto;
+        el.className = `alerta-perfil ${tipo}`;
+        el.style.display = 'block';
+        setTimeout(() => { el.style.display = 'none'; }, 5000);
+    }
+
+    function formatFecha(fechaStr) {
+        if (!fechaStr) return '—';
+        const d = new Date(fechaStr);
+        return d.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    function capitalizarPrimera(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+    </script>
+</body>
+</html>

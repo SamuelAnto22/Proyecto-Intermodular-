@@ -46,4 +46,44 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
+    // --- Comprobar sesión para transformar el menú "Login" en dos botones separados ---
+    const basePath = '/Proyecto-Intermodular-/servidor/api';
+
+    fetch(`${basePath}/sesion.php`)
+        .then(response => response.json())
+        .then(data => {
+            // El <li> que contiene el enlace login.html
+            const liLogin = document.querySelector('li:has(a[href="login.html"])') ||
+                            (() => {
+                                const a = document.querySelector('a[href="login.html"]');
+                                return a ? a.closest('li') : null;
+                            })();
+
+            if (data.ok && data.logueado) {
+                if (liLogin) {
+                    // --- Li 1: nombre del usuario → perfil ---
+                    const liPerfil = document.createElement('li');
+                    liPerfil.innerHTML = `<a href="perfil.html" id="nav-perfil-link" title="Ver mi perfil">👤 ${data.nombre}</a>`;
+
+                    // --- Li 2: cerrar sesión ---
+                    const liLogout = document.createElement('li');
+                    liLogout.innerHTML = `<a href="${basePath}/logout.php" id="nav-logout-link" class="nav-logout" title="Cerrar sesión">Cerrar sesión</a>`;
+
+                    // Reemplazar el li original por los dos nuevos
+                    liLogin.replaceWith(liPerfil, liLogout);
+                }
+            } else {
+                // No logueado → restaurar estado normal si se había transformado
+                if (liLogin) {
+                    const a = liLogin.querySelector('a');
+                    if (a) {
+                        a.textContent = 'Login';
+                        a.removeAttribute('style');
+                    }
+                }
+            }
+        })
+        .catch(error => console.error('Error verificando sesión:', error));
+
 });

@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS pedidos (
     id                INT AUTO_INCREMENT PRIMARY KEY,
     configuracion_id  INT             NOT NULL,
     usuario_id        INT             NOT NULL,
-    estado            ENUM('pendiente','en proceso','terminado') NOT NULL DEFAULT 'pendiente',
+    estado            ENUM('pendiente','solicitado','en proceso','terminado') NOT NULL DEFAULT 'pendiente',
     fecha             TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (configuracion_id) REFERENCES configuraciones(id) ON DELETE CASCADE,
