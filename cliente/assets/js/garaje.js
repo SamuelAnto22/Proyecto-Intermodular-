@@ -83,10 +83,7 @@ function crearTarjeta(p) {
                     <span class="spec-label">🛞 Llantas</span>
                     <span class="spec-valor">${p.llantas}</span>
                 </div>
-                <div class="spec-item">
-                    <span class="spec-label">⚙️ Suspensión</span>
-                    <span class="spec-valor">${p.suspension}</span>
-                </div>
+
                 <div class="spec-item">
                     <span class="spec-label">📋 ID pedido</span>
                     <span class="spec-valor">#${String(p.id).padStart(4, '0')}</span>
@@ -97,7 +94,7 @@ function crearTarjeta(p) {
         </div>
         <div class="tarjeta-acciones">
             <button class="btn-accion btn-editar"
-                    onclick="editarEnConfigurador(${p.id},'${p.modelo}','${p.color}','${p.llantas}','${p.suspension}')"
+                    onclick="editarEnConfigurador(${p.id},'${p.modelo}','${p.color}','${p.llantas}')"
                     title="Cargar en el configurador para editar">
                 ✏️ Editar
             </button>
@@ -133,8 +130,8 @@ function etiquetaEstado(estado) {
 // ────────────────────────────────────────────────────────────
 // Editar en el configurador (antes "Cargar")
 // ────────────────────────────────────────────────────────────
-function editarEnConfigurador(id, modelo, color, llantas, suspension) {
-    const params = new URLSearchParams({ id, modelo, color, llantas, suspension });
+function editarEnConfigurador(id, modelo, color, llantas) {
+    const params = new URLSearchParams({ id, modelo, color, llantas });
     window.location.href = `configurador.html?${params.toString()}`;
 }
 

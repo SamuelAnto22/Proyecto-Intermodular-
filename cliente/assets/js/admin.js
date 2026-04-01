@@ -66,7 +66,7 @@ function cargarDashboard() {
                     </td>
                     <td class="modelo-texto">${p.modelo.replace('_', ' ')}</td>
                     <td>
-                        <span class="detalle-config">🎨 ${p.color} · 🛞 ${p.llantas} · ⚙️ ${p.suspension}</span>
+                        <span class="detalle-config">🎨 ${p.color} · 🛞 ${p.llantas}</span>
                     </td>
                     <td>
                         <span class="badge-estado badge-${estadoSlug}" id="badge-${p.id}">${capitalizarEstado(p.estado)}</span>

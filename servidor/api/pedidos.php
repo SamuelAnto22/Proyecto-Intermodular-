@@ -24,7 +24,7 @@ if ($method === 'GET') {
                 c.modelo,
                 c.color,
                 c.llantas,
-                c.suspension,
+
                 p.estado,
                 p.fecha
          FROM pedidos p

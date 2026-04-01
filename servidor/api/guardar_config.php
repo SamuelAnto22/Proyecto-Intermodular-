@@ -50,23 +50,22 @@ if ($method === 'POST') {
 
     // ── Acción: ACTUALIZAR (editar config existente) ─────────
     if ($accion === 'actualizar') {
-        $id         = (int) ($input['id'] ?? 0);
-        $modelo     = trim($input['modelo']     ?? '');
-        $color      = trim($input['color']      ?? '');
-        $llantas    = trim($input['llantas']     ?? '');
-        $suspension = trim($input['suspension']  ?? '');
+        $id      = (int) ($input['id']     ?? 0);
+        $modelo  = trim($input['modelo']    ?? '');
+        $color   = trim($input['color']     ?? '');
+        $llantas = trim($input['llantas']   ?? '');
 
-        if ($id <= 0 || $modelo === '' || $color === '' || $llantas === '' || $suspension === '') {
+        if ($id <= 0 || $modelo === '' || $color === '' || $llantas === '') {
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Faltan campos obligatorios.']);
             exit;
         }
 
         $stmt = $pdo->prepare(
-            'UPDATE configuraciones SET modelo = ?, color = ?, llantas = ?, suspension = ?
+            'UPDATE configuraciones SET modelo = ?, color = ?, llantas = ?
              WHERE id = ? AND usuario_id = ?'
         );
-        $stmt->execute([$modelo, $color, $llantas, $suspension, $id, $userId]);
+        $stmt->execute([$modelo, $color, $llantas, $id, $userId]);
 
         if ($stmt->rowCount() === 0) {
             http_response_code(404);
@@ -83,12 +82,11 @@ if ($method === 'POST') {
     }
 
     // ── Acción: CREAR (nueva configuración — por defecto) ────
-    $modelo     = trim($input['modelo']     ?? '');
-    $color      = trim($input['color']      ?? '');
-    $llantas    = trim($input['llantas']     ?? '');
-    $suspension = trim($input['suspension']  ?? '');
+    $modelo  = trim($input['modelo']  ?? '');
+    $color   = trim($input['color']   ?? '');
+    $llantas = trim($input['llantas'] ?? '');
 
-    if ($modelo === '' || $color === '' || $llantas === '' || $suspension === '') {
+    if ($modelo === '' || $color === '' || $llantas === '') {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Faltan campos obligatorios.']);
         exit;
@@ -96,9 +94,9 @@ if ($method === 'POST') {
 
     // Insertar configuración
     $stmt = $pdo->prepare(
-        'INSERT INTO configuraciones (usuario_id, modelo, color, llantas, suspension) VALUES (?, ?, ?, ?, ?)'
+        'INSERT INTO configuraciones (usuario_id, modelo, color, llantas) VALUES (?, ?, ?, ?)'
     );
-    $stmt->execute([$userId, $modelo, $color, $llantas, $suspension]);
+    $stmt->execute([$userId, $modelo, $color, $llantas]);
     $configId = (int) $pdo->lastInsertId();
 
     // Crear pedido asociado automáticamente
@@ -118,7 +116,7 @@ if ($method === 'GET') {
     $userId = getUserId();
 
     $stmt = $pdo->prepare(
-        'SELECT c.id, c.modelo, c.color, c.llantas, c.suspension, c.created_at,
+        'SELECT c.id, c.modelo, c.color, c.llantas, c.created_at,
                 p.estado AS pedido_estado
          FROM configuraciones c
          LEFT JOIN pedidos p ON p.configuracion_id = c.id

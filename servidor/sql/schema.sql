@@ -29,7 +29,6 @@ CREATE TABLE IF NOT EXISTS configuraciones (
     modelo      VARCHAR(50)     NOT NULL,
     color       VARCHAR(50)     NOT NULL,
     llantas     VARCHAR(50)     NOT NULL,
-    suspension  VARCHAR(50)     NOT NULL,
     created_at  TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE

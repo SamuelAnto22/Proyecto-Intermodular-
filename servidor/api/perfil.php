@@ -29,7 +29,7 @@ if ($method === 'GET') {
 
     // Configuraciones (garaje)
     $stmt2 = $pdo->prepare(
-        'SELECT c.id, c.modelo, c.color, c.llantas, c.suspension, c.created_at,
+        'SELECT c.id, c.modelo, c.color, c.llantas, c.created_at,
                 p.estado AS pedido_estado
          FROM configuraciones c
          LEFT JOIN pedidos p ON p.configuracion_id = c.id
