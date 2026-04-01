@@ -27,7 +27,9 @@ const CATALOGO = {
         colores: {
             rojo: 'assets/img/mini-rojo.png',
             azul: 'assets/img/mini-azul.png',
-            verde: 'assets/img/mini-verde.png'
+            verde: 'assets/img/mini-verde.png',
+            blanco: 'assets/img/mini-blanco.png',
+            negro: 'assets/img/mini-negro.png'
         },
         // Dimensiones del contenedor del coche
         ancho: 640,
@@ -48,9 +50,12 @@ const CATALOGO = {
     bmw_serie1: {
         nombre: 'BMW Serie 1',
         colores: {
-            rojo: 'assets/img/bmw1-blanco.png',
+            rojo: 'assets/img/bmw1-rojo.png',
             azul: 'assets/img/bmw1-azul.png',
-            verde: 'assets/img/bmw1-negro.png'
+            verde: 'assets/img/bmw1-verde.png',
+            blanco: 'assets/img/bmw1-blanco.png',
+            negro: 'assets/img/bmw1-negro.png',
+
         },
         ancho: 640,
         alto: 360,
@@ -69,7 +74,9 @@ const CATALOGO = {
         colores: {
             rojo: 'assets/img/audi-a3-rojo.png',
             azul: 'assets/img/audi-a3-azul.png',
-            verde: 'assets/img/audi-a3-blanco.png'
+            verde: 'assets/img/audi-a3-verde.png',
+            blanco: 'assets/img/audi-a3-blanco.png',
+            negro: 'assets/img/audi-a3-negro.png',
         },
         ancho: 640,
         alto: 360,
@@ -87,8 +94,11 @@ const CATALOGO = {
         nombre: 'Porsche Cayenne',
         colores: {
             rojo: 'assets/img/porsche-rojo.png',
-            azul: 'assets/img/porsche-blanco.png',
-            verde: 'assets/img/porsche-negro.png'
+            azul: 'assets/img/porsche-azul.png',
+            verde: 'assets/img/porsche-verde.png',
+            blanco: 'assets/img/porsche-blanco.png',
+            negro: 'assets/img/porsche-negro.png'
+
         },
         ancho: 640,
         alto: 360,
@@ -128,7 +138,10 @@ const CATALOGO = {
 const RUEDAS = {
     clasica: 'assets/img/rueda-clasica.png',
     deportiva: 'assets/img/rueda-deportiva.png',
-    competicion: 'assets/img/rueda-competicion.png'
+    competicion: 'assets/img/rueda-competicion.png',
+    multiradio: 'assets/img/rueda-multi-radio.png',
+    palos: 'assets/img/rueda-palos.png'
+
 };
 
 // ── Inicialización ──────────────────────────────────────────

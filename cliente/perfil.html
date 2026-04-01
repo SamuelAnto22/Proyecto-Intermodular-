@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Mi Perfil — gestiona tus datos personales, cambia tu contraseña y accede a tu garaje en Midnight Customs.">
+    <meta name="description"
+        content="Mi Perfil — gestiona tus datos personales, cambia tu contraseña y accede a tu garaje en Midnight Customs.">
     <title>Mi Perfil | Midnight Customs</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=4">
-    <link rel="stylesheet" href="assets/css/animaciones.css?v=4">
+    <link rel="stylesheet" href="assets/css/style.css?v=5">
+    <link rel="stylesheet" href="assets/css/animaciones.css?v=5">
     <style>
         /* ── Layout principal ── */
         .perfil-page {
@@ -63,7 +65,7 @@
             font-size: 0.75rem;
             font-family: 'Bebas Neue', sans-serif;
             letter-spacing: 2px;
-            background: rgba(192,82,226,0.2);
+            background: rgba(192, 82, 226, 0.2);
             border: 1px solid var(--color1);
             color: var(--color2);
         }
@@ -85,7 +87,9 @@
             animation: aparecerFadeIn 0.7s ease-out forwards;
         }
 
-        .perfil-card:hover { border-color: rgba(192,82,226,0.35); }
+        .perfil-card:hover {
+            border-color: rgba(192, 82, 226, 0.35);
+        }
 
         .perfil-card-titulo {
             font-family: 'Bebas Neue', sans-serif;
@@ -107,10 +111,12 @@
             justify-content: space-between;
             align-items: center;
             padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .dato-fila:last-child { border-bottom: none; }
+        .dato-fila:last-child {
+            border-bottom: none;
+        }
 
         .dato-label {
             color: var(--gris);
@@ -141,7 +147,7 @@
         .campo-perfil input {
             width: 100%;
             padding: 0.85rem 1rem;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             border: 1px solid var(--borde-tarjeta);
             border-radius: 8px;
             color: var(--blanco);
@@ -188,15 +194,15 @@
         }
 
         .alerta-perfil.exito {
-            background: rgba(50,200,50,0.15);
+            background: rgba(50, 200, 50, 0.15);
             color: #33cc33;
-            border: 1px solid rgba(50,200,50,0.3);
+            border: 1px solid rgba(50, 200, 50, 0.3);
         }
 
         .alerta-perfil.error {
-            background: rgba(255,50,50,0.15);
+            background: rgba(255, 50, 50, 0.15);
             color: #ff4444;
-            border: 1px solid rgba(255,50,50,0.3);
+            border: 1px solid rgba(255, 50, 50, 0.3);
         }
 
         /* ── Garaje minipreview ── */
@@ -255,7 +261,7 @@
         }
 
         .garaje-mini-tarjeta {
-            background: rgba(0,0,0,0.4);
+            background: rgba(0, 0, 0, 0.4);
             border: 1px solid var(--borde-tarjeta);
             border-radius: 10px;
             padding: 1.2rem;
@@ -290,9 +296,23 @@
             font-weight: 600;
         }
 
-        .estado-pendiente { background: rgba(255,200,0,0.2); color: #ffcc00; border: 1px solid rgba(255,200,0,0.4); }
-        .estado-en-proceso { background: rgba(0,150,255,0.2); color: #5599ff; border: 1px solid rgba(0,150,255,0.4); }
-        .estado-completado { background: rgba(50,200,50,0.2); color: #33cc33; border: 1px solid rgba(50,200,50,0.4); }
+        .estado-pendiente {
+            background: rgba(255, 200, 0, 0.2);
+            color: #ffcc00;
+            border: 1px solid rgba(255, 200, 0, 0.4);
+        }
+
+        .estado-en-proceso {
+            background: rgba(0, 150, 255, 0.2);
+            color: #5599ff;
+            border: 1px solid rgba(0, 150, 255, 0.4);
+        }
+
+        .estado-completado {
+            background: rgba(50, 200, 50, 0.2);
+            color: #33cc33;
+            border: 1px solid rgba(50, 200, 50, 0.4);
+        }
 
         #garaje-vacio {
             color: var(--gris);
@@ -301,7 +321,9 @@
             padding: 1.5rem 0;
         }
 
-        #garaje-vacio a { color: var(--color2); }
+        #garaje-vacio a {
+            color: var(--color2);
+        }
 
         /* ── Loading ── */
         .cargando-perfil {
@@ -315,18 +337,29 @@
 
         /* ── Responsive ── */
         @media (max-width: 768px) {
-            .perfil-grid { grid-template-columns: 1fr; }
-            .garaje-fullcard { grid-column: 1; }
-            .perfil-hero { flex-direction: column; text-align: center; }
+            .perfil-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .garaje-fullcard {
+                grid-column: 1;
+            }
+
+            .perfil-hero {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
+
 <body>
     <header class="cabecera-principal">
         <div class="logo">
             <a href="index.html">
                 <img src="assets/img/icon-Photoroom.png" alt="Logotipo de Midnight Customs">
-                <span style="color:var(--color1);margin-right:5px;">Midnight</span><span style="color:var(--color2);">Customs</span>
+                <span style="color:var(--color1);margin-right:5px;">Midnight</span><span
+                    style="color:var(--color2);">Customs</span>
             </a>
         </div>
         <button class="boton-menu" aria-label="Abrir menú" aria-expanded="false">☰</button>
@@ -397,17 +430,21 @@
                         <form id="form-password" novalidate>
                             <div class="campo-perfil">
                                 <label for="password-actual">Contraseña actual</label>
-                                <input type="password" id="password-actual" placeholder="Tu contraseña actual" autocomplete="current-password">
+                                <input type="password" id="password-actual" placeholder="Tu contraseña actual"
+                                    autocomplete="current-password">
                             </div>
                             <div class="campo-perfil">
                                 <label for="password-nuevo">Nueva contraseña</label>
-                                <input type="password" id="password-nuevo" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+                                <input type="password" id="password-nuevo" placeholder="Mínimo 8 caracteres"
+                                    autocomplete="new-password">
                             </div>
                             <div class="campo-perfil">
                                 <label for="password-confirm">Confirmar nueva contraseña</label>
-                                <input type="password" id="password-confirm" placeholder="Repite la nueva contraseña" autocomplete="new-password">
+                                <input type="password" id="password-confirm" placeholder="Repite la nueva contraseña"
+                                    autocomplete="new-password">
                             </div>
-                            <button type="submit" class="btn-perfil" id="btn-cambiar-pass">Actualizar contraseña</button>
+                            <button type="submit" class="btn-perfil" id="btn-cambiar-pass">Actualizar
+                                contraseña</button>
                         </form>
                     </div>
 
@@ -417,7 +454,8 @@
 
                         <div class="garaje-acceso-btns">
                             <a href="garaje.html" class="btn-garaje-ir">🚗 Ver garaje completo</a>
-                            <a href="configurador.html" class="btn-garaje-ir btn-configurar-ir">🔧 Crear nueva config</a>
+                            <a href="configurador.html" class="btn-garaje-ir btn-configurar-ir">🔧 Crear nueva
+                                config</a>
                         </div>
 
                         <div id="garaje-mini-grid" class="garaje-mini-grid">
@@ -440,167 +478,186 @@
         </div>
     </main>
 
-    <script src="assets/js/pie-pagina.js?v=4"></script>
-    <script src="assets/js/main.js?v=4"></script>
+    <script src="assets/js/pie-pagina.js?v=5"></script>
+    <script src="assets/js/main.js?v=5"></script>
     <script>
-    // ── perfil.js (inline) ──────────────────────────────────
-    const API = '/Proyecto-Intermodular-/servidor/api';
+        // ── perfil.js (inline) ──────────────────────────────────
+        const API = '/Proyecto-Intermodular-/servidor/api';
 
-    document.addEventListener('DOMContentLoaded', () => {
-        cargarPerfil();
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarPerfil();
 
-        document.getElementById('form-password').addEventListener('submit', function(e) {
-            e.preventDefault();
-            cambiarPassword();
-        });
-    });
-
-    function cargarPerfil() {
-        fetch(`${API}/perfil.php`)
-            .then(r => {
-                if (r.status === 401) {
-                    // No hay sesión
-                    document.getElementById('perfil-loading').style.display = 'none';
-                    document.getElementById('perfil-sin-sesion').style.display = 'block';
-                    return null;
-                }
-                return r.json();
-            })
-            .then(data => {
-                if (!data) return;
-
-                document.getElementById('perfil-loading').style.display = 'none';
-                document.getElementById('perfil-contenido').style.display = 'block';
-
-                const u = data.usuario;
-
-                // Hero
-                document.getElementById('perfil-nombre-hero').textContent = u.nombre;
-                document.getElementById('perfil-email-hero').textContent  = u.email;
-                document.getElementById('perfil-rol-hero').textContent    = u.rol.toUpperCase();
-
-                // Datos
-                document.getElementById('dato-nombre').textContent  = u.nombre;
-                document.getElementById('dato-email').textContent   = u.email;
-                document.getElementById('dato-rol').textContent     = u.rol.charAt(0).toUpperCase() + u.rol.slice(1);
-                document.getElementById('dato-fecha').textContent   = formatFecha(u.created_at);
-                document.getElementById('dato-num-configs').textContent = data.garaje.length;
-
-                // Garaje mini
-                renderGarajeMini(data.garaje);
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('perfil-loading').textContent = 'Error al cargar el perfil.';
+            document.getElementById('form-password').addEventListener('submit', function (e) {
+                e.preventDefault();
+                cambiarPassword();
             });
-    }
+        });
 
-    function renderGarajeMini(configs) {
-        const grid = document.getElementById('garaje-mini-grid');
-        const vacio = document.getElementById('garaje-vacio');
+        function cargarPerfil() {
+            fetch(`${API}/perfil.php`)
+                .then(r => {
+                    if (r.status === 401) {
+                        // No hay sesión
+                        document.getElementById('perfil-loading').style.display = 'none';
+                        document.getElementById('perfil-sin-sesion').style.display = 'block';
+                        return null;
+                    }
+                    return r.json();
+                })
+                .then(data => {
+                    if (!data) return;
 
-        if (!configs || configs.length === 0) {
-            vacio.style.display = 'block';
-            return;
+                    document.getElementById('perfil-loading').style.display = 'none';
+                    document.getElementById('perfil-contenido').style.display = 'block';
+
+                    const u = data.usuario;
+
+                    // Hero
+                    document.getElementById('perfil-nombre-hero').textContent = u.nombre;
+                    document.getElementById('perfil-email-hero').textContent = u.email;
+                    document.getElementById('perfil-rol-hero').textContent = u.rol.toUpperCase();
+
+                    // Datos
+                    document.getElementById('dato-nombre').textContent = u.nombre;
+                    document.getElementById('dato-email').textContent = u.email;
+                    document.getElementById('dato-rol').textContent = u.rol.charAt(0).toUpperCase() + u.rol.slice(1);
+                    document.getElementById('dato-fecha').textContent = formatFecha(u.created_at);
+
+                    if (u.rol === 'admin') {
+                        // Ocultar fila de proyectos guardados en los datos
+                        const filaProyectos = document.getElementById('dato-num-configs').closest('.dato-fila');
+                        if (filaProyectos) filaProyectos.style.display = 'none';
+
+                        // Reemplazar la tarjeta completa del garaje
+                        const garajeCard = document.querySelector('.garaje-fullcard');
+                        if (garajeCard) {
+                            garajeCard.innerHTML = `
+                            <div class="perfil-card-titulo">⚙️ Gestión de Plataforma</div>
+                            <p style="color:var(--gris); font-size: 0.95rem; margin-bottom: 2rem;">
+                            Accede a tu panel de control para gestionar los pedidos y configuraciones de los clientes.
+                            </p>
+                            <a href="admin.html" class="btn-garaje-ir" style="border-color:var(--color2); color:var(--color2); box-shadow: 0 0 10px rgba(80,200,255,0.4);">Ir al Panel Admin →</a>
+                        `;
+                        }
+                    } else {
+                        document.getElementById('dato-num-configs').textContent = data.garaje.length;
+                        // Garaje mini para clientes
+                        renderGarajeMini(data.garaje);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    document.getElementById('perfil-loading').textContent = 'Error al cargar el perfil.';
+                });
         }
 
-        // Mostrar máximo 3 en el perfil
-        const mostrar = configs.slice(0, 3);
-        mostrar.forEach(c => {
-            const card = document.createElement('div');
-            card.className = 'garaje-mini-tarjeta';
+        function renderGarajeMini(configs) {
+            const grid = document.getElementById('garaje-mini-grid');
+            const vacio = document.getElementById('garaje-vacio');
 
-            const estado = c.pedido_estado || 'pendiente';
-            const claseEstado = `estado-${estado.replace(' ', '-')}`;
+            if (!configs || configs.length === 0) {
+                vacio.style.display = 'block';
+                return;
+            }
 
-            card.innerHTML = `
+            // Mostrar máximo 3 en el perfil
+            const mostrar = configs.slice(0, 3);
+            mostrar.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'garaje-mini-tarjeta';
+
+                const estado = c.pedido_estado || 'pendiente';
+                const claseEstado = `estado-${estado.replace(' ', '-')}`;
+
+                card.innerHTML = `
                 <h4>${c.modelo}</h4>
                 <p>🎨 ${c.color}</p>
                 <p>🔧 ${c.suspension}</p>
                 <p>🛞 ${c.llantas}</p>
                 <span class="garaje-mini-estado ${claseEstado}">${capitalizarPrimera(estado)}</span>
             `;
-            grid.appendChild(card);
-        });
+                grid.appendChild(card);
+            });
 
-        // Si hay más de 3, mostrar enlace "ver todos"
-        if (configs.length > 3) {
-            const verMas = document.createElement('div');
-            verMas.className = 'garaje-mini-tarjeta';
-            verMas.style.display = 'flex';
-            verMas.style.alignItems = 'center';
-            verMas.style.justifyContent = 'center';
-            verMas.innerHTML = `<a href="garaje.html" style="color:var(--color2);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;text-decoration:none;">+${configs.length - 3} más →</a>`;
-            grid.appendChild(verMas);
-        }
-    }
-
-    function cambiarPassword() {
-        const actual   = document.getElementById('password-actual').value;
-        const nuevo    = document.getElementById('password-nuevo').value;
-        const confirm  = document.getElementById('password-confirm').value;
-        const alerta   = document.getElementById('alerta-password');
-        const btn      = document.getElementById('btn-cambiar-pass');
-
-        // Validación client-side rápida
-        if (!actual || !nuevo || !confirm) {
-            mostrarAlertaPerfil('Rellena todos los campos.', 'error');
-            return;
-        }
-        if (nuevo !== confirm) {
-            mostrarAlertaPerfil('Las contraseñas nuevas no coinciden.', 'error');
-            return;
-        }
-        if (nuevo.length < 8) {
-            mostrarAlertaPerfil('La nueva contraseña debe tener al menos 8 caracteres.', 'error');
-            return;
-        }
-
-        btn.textContent = 'Actualizando...';
-        btn.disabled = true;
-
-        fetch(`${API}/perfil.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                password_actual: actual,
-                password_nuevo: nuevo,
-                password_confirm: confirm
-            })
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (data.ok) {
-                mostrarAlertaPerfil(data.message, 'exito');
-                document.getElementById('form-password').reset();
-            } else {
-                mostrarAlertaPerfil(data.message || 'Error desconocido.', 'error');
+            // Si hay más de 3, mostrar enlace "ver todos"
+            if (configs.length > 3) {
+                const verMas = document.createElement('div');
+                verMas.className = 'garaje-mini-tarjeta';
+                verMas.style.display = 'flex';
+                verMas.style.alignItems = 'center';
+                verMas.style.justifyContent = 'center';
+                verMas.innerHTML = `<a href="garaje.html" style="color:var(--color2);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;text-decoration:none;">+${configs.length - 3} más →</a>`;
+                grid.appendChild(verMas);
             }
-        })
-        .catch(() => mostrarAlertaPerfil('Error de conexión.', 'error'))
-        .finally(() => {
-            btn.textContent = 'Actualizar contraseña';
-            btn.disabled = false;
-        });
-    }
+        }
 
-    function mostrarAlertaPerfil(texto, tipo) {
-        const el = document.getElementById('alerta-password');
-        el.textContent = texto;
-        el.className = `alerta-perfil ${tipo}`;
-        el.style.display = 'block';
-        setTimeout(() => { el.style.display = 'none'; }, 5000);
-    }
+        function cambiarPassword() {
+            const actual = document.getElementById('password-actual').value;
+            const nuevo = document.getElementById('password-nuevo').value;
+            const confirm = document.getElementById('password-confirm').value;
+            const alerta = document.getElementById('alerta-password');
+            const btn = document.getElementById('btn-cambiar-pass');
 
-    function formatFecha(fechaStr) {
-        if (!fechaStr) return '—';
-        const d = new Date(fechaStr);
-        return d.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
-    }
+            // Validación client-side rápida
+            if (!actual || !nuevo || !confirm) {
+                mostrarAlertaPerfil('Rellena todos los campos.', 'error');
+                return;
+            }
+            if (nuevo !== confirm) {
+                mostrarAlertaPerfil('Las contraseñas nuevas no coinciden.', 'error');
+                return;
+            }
+            if (nuevo.length < 8) {
+                mostrarAlertaPerfil('La nueva contraseña debe tener al menos 8 caracteres.', 'error');
+                return;
+            }
 
-    function capitalizarPrimera(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
+            btn.textContent = 'Actualizando...';
+            btn.disabled = true;
+
+            fetch(`${API}/perfil.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    password_actual: actual,
+                    password_nuevo: nuevo,
+                    password_confirm: confirm
+                })
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.ok) {
+                        mostrarAlertaPerfil(data.message, 'exito');
+                        document.getElementById('form-password').reset();
+                    } else {
+                        mostrarAlertaPerfil(data.message || 'Error desconocido.', 'error');
+                    }
+                })
+                .catch(() => mostrarAlertaPerfil('Error de conexión.', 'error'))
+                .finally(() => {
+                    btn.textContent = 'Actualizar contraseña';
+                    btn.disabled = false;
+                });
+        }
+
+        function mostrarAlertaPerfil(texto, tipo) {
+            const el = document.getElementById('alerta-password');
+            el.textContent = texto;
+            el.className = `alerta-perfil ${tipo}`;
+            el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 5000);
+        }
+
+        function formatFecha(fechaStr) {
+            if (!fechaStr) return '—';
+            const d = new Date(fechaStr);
+            return d.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function capitalizarPrimera(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
     </script>
 </body>
+
 </html>

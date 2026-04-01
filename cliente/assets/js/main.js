@@ -61,6 +61,31 @@ document.addEventListener('DOMContentLoaded', function () {
                             })();
 
             if (data.ok && data.logueado) {
+                
+                // --- Lógica según ROL (Admin vs Cliente) ---
+                if (data.rol === 'admin') {
+                    // Ocultar Configurador
+                    const configLink = document.querySelector('a[href="configurador.html"]');
+                    if (configLink && configLink.parentElement) {
+                        configLink.parentElement.style.display = 'none';
+                    }
+                    
+                    // Insertar Panel Admin antes de su perfil
+                    if (liLogin) {
+                        const liAdmin = document.createElement('li');
+                        liAdmin.innerHTML = '<a href="admin.html" class="boton-neon boton-neon-nav" style="border-color:var(--color2); color:var(--color2); box-shadow: 0 0 10px rgba(80,200,255,0.4)">⚙️ Panel Admin</a>';
+                        liLogin.parentNode.insertBefore(liAdmin, liLogin);
+                    }
+                } else {
+                    // Si es Cliente asegurar que 'Mi Garaje' aparezca si no estaba hardcodeado
+                    const garageLinkExiste = document.querySelector('a[href="garaje.html"]');
+                    if (!garageLinkExiste && liLogin) {
+                        const liGaraje = document.createElement('li');
+                        liGaraje.innerHTML = '<a href="garaje.html">Mi Garaje</a>';
+                        liLogin.parentNode.insertBefore(liGaraje, liLogin);
+                    }
+                }
+
                 if (liLogin) {
                     // --- Li 1: nombre del usuario → perfil ---
                     const liPerfil = document.createElement('li');
