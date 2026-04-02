@@ -48,9 +48,6 @@ CREATE TABLE IF NOT EXISTS pedidos (
     FOREIGN KEY (usuario_id)       REFERENCES usuarios(id)        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- ============================================================
--- Usuario admin por defecto (contraseña: admin123)
--- El hash se genera con password_hash('admin123', PASSWORD_BCRYPT)
--- ============================================================
+
 INSERT INTO usuarios (nombre, email, password, rol) VALUES
 ('Administrador', 'admin@midnight.com', '$2y$10$YJ1Xk0V3fK7vGxq5q5Q5eO9J6Z8zH4d2wKk5r3nA1bC7dE9fG0hI2', 'admin');

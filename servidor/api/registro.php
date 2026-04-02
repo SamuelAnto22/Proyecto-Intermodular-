@@ -15,9 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Recoger datos del formulario
-$nombre   = trim($_POST['nombre']   ?? '');
-$email    = trim($_POST['email']    ?? '');
+// Recoger datos del formulario (Sanitización básica Día 1)
+$nombre   = htmlspecialchars(trim($_POST['nombre']   ?? ''), ENT_QUOTES, 'UTF-8');
+$email    = filter_var(trim($_POST['email']          ?? ''), FILTER_SANITIZE_EMAIL);
 $password = $_POST['password']      ?? '';
 $confirm  = $_POST['confirm-password'] ?? '';
 
@@ -26,9 +26,13 @@ $errores = [];
 
 if ($nombre === '') {
     $errores[] = 'El nombre es obligatorio.';
+} elseif (strlen($nombre) > 50) {
+    $errores[] = 'El nombre es demasiado largo (máximo 50 caracteres).';
 }
 if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $errores[] = 'Introduce un email válido.';
+} elseif (strlen($email) > 100) {
+    $errores[] = 'El email es demasiado largo (máximo 100 caracteres).';
 }
 if (strlen($password) < 6) {
     $errores[] = 'La contraseña debe tener al menos 6 caracteres.';

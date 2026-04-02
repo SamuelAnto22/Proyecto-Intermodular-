@@ -1,53 +1,71 @@
-## MIDNIGHT CUSTOMS - Proyecto Final DAW
+# MIDNIGHT CUSTOMS - Proyecto Intermodular (2º DAW)
 
-¡Hola! Este es el proyecto de Midnight Customs. Lo hemos hecho para el Proyecto Intermodular de final de ciclo de DAW (Desarrollo de Aplicaciones Web).
+## Descripción
 
-La idea es sencilla: un sitio donde puedas "tunear" coches de alta gama de forma visual antes de gastarte la pasta de verdad.
+**Midnight Customs** es una aplicación Web dinámica (Vanilla JS, HTML/CSS, PHP, MySQL) que permite a los usuarios **configurar virtualmente coches de alta gama** antes de su modificación real física. Hemos construido este proyecto como desarrollo final para el grado superior de DAW.
 
-## ¿De qué va esto?
+El objetivo pedagógico y técnico del proyecto es:
+1. **Frontend puro y responsivo**: Sin el "peso" de frameworks, hemos diseñado componentes modernos (Glassmorphism, CSS Grid) orientados a una interactividad total al momento de elegir el coche, sus componentes y guardar las decisiones.
+2. **Backend robusto y seguro**: Sistema de autenticación de dos niveles (clientes y administradores), validación de parámetros, CORS local y prevención XSS.
+3. **Flujo completo de persistencia**: El cliente diseña el coche (el cliente web empareja fotos separadas usando posicionamiento dinámico absoluto y escalado), lo guarda en su Garaje Personal y el Administrador puede cambiar los estados de fabricación ("Solicitado", "En Proceso", etc).
 
-Es una web para un taller de personalización de coches. Queremos que el cliente pueda ver cómo queda su coche cambiando cuatro cosas básicas:
-- **Catálogo**: Para ver lo que ya hemos hecho y pillar ideas.
-- **Configurador**: El plato fuerte. Eliges un coche, le cambias las llantas, el color y la altura, y lo ves en directo (usando fotos PNG con transparencias).
-- **Panel de Admin**: Para que el mecánico vea lo que ha pedido el cliente y no se vuelva loco.
+---
 
-## Tecnologías que hemos usado
+##  Guía de Instalación para Profesores/Evaluadores
 
-No nos hemos querido liar con frameworks raros, así que hemos ido a lo que sabemos:
-- **HTML, CSS y JavaScript (a pelo)**: Para que el configurador vaya rápido y se entienda bien el código.
-- **PHP**: Para guardar los usuarios y los coches en la base de datos.
-- **MySQL**: Donde guardamos todo el lío de los pedidos y configuraciones.
-- **XAMPP**: Para hacerlo rular en local.
+1. Copiar este proyecto en la carpeta del servidor local (e.g. `C:/xampp/htdocs/Proyecto-Intermodular-`).
+2. Levantar los servicios de **Apache** y **MySQL** desde el panel de XAMPP.
+3. Importar la Base de Datos con todos los datos de demostración incluidos.
+   - Ir a **phpMyAdmin** (`http://localhost/phpmyadmin`).
+   - Importar el archivo alojado en `servidor/sql/midnight_demo.sql`. Este archivo crea la BD automáticamente y le inserta datos de demostración para no evaluar un sistema en blanco.
+4. Confirmar las credenciales en `servidor/includes/db.php` si tiene configurada otra contraseña en su motor MySQL local (por defecto asume `root` sin contraseña).
+5. Visitar a través de localhost: [http://localhost/Proyecto-Intermodular-/cliente/](http://localhost/Proyecto-Intermodular-/cliente/) *(asegúrese de utilizar la ruta local exacta donde guardó la carpeta)*.
 
-## Estructura de carpetas (cómo está organizado)
+---
 
-Aquí te explico dónde está cada cosa por si te pierdes:
+##  Credenciales de Prueba Rápida
 
-- `/cliente`: Todo lo que se ve en el navegador (el diseño).
-  - `/assets`:
-    - `/css`: Los estilos de la web.
-    - `/js`: Los archivos de JavaScript (lógica del configurador, etc).
-    - `/img`: Las fotos de los coches, las llantas y demás.
-- `/servidor`: El "cerebro" de la web.
-  - `/api`: Los archivos PHP que conectan con la base de datos.
-  - `/includes`: Cosas que repetimos mucho, como la conexión a la base de datos.
-  - `/sql`: El archivo para crear las tablas de la base de datos.
+La base de datos de demo de este script (*midnight_demo.sql*) trae preconfiguradas las siguientes cuentas:
 
-## Cómo hacerlo funcionar en tu PC
+### Perfil Administrador
+Cuenta con acceso al panel global financiero para el estado de los proyectos de todos los usuarios. No ve el Garaje ni puede usar el configurador porque su flujo es gestor, no comprador.
+* **Email:** `admin@midnight.com`
+* **Contraseña:** `admin123`
 
-1. Instala **XAMPP**.
-2. Mete la carpeta del proyecto en `C:/xampp/htdocs/`.
-3. Abre **phpMyAdmin** y crea una base de datos que se llame `midnight_customs` (o lo que quieras).
-4. Importa el archivo que está en `servidor/sql/schema.sql`.
-5. Cambia los datos de conexión en `servidor/includes/db.php` si le has puesto contraseña al MySQL.
-6. Entra en `http://localhost/Proyecto-Intermodular-/cliente/index.html` y ¡listo!
+### Perfil Cliente (con pedidos)
+Tiene acceso al configurador interactivo y un garaje donde ve la progresión del proyecto que el taller debe realizarle al coche.
+* **Email:** `carlos@ejemplo.com`
+* **Contraseña:** `cliente123`
 
-## Cosas que queremos mejorar (si nos da tiempo)
+---
 
-- [ ] Meter más modelos de coches y más tipos de llantas.
-- [ ] Que se puedan descargar las fotos del coche tuneado.
-- [ ] Poner un sistema de login más seguro.
-- [ ] Que la web se vea bien en el móvil (ahora está pensada para PC).
+##  Checklist de Pruebas recomendadas para el Profesor
 
-Hecho con ganas para el proyecto final de DAW.
+Hemos diseñado una experiencia con atención al detalle que pedimos encarecidamente probar para validar la evaluación:
 
+1. [ ] **Responsive Design & Accesibilidad:**
+   - La plataforma puede inspeccionarse perfectamente desde móvil (presionando F12 > Device Toolbar de Chrome y probando anchos pequeños de <380px). Se adaptan las Grid y las tablas sin problemas.
+   - Navegue por los apartados usando exclusivamente la tecla **TAB**. Hemos garantizado el foco visual global y correcto uso de links.
+
+2. [ ] **El motor visual del Configurador:**
+   - Inicie sesión como Cliente. Vaya al *Configurador*.
+   - Juegue con el selector de coches, rines (llantas) y colores. Se dará cuenta de que las "luces/sombras" no cambian, porque utilizamos PNGs superpuestos estratégicamente en Z-index y posiciones absolutas. Además, al empequeñecer la pantalla en el móvil, notará que **el coche en conjunto hace un "scale" matemático inteligente** para no salirse de los márgenes en pantallas estrechas. Todo puramente en el `configurador.js`.
+
+3. [ ] **Carga Dinámica del Sistema (Mi Garaje):**
+   - Vaya a la sección **Mi Garaje** de Carlos. Utiliza la API y `fetch()` asíncrono puro para renderizar las tarjetas a un `GRID` desde JSON sin recargar toda la página desde PHP, y le dará un feedback suave de *Toast Notifications*.
+   - Intente "Editar" un coche y ver cómo la URL hereda limpiamente los detalles mediante *URLSearchParams*. Podrá reenviar el estado visual anterior del coche al configurador.
+
+4. [ ] **Gestión como Administrador:**
+   - Cierre sesión. Podrá ver que las cookies se limpian (seguridad del día 1). Inicie sesión usando el Admin (`admin@midnight.com`).
+   - Fíjese cómo automáticamente el script general interviene (`sesion.php` -> `main.js`) detectando su ROL y cambiando la *Navigation* global (quita 'Configurador', le manda un atajo a 'Panel Admin', e inyecta un *Dashboard* con los datos de todos los clientes).
+   - Intente cambiar el estado desplegable de cualquier producto ("En proceso", "Terminado") de un cliente. Los cambios de estado no recargan la página, lanzan promesas asíncronas de POST muy eficientes al fondo.
+
+---
+
+## Arquitectura de Ficheros
+
+*   `cliente/`: Lógica FrontEnd SPA-Like, interactiva a base de HTML estáticos, Vanilla JS usando asincronismo para las mutaciones y Custom CSS puro sin librerías externas.
+*   `servidor/api/`: Lógica BackEnd de transferencia POST/GET. Cada endpoint es único en `.php` usando cabeceras JSON, devolviendo HTTP Codes y verificaciones de sesión/XSS contra MySQL en formato **PDO** con variables pre-limpiadas preparadas (`?`) anti SQLi.
+*   `servidor/sql/`: Los esquemas y los tests de base de datos automatizados instalables.
+
+¡Gracias por evaluar este proyecto final! Esperamos que os guste.

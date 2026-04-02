@@ -51,9 +51,9 @@ if ($method === 'POST') {
     // ── Acción: ACTUALIZAR (editar config existente) ─────────
     if ($accion === 'actualizar') {
         $id      = (int) ($input['id']     ?? 0);
-        $modelo  = trim($input['modelo']    ?? '');
-        $color   = trim($input['color']     ?? '');
-        $llantas = trim($input['llantas']   ?? '');
+        $modelo  = substr(htmlspecialchars(trim($input['modelo']    ?? ''), ENT_QUOTES, 'UTF-8'), 0, 50);
+        $color   = substr(htmlspecialchars(trim($input['color']     ?? ''), ENT_QUOTES, 'UTF-8'), 0, 50);
+        $llantas = substr(htmlspecialchars(trim($input['llantas']   ?? ''), ENT_QUOTES, 'UTF-8'), 0, 50);
 
         if ($id <= 0 || $modelo === '' || $color === '' || $llantas === '') {
             http_response_code(400);
@@ -82,9 +82,9 @@ if ($method === 'POST') {
     }
 
     // ── Acción: CREAR (nueva configuración — por defecto) ────
-    $modelo  = trim($input['modelo']  ?? '');
-    $color   = trim($input['color']   ?? '');
-    $llantas = trim($input['llantas'] ?? '');
+    $modelo  = substr(htmlspecialchars(trim($input['modelo']  ?? ''), ENT_QUOTES, 'UTF-8'), 0, 50);
+    $color   = substr(htmlspecialchars(trim($input['color']   ?? ''), ENT_QUOTES, 'UTF-8'), 0, 50);
+    $llantas = substr(htmlspecialchars(trim($input['llantas'] ?? ''), ENT_QUOTES, 'UTF-8'), 0, 50);
 
     if ($modelo === '' || $color === '' || $llantas === '') {
         http_response_code(400);

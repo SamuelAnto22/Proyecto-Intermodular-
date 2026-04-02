@@ -111,6 +111,9 @@ document.addEventListener('DOMContentLoaded', function () {
     actualizarVista();
 });
 
+// Escuchar cambios de tamaño de pantalla para escalar el coche en móviles
+window.addEventListener('resize', actualizarEscala);
+
 // ── Cargar configuración desde URL (modo edición) ───────────
 function cargarDesdeURL() {
     const params = new URLSearchParams(window.location.search);
@@ -196,6 +199,30 @@ function renderizarCoche() {
     if (contenedor) {
         contenedor.style.width  = modelo.ancho + 'px';
         contenedor.style.height = modelo.alto  + 'px';
+    }
+
+    // 4. Adaptar escala para móviles
+    actualizarEscala();
+}
+
+// ── Escalar coche responsivamente ───────────────────────────
+function actualizarEscala() {
+    const visor = document.getElementById('coche-visor');
+    const contenedor = document.getElementById('contenedor-coche');
+    if (!visor || !contenedor) return;
+
+    // Ancho real del visor en la pantalla padre
+    const anchoVisor = visor.clientWidth;
+    // Ancho teórico del coche actual
+    const anchoCoche = parseInt(contenedor.style.width) || 640;
+
+    // Si la pantalla es más pequeña que el coche (añadiendo margen)
+    if (anchoVisor < (anchoCoche + 40)) {
+        const escala = anchoVisor / (anchoCoche + 40);
+        contenedor.style.transform = `scale(${escala})`;
+        contenedor.style.transformOrigin = 'center center';
+    } else {
+        contenedor.style.transform = 'scale(1)';
     }
 }
 

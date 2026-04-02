@@ -36,6 +36,7 @@ if (!$usuario || !password_verify($password, $usuario['password'])) {
 }
 
 // --- Crear sesión ---
+session_regenerate_id(true); // Evitar fijación de sesión
 $_SESSION['user_id']   = $usuario['id'];
 $_SESSION['user_name'] = $usuario['nombre'];
 $_SESSION['user_role'] = $usuario['rol'];
