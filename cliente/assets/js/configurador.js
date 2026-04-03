@@ -33,8 +33,9 @@ const CATALOGO = {
         ruedaDelantera: { top: 62,  left: -79,  width: 445, height: 304 },
         ruedaTrasera:   { top: 62,  left: 282,  width: 445, height: 304 },
         // Coordenadas exclusivas para móvil:
-        ruedaDelanteraMovil: { top: 206, left: -48, width: 250, height: 150 },
-        ruedaTraseraMovil:   { top: 206, left: 150, width: 250, height: 150 }
+        carroceriaMovil: { top: -400, left: -228, width: 818, height: 900 },
+        ruedaDelanteraMovil: { top: 38, left: -329, width: 568, height: 550 },
+        ruedaTraseraMovil:   { top: 39, left: 132, width: 568, height: 550 }
     },
 
     bmw_serie1: {
@@ -48,10 +49,11 @@ const CATALOGO = {
         },
         ancho: 640, alto: 360,
         carroceria: { top: 0, left: 0, width: '100%', height: '100%' },
+        carroceriaMovil: { top: -400, left: -220, width: 786, height: 900 },
         ruedaDelantera: { top: -337, left: -79,  width: 445, height: 1110 },
         ruedaTrasera:   { top: -328, left: 288,  width: 445, height: 1100 },
-        ruedaDelanteraMovil: { top: 208, left: -41, width: 237, height: 150 },
-        ruedaTraseraMovil:   { top: 208, left: 160, width: 237, height: 150 }
+        ruedaDelanteraMovil: { top: 51, left: -329, width: 568, height: 550 },
+        ruedaTraseraMovil:   { top: 55, left: 128, width: 559, height: 550 }
     },
 
     audi_a3: {
@@ -65,10 +67,11 @@ const CATALOGO = {
         },
         ancho: 640, alto: 360,
         carroceria: { top: 0, left: 0, width: '100%', height: '100%' },
+        carroceriaMovil: { top: -400, left: -213, width: 770, height: 900 },
         ruedaDelantera: { top: 62, left: -91, width: 462, height: 313 },
         ruedaTrasera:   { top: 63, left: 290, width: 462, height: 313 },
-        ruedaDelanteraMovil: { top: 208, left: -48, width: 250, height: 150 },
-        ruedaTraseraMovil:   { top: 209, left: 159, width: 250, height: 150 }
+        ruedaDelanteraMovil: {  top: 55, left: -327, width: 568, height: 550  },
+        ruedaTraseraMovil:   { top: 55, left: 136, width: 559, height: 550}
     },
 
     volkswagen_golf: {
@@ -82,10 +85,11 @@ const CATALOGO = {
         },
         ancho: 640, alto: 360,
         carroceria: { top: 0, left: 0, width: '100%', height: '100%' },
+        carroceriaMovil: { top: -400, left: -213, width: 770, height: 900 },
         ruedaDelantera: { top: 46, left: -102, width: 479, height: 324 },
         ruedaTrasera:   { top: 44, left: 262,  width: 479, height: 324 },
-        ruedaDelanteraMovil: { top: 202, left: -50, width: 250, height: 150 },
-        ruedaTraseraMovil:   { top: 202, left: 149, width: 250, height: 150 }
+        ruedaDelanteraMovil: { top: 41, left: -330, width: 568, height: 550 },
+        ruedaTraseraMovil:   { top: 41, left: 107, width: 568, height: 550 }
     },
 
     toyota_supra: {
@@ -99,10 +103,11 @@ const CATALOGO = {
         },
         ancho: 640, alto: 360,
         carroceria: { top: 0, left: 0, width: '100%', height: '100%' },
+        carroceriaMovil: { top: -400, left: -206, width: 760, height: 900 },
         ruedaDelantera: { top: 41, left: -87, width: 460, height: 311 },
         ruedaTrasera:   { top: 37, left: 266, width: 464, height: 317 },
-        ruedaDelanteraMovil: { top: 197, left: -47, width: 250, height: 150 },
-        ruedaTraseraMovil:   { top: 197, left: 147, width: 250, height: 150 }
+        ruedaDelanteraMovil: {top: 31, left: -311, width: 550, height: 550},
+        ruedaTraseraMovil:   {  top: 31, left: 111, width: 550, height: 550 }
     }
 };
 
@@ -186,6 +191,14 @@ function renderizarCoche() {
     if (imgCarroceria) {
         const src = modelo.colores[configuracionActual.color];
         if (src) imgCarroceria.src = src;
+
+        // Selección de coordenadas para carrocería
+        const c = (esMovil && modelo.carroceriaMovil) ? modelo.carroceriaMovil : modelo.carroceria;
+
+        imgCarroceria.style.top    = typeof c.top === 'number' ? c.top + 'px' : c.top;
+        imgCarroceria.style.left   = typeof c.left === 'number' ? c.left + 'px' : c.left;
+        imgCarroceria.style.width  = typeof c.width === 'number' ? c.width + 'px' : c.width;
+        imgCarroceria.style.height = typeof c.height === 'number' ? c.height + 'px' : c.height;
     }
 
     // 2. Ruedas — posiciones específicas por modelo
