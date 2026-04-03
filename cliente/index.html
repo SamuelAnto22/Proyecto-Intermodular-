@@ -5,15 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Midnight Customs — Taller especializado en personalización de vehículos. Vinilado, potenciación, llantas, body kits e iluminación LED.">
     <title>Midnight Customs | Inicio</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=7">
-    <link rel="stylesheet" href="assets/css/animaciones.css?v=7">
+    <link rel="stylesheet" href="assets/css/style.css?v=8">
+    <link rel="stylesheet" href="assets/css/nosotros.css?v=8">
+    <link rel="stylesheet" href="assets/css/contacto.css?v=8">
+    <link rel="stylesheet" href="assets/css/animaciones.css?v=8">
 </head>
 <body>
     <a href="#contenido-principal" class="saltar-enlace" style="position:absolute;top:-40px;left:0;background:#000;color:#fff;padding:8px;z-index:2000;">Saltar al contenido</a>
 
     <header class="cabecera-principal">
         <div class="logo">
-            <a href="index.html">
+            <a href="#">
                 <img src="assets/img/icon-Photoroom.png" alt="Logotipo de Midnight Customs">
                 <span style="color:var(--color1);margin-right:5px;">Midnight</span><span style="color:var(--color2);">Customs</span>
             </a>
@@ -21,11 +23,11 @@
         <button class="boton-menu" aria-label="Abrir menú" aria-expanded="false">☰</button>
         <nav class="navegacion-principal" id="navegacion-principal" aria-label="Navegación principal">
             <ul>
-                <li><a href="index.html" class="activo">Inicio</a></li>
-                <li><a href="servicios.html">Servicios</a></li>
-                <li><a href="proyectos.html">Proyectos</a></li>
-                <li><a href="nosotros.html">Nosotros</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
+                
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#proyectos">Proyectos</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#contacto">Contacto</a></li>
                 <li><a href="configurador.html" class="boton-neon boton-neon-nav">🔧 Configurador</a></li>
                 <li><a href="login.html">Login</a></li>
             </ul>
@@ -47,56 +49,323 @@
                     <span class="lema-linea">No creamos sueños.</span>
                     <span class="lema-linea lema-destaque">Los cumplimos.</span>
                 </p>
-                <a href="servicios.html" class="boton-neon lema-cta">Descubre cómo</a>
+                <a href="#servicios" class="boton-neon lema-cta">Descubre cómo</a>
             </div>
         </section>
 
-        <section class="servicios-inicio">
+        <section class="pagina-servicios seccion-scroll" id="servicios">
             <div class="titulo-seccion">
-                <h2 id="titulo-servicios-inicio">Nuestros Servicios</h2>
+                <h1 id="titulo-servicios">Nuestros Servicios</h1>
             </div>
-            <div class="cuadricula cuadricula-fila">
-                <a href="servicios.html#vinilado" class="tarjeta-cristal tarjeta-servicio-inicio">
-                    <img src="https://www.areagraficadigital.es/images/galeria/o_1i1nc183j15sh32nhtk1bstboi1b.jpg" alt="Vinilado y pintura">
-                    <h3>Vinilado y pintura</h3>
-                    <p>Vinilos premium: mate, satinado, iridiscente o cromo.</p>
-                    <span class="tarjeta-enlace">Descubre más <span class="tarjeta-flecha">→</span></span>
+            <div class="lista-servicios">
+                <article id="vinilado" class="tarjeta-servicio tarjeta-cristal">
+                    <div class="imagen-servicio">
+                        <img src="https://www.areagraficadigital.es/images/galeria/o_1i1nc183j15sh32nhtk1bstboi1b.jpg" alt="Vinilado y pintura especial">
+                    </div>
+                    <div class="info-servicio">
+                        <h2>Vinilado y Pintura Especial</h2>
+                        <p>Transformamos por completo el aspecto exterior de tu vehículo. Desde un sencillo cambio de color hasta acabados que ningún taller convencional puede ofrecer.</p>
+                        <ul>
+                            <li><strong>Wrapping completo o parcial</strong> <span class="etiqueta-precio">800 € – 1.500 €</span></li>
+                            <li><strong>Pinturas reactivas a UV</strong> <span class="etiqueta-precio">1.400 € – 3.800 €</span></li>
+                            <li><strong>Acabados mate, satinado, iridiscente</strong> <span class="etiqueta-precio">600 € – 1.200 €</span></li>
+                            <li><strong>Vinilos decorativos y calcas</strong> <span class="etiqueta-precio">200 € – 500 €</span></li>
+                        </ul>
+                    </div>
+                </article>
+
+                <article id="motor" class="tarjeta-servicio tarjeta-cristal">
+                    <div class="imagen-servicio">
+                        <img src="https://cdn-s3.clubcorsavenezuela.com/original/2X/2/27e2b4d98a789cc7977b870dec0270fba0228314.jpeg" alt="Potenciación motor">
+                    </div>
+                    <div class="info-servicio">
+                        <h2>Potenciación y Rendimiento</h2>
+                        <p>Extraemos el máximo potencial de tu motor con técnicas de tuning avanzadas. Cada intervención es personalizada según el uso del vehículo.</p>
+                        <ul>
+                            <li><strong>Reprogramación ECU (Stage 1, 2, 3)</strong> <span class="etiqueta-precio">350 € – 900 €</span></li>
+                            <li><strong>Escapes custom y colectores</strong> <span class="etiqueta-precio">800 € – 2.500 €</span></li>
+                            <li><strong>Turbinas e intercoolers híbridos</strong> <span class="etiqueta-precio">1.200 € – 4.000 €</span></li>
+                        </ul>
+                    </div>
+                </article>
+
+                <article id="llantas" class="tarjeta-servicio tarjeta-cristal">
+                    <div class="imagen-servicio">
+                        <img src="https://i.pinimg.com/736x/15/1a/81/151a819607a890b1aaa6b0c41cce7d92.jpg" alt="Llantas personalizadas">
+                    </div>
+                    <div class="info-servicio">
+                        <h2>Llantas y Suspensión</h2>
+                        <p>La postura y los bajos son la base de cualquier build serio. Trabajamos con las mejores marcas y ajustamos cada parámetro a mano.</p>
+                        <ul>
+                            <li><strong>Airsuspension (Airride)</strong> <span class="etiqueta-precio">1.500 € – 4.500 €</span></li>
+                            <li><strong>Llantas forjadas o fundidas</strong> <span class="etiqueta-precio">800 € – 2.000 €</span></li>
+                            <li><strong>Geometría y alineación custom</strong> <span class="etiqueta-precio">400 € – 900 €</span></li>
+                        </ul>
+                    </div>
+                </article>
+
+                <article id="bodykits" class="tarjeta-servicio tarjeta-cristal">
+                    <div class="imagen-servicio">
+                        <img src="https://img.interempresas.net/fotos/2086977.jpeg" alt="Body kits">
+                    </div>
+                    <div class="info-servicio">
+                        <h2>Body Kits y Aerodinámica</h2>
+                        <p>Transformamos la silueta de tu coche con kits de carrocería fabricados en fibra de vidrio, carbono o poliuretano de alta resistencia.</p>
+                        <ul>
+                            <li><strong>Widebody artesanal</strong> <span class="etiqueta-precio">2.000 € – 8.000 €</span></li>
+                            <li><strong>Splitters, difusores...</strong> <span class="etiqueta-precio">400 € – 1.500 €</span></li>
+                            <li><strong>Faldones y taloneras</strong> <span class="etiqueta-precio">300 € – 800 €</span></li>
+                        </ul>
+                    </div>
+                </article>
+
+                <article id="iluminacion" class="tarjeta-servicio tarjeta-cristal">
+                    <div class="imagen-servicio">
+                        <img src="https://img.freepik.com/fotos-premium/faro-coche-vista-macro-espacio-copia-lampara-led-o-xenon-primer-plano-ilustracion-3d-coche-moderno-prestigioso_161844-1189.jpg" alt="Iluminación LED">
+                    </div>
+                    <div class="info-servicio">
+                        <h2>Iluminación LED Custom</h2>
+                        <p>Desde faros reacondicionados hasta kits completos de iluminación ambiental. Hacemos que tu coche brille de forma única.</p>
+                        <ul>
+                            <li><strong>Underglow y ambient lighting</strong> <span class="etiqueta-precio">200 € – 600 €</span></li>
+                            <li><strong>Faros custom y proyectores</strong> <span class="etiqueta-precio">400 € – 1.200 €</span></li>
+                            <li><strong>Luz de matrícula y DRL</strong> <span class="etiqueta-precio">150 € – 400 €</span></li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+<section class="pagina-proyectos seccion-scroll" id="proyectos">
+            <div class="titulo-seccion">
+                <h1 id="titulo-proyectos">Últimos Proyectos</h1>
+            </div>
+            <div class="cuadricula">
+                <a href="proyecto-nightwalker.html" class="tarjeta-cristal tarjeta-proyecto">
+                    <img src="https://mlin.es/wp-content/uploads/2025/09/mercedes-gla-loren-lip-delantero-maxton-min.jpg" alt="Mercedes GLA Panamericana build completo">
+                    <h3>GLA Panamericana</h3>
+                    <p>Mercedes GLA 200CDI convertido en build AMG completo con vinilado Midnight Black y suspensión Airride.</p>
+                    <span class="tarjeta-enlace">Ver proyecto <span class="tarjeta-flecha">→</span></span>
                 </a>
-                <a href="servicios.html#motor" class="tarjeta-cristal tarjeta-servicio-inicio">
-                    <img src="https://cdn-s3.clubcorsavenezuela.com/original/2X/2/27e2b4d98a789cc7977b870dec0270fba0228314.jpeg" alt="Potenciación Motor">
-                    <h3>Potenciación Motor</h3>
-                    <p>Reprogramación ECU, escapes custom y turbinas híbridas.</p>
-                    <span class="tarjeta-enlace">Descubre más <span class="tarjeta-flecha">→</span></span>
+                <a href="proyecto-vortex.html" class="tarjeta-cristal tarjeta-proyecto">
+                    <img src="https://mlin.es/wp-content/uploads/2026/01/bmw-e36-tuning-wide-body-kit-1.jpg" alt="BMW E36 Dark Widebody">
+                    <h3>E36 Dark Widebody</h3>
+                    <p>BMW E36 Coupé con widebody artesanal en fibra de vidrio, llantas Work y suspensión coilover a medida.</p>
+                    <span class="tarjeta-enlace">Ver proyecto <span class="tarjeta-flecha">→</span></span>
                 </a>
-                <a href="servicios.html#llantas" class="tarjeta-cristal tarjeta-servicio-inicio">
-                    <img src="https://i.pinimg.com/736x/15/1a/81/151a819607a890b1aaa6b0c41cce7d92.jpg" alt="Llantas personalizadas">
-                    <h3>Llantas personalizadas</h3>
-                    <p>Airride, llantas forjadas y geometría a medida.</p>
-                    <span class="tarjeta-enlace">Descubre más <span class="tarjeta-flecha">→</span></span>
-                </a>
-                <a href="servicios.html#bodykits" class="tarjeta-cristal tarjeta-servicio-inicio">
-                    <img src="https://img.interempresas.net/fotos/2086977.jpeg" alt="Body Kits">
-                    <h3>Body Kits</h3>
-                    <p>Widebody, splitters, difusores y alerones GTR.</p>
-                    <span class="tarjeta-enlace">Descubre más <span class="tarjeta-flecha">→</span></span>
-                </a>
-                <a href="servicios.html#iluminacion" class="tarjeta-cristal tarjeta-servicio-inicio">
-                    <img src="https://img.freepik.com/fotos-premium/faro-coche-vista-macro-espacio-copia-lampara-led-o-xenon-primer-plano-ilustracion-3d-coche-moderno-prestigioso_161844-1189.jpg" alt="Iluminación LED">
-                    <h3>Iluminación LED</h3>
-                    <p>Underglow, ambient lighting y faros personalizados.</p>
-                    <span class="tarjeta-enlace">Descubre más <span class="tarjeta-flecha">→</span></span>
+                <a href="proyecto-synth-z.html" class="tarjeta-cristal tarjeta-proyecto">
+                    <img src="https://mlin.es/wp-content/uploads/2022/11/MERCEDES-VITO-TUNING-BODY-KIT-FRENTE-min.jpg" alt="Mercedes Vito Full Custom">
+                    <h3>Vito Full Custom</h3>
+                    <p>Mercedes Vito W638 del 99 convertida en showcar con body kit completo, pantallas y sonido de competición.</p>
+                    <span class="tarjeta-enlace">Ver proyecto <span class="tarjeta-flecha">→</span></span>
                 </a>
             </div>
         </section>
 
-        <section style="text-align:center; padding: 4rem 5%;">
+<section class="seccion-scroll" id="nosotros" style="padding-top: 4rem; padding-bottom: 4rem;">
+            <div class="titulo-seccion">
+                <h1 id="titulo-nosotros">Sobre Nosotros</h1>
+            </div>
+
+            <div class="seccion-filosofia">
+                <div class="bloque-filosofia">
+                    <h2>La Filosofía Midnight</h2>
+                    <p>Midnight Customs nació de la misma pasión que empuja a un mecánico a quedarse en el taller hasta las tres de la madrugada: no por obligación, sino porque el proyecto lo exige. No hacemos mantenimientos ni cambiamos filtros. Creamos máquinas que generan miradas, respeto y conversación allá donde aparecen.</p>
+                    <p>Nuestro proceso es artesano: cada pieza se mide, se prueba y se ajusta a mano antes de instalarse. Trabajamos con los mejores materiales del mercado —fibra de carbono real, pintura de cabina, frenos de competición— porque nuestros clientes no aceptan menos.</p>
+                    <p>No creamos monstruos en serie. Cada proyecto es único, irrepetible, y lleva la firma de quien lo construyó.</p>
+                </div>
+
+                <div class="cuadricula-stats">
+                    <div class="caja-estadistica">
+                        <h4>+80</h4>
+                        <p>Proyectos completados</p>
+                    </div>
+                    <div class="caja-estadistica">
+                        <h4>12</h4>
+                        <p>Años de experiencia</p>
+                    </div>
+                    <div class="caja-estadistica">
+                        <h4>7</h4>
+                        <p>Premios de diseño</p>
+                    </div>
+                    <div class="caja-estadistica">
+                        <h4>100%</h4>
+                        <p>Pura pasión</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="seccion-equipo" style="position: relative; overflow: hidden; padding: 4rem 5%; border-radius: 12px; max-width: 1300px; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+                <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;opacity:0.25;">
+                    <source src="assets/img/video.mp4" type="video/mp4">
+                </video>
+                <div class="titulo-seccion" style="position:relative; z-index:2;">
+                    <h2 style="color:var(--color1);">Nuestro Equipo</h2>
+                </div>
+                <div class="cuadricula-equipo">
+                    <article class="tarjeta-cristal tarjeta-equipo">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80" alt="Diego Martín García - CEO">
+                        <h3>Diego Martín</h3>
+                        <div class="cargo-equipo">CEO &amp; Fundador</div>
+                        <p>La mente detrás de Midnight Customs. Cada proyecto lleva su visión y sus estándares imposibles de bajar.</p>
+                    </article>
+                    <article class="tarjeta-cristal tarjeta-equipo">
+                        <img src="https://images.unsplash.com/photo-1540569014015-19a7be504e3a?auto=format&fit=crop&w=400&q=80" alt="Izan - Maestro pintor">
+                        <h3>Izan</h3>
+                        <div class="cargo-equipo">Maestro pintor</div>
+                        <p>Pinturas iridiscentes, camaleón, vinilos cromo y acabados que cambian de color con la luz.</p>
+                    </article>
+                    <article class="tarjeta-cristal tarjeta-equipo">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80" alt="Adrián López - Chapista">
+                        <h3>Adrián López</h3>
+                        <div class="cargo-equipo">Chapista</div>
+                        <p>Escultor de carrocerías. Widebody artesanal, integración de body kits y pasos de rueda con precisión de relojero.</p>
+                    </article>
+                    <article class="tarjeta-cristal tarjeta-equipo">
+                        <img src="https://images.unsplash.com/photo-1534308143481-c55f00be8bd7?auto=format&fit=crop&w=400&q=80" alt="Samuel - Mozo mecánico">
+                        <h3>Samuel</h3>
+                        <div class="cargo-equipo">Mozo mecánico</div>
+                        <p>El primero en llegar y el último en salir. Cambios de ruedas, montajes y todo lo necesario para que los demás trabajen a tope.</p>
+                    </article>
+                    <article class="tarjeta-cristal tarjeta-equipo">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80" alt="Rubén Castillo - Electrónica">
+                        <h3>Rubén Castillo</h3>
+                        <div class="cargo-equipo">Especialista electrónica</div>
+                        <p>Underglow, centralitas, valvetronic y sistemas de audio integrados. El cerebro digital de cada proyecto.</p>
+                    </article>
+                    <article class="tarjeta-cristal tarjeta-equipo">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80" alt="Laura Gómez - Diseño 3D">
+                        <h3>Laura Gómez</h3>
+                        <div class="cargo-equipo">Diseño y visualización 3D</div>
+                        <p>Da forma al proyecto antes de tocar la chapa. Renders hiperrealistas para que el cliente sepa exactamente qué recibirá.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+<section class="contact-page seccion-scroll" id="contacto">
+            <div class="titulo-seccion">
+                <h1 id="titulo-contacto">Contacta con Nosotros</h1>
+                <p style="color:var(--gris);margin-top:0.3rem;">¿Listo para transformar tu vehículo?</p>
+            </div>
+
+            <div class="contenedor-contacto">
+                <div class="tarjeta-cristal info-contacto">
+                    <h2>Hablemos de tu proyecto</h2>
+                    <p>Rellena el formulario con los detalles de la máquina que nos traes y qué tienes pensado. Te responderemos antes de 24 h.</p>
+                    <ul class="lista-contacto">
+                        <li>
+                            <span class="icono-info">📍</span>
+                            <div>
+                                <strong>Dirección</strong>
+                                <span>C/ Circuito Exterior 84, Hub Neón Sur</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="icono-info">📞</span>
+                            <div>
+                                <strong>Teléfono</strong>
+                                <span>+34 555 123 456</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="icono-info">✉️</span>
+                            <div>
+                                <strong>Email</strong>
+                                <span>garage@midnightcustoms.es</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="icono-info">🕐</span>
+                            <div>
+                                <strong>Horario</strong>
+                                <span>L–V: 09:00–20:00 · Sáb: 10:00–15:00</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="icono-info">📸</span>
+                            <div>
+                                <strong>Instagram</strong>
+                                <span>@midnightcustoms</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tarjeta-cristal formulario-contacto">
+                    <h2>Solicitar presupuesto</h2>
+
+                    <form id="formContacto" action="#" method="POST" novalidate>
+                        <div class="fila-formulario">
+                            <div class="grupo-formulario">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre" autocomplete="given-name">
+                            </div>
+                            <div class="grupo-formulario">
+                                <label for="telefono">Teléfono</label>
+                                <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000" autocomplete="tel">
+                            </div>
+                        </div>
+
+                        <div class="grupo-formulario">
+                            <label for="email">Correo electrónico</label>
+                            <input type="email" id="email" name="email" required placeholder="tuemail@ejemplo.com" autocomplete="email">
+                        </div>
+
+                        <div class="grupo-formulario">
+                            <label for="vehiculo">Vehículo (Marca, Modelo, Año)</label>
+                            <input type="text" id="vehiculo" name="vehiculo" placeholder="Ej. BMW E36 Coupé 1996">
+                        </div>
+
+                        <div class="grupo-formulario">
+                            <label for="servicio">Tipo de servicio</label>
+                            <select id="servicio" name="servicio">
+                                <option value="" disabled selected>Selecciona un servicio…</option>
+                                <option>Vinilado y rotulación</option>
+                                <option>Pintura artesanal</option>
+                                <option>Suspensión (lowering / airride)</option>
+                                <option>Body kit y aerodinámica</option>
+                                <option>Electrónica y luces</option>
+                                <option>Presupuesto completo</option>
+                            </select>
+                        </div>
+
+                        <div class="grupo-formulario">
+                            <label for="mensaje">Idea del proyecto / Mensaje</label>
+                            <textarea id="mensaje" name="mensaje" rows="5" required placeholder="Describe qué modificaciones buscas, colores, referencias, plazos…"></textarea>
+                        </div>
+
+                        <div class="grupo-checkbox">
+                            <input type="checkbox" id="privacidad" name="privacidad" required>
+                            <label for="privacidad">Acepto la <a href="#">política de privacidad</a></label>
+                        </div>
+
+                        <button type="submit" class="boton-neon btn-enviar">Enviar mensaje</button>
+                    </form>
+
+                    <div class="mensaje-enviado" id="msgEnviado">
+                        <span class="icono-ok">✅</span>
+                        <h3>¡Mensaje recibido!</h3>
+                        <p>Nos pondremos en contacto contigo antes de 24 horas.<br>
+                            Mientras tanto, echa un vistazo a nuestros <a href="#proyectos">últimos proyectos</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section style="text-align:center; padding: 4rem 5%;" class="seccion-scroll">
             <div class="titulo-seccion">
                 <h2 id="titulo-cta-config">¿Listo para configurar tu coche?</h2>
             </div>
             <p style="max-width:600px;margin:0 auto 2rem;">Usa nuestro configurador interactivo para visualizar las modificaciones de tu vehículo antes de solicitarlas.</p>
-            <a href="registro.html" class="boton-neon">Crear cuenta gratis</a>
-            <a href="configurador.html" class="boton-neon boton-secundario" style="margin-left:1rem;">Probar configurador</a>
+            <div class="botones-cta-container" style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap;">
+                <a href="registro.html" class="boton-neon" style="flex:1; max-width:300px; text-align:center;">Crear cuenta gratis</a>
+                <a href="configurador.html" class="boton-neon boton-secundario" style="margin-left:0; flex:1; max-width:300px; text-align:center;">Probar configurador</a>
+            </div>
         </section>
+
     </main>
 
     <script src="assets/js/pie-pagina.js?v=7"></script>

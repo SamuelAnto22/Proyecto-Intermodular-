@@ -11,7 +11,10 @@
     <link rel="stylesheet" href="assets/css/animaciones.css?v=7">
     <style>
         .configurador-page {
-            padding: 2rem 5%;
+            padding: 8rem 5% 2rem 5%; /* Añadido padding superior base */
+            width: 100%;
+            box-sizing: border-box;
+            overflow-x: hidden;
         }
 
         .configurador-container {
@@ -20,7 +23,9 @@
             gap: 2rem;
             align-items: start;
             max-width: 1300px;
+            width: 100%;
             margin: 0 auto;
+            box-sizing: border-box;
         }
 
         .vista-coche {
@@ -138,6 +143,38 @@
                 position: static;
             }
         }
+        
+        @media (max-width: 768px) {
+            main.configurador-page {
+                padding-top: 100px !important; /* Ajuste para que no se corte arriba */
+            }
+            .boton-neon, .boton-secundario {
+                width: 100%;
+                text-align: center;
+                display: block;
+                box-sizing: border-box;
+            }
+            
+            .botones-cta-container {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            #coche-visor {
+                height: auto !important; /* Permitir que crezca */
+                min-height: 250px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: visible;
+            }
+            .vista-coche {
+                min-height: auto !important;
+                padding: 2rem 0;
+                overflow: hidden; /* Evitar scroll lateral del escalado */
+            }
+        }
     </style>
 </head>
 
@@ -153,11 +190,11 @@
         <button class="boton-menu" aria-label="Abrir menú">☰</button>
         <nav class="navegacion-principal" id="navegacion-principal">
             <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="servicios.html">Servicios</a></li>
-                <li><a href="proyectos.html">Proyectos</a></li>
-                <li><a href="nosotros.html">Nosotros</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
+                
+                <li><a href="index.html#servicios">Servicios</a></li>
+                <li><a href="index.html#proyectos">Proyectos</a></li>
+                <li><a href="index.html#nosotros">Nosotros</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
                 <li><a href="configurador.html" class="boton-neon boton-neon-nav">🔧 Configurador</a></li>
                 <li><a href="garaje.html">Mi Garaje</a></li>
                 <li><a href="login.html">Login</a></li>
@@ -165,30 +202,30 @@
         </nav>
     </header>
 
-    <main class="configurador-page">
-        <div class="titulo-seccion" style="margin-bottom:2rem;">
+    <main class="configurador-page" style="min-height: 100vh;">
+        <div class="titulo-seccion" style="margin-bottom:2rem; text-align:center;">
             <h1 id="titulo-configurador">Configura tu Coche</h1>
         </div>
 
         <div class="configurador-container">
             <!-- Visor de visualización -->
             <div class="vista-coche">
-                <div id="coche-visor"
-                    style="position: relative; width: 100%; max-width: 800px; height: 400px; display: flex; align-items: center; justify-content: center;">
-                    <br>
-                    <div id="contenedor-coche"
-                        style="position: relative; width: 640px; height: 360px;">
-                        <!-- La carrocería (z-index: 2). Se añade object-fit:contain y object-position:bottom para normalizar el recorte diferente entre el rojo y el azul -->
-                        <img id="capa-carroceria" src="assets/img/mini-rojo.png" alt="Mini Cooper Carrocería"
-                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom; z-index: 2; filter: drop-shadow(0 20px 20px rgba(0,0,0,0.8));">
+                    <div id="coche-visor"
+                        style="position: relative; width: 100%; max-width: 800px; height: 400px; display: flex; align-items: center; justify-content: center;">
+                        <br>
+                        <div id="contenedor-coche"
+                            style="position: relative; width: 640px; height: 360px;">
+                            <!-- La carrocería (z-index: 2). Se añade object-fit:contain y object-position:bottom para normalizar el recorte diferente entre el rojo y el azul -->
+                            <img id="capa-carroceria" src="assets/img/mini-rojo.png" alt="Mini Cooper Carrocería"
+                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom; z-index: 2; filter: drop-shadow(0 20px 20px rgba(0,0,0,0.8));">
 
-                        <!-- Añadimos object-fit: contain y forzamos proporciones cuadradas (width = height) para no deformar -->
-                        <img id="capa-rueda-delantera" src="assets/img/rueda-clasica.png" alt="Rueda Delantera"
-                            style="position: absolute; top: 62px; left: -79px; width: 445px; height: 304px; z-index: 3; object-fit: contain; border-radius: 50%;">
-                        <img id="capa-rueda-trasera" src="assets/img/rueda-clasica.png" alt="Rueda Trasera"
-                            style="position: absolute; top: 62px; left: 282px; width: 445px; height: 304px; z-index: 3; object-fit: contain; border-radius: 50%;">
+                            <!-- Añadimos object-fit: contain y forzamos proporciones cuadradas (width = height) para no deformar -->
+                            <img id="capa-rueda-delantera" src="assets/img/rueda-clasica.png" alt="Rueda Delantera"
+                                style="position: absolute; top: 62px; left: -79px; width: 445px; height: 304px; z-index: 3; object-fit: contain; border-radius: 50%;">
+                            <img id="capa-rueda-trasera" src="assets/img/rueda-clasica.png" alt="Rueda Trasera"
+                                style="position: absolute; top: 62px; left: 282px; width: 445px; height: 304px; z-index: 3; object-fit: contain; border-radius: 50%;">
 
-                    </div>
+                        </div>
                     <style>
                         @keyframes rotarV {
                             from {

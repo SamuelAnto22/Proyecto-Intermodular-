@@ -47,6 +47,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // --- Scrollytelling IntersectionObserver ---
+    const scrollySections = document.querySelectorAll('.seccion-scroll');
+    if (scrollySections.length > 0) {
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Opcional: si solo queremos animar una vez
+                    // observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1, // Se activa cuando un 10% del bloque es visible
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        scrollySections.forEach(section => {
+            observer.observe(section);
+        });
+    }
+
     // --- Comprobar sesión para transformar el menú "Login" en dos botones separados ---
     const basePath = '/Proyecto-Intermodular-/servidor/api';
 

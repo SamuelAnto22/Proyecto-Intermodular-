@@ -72,7 +72,11 @@
     line-height: 1.5;
 }
 
-.formulario-contacto { padding: 2rem 2.5rem; }
+.formulario-contacto { 
+    padding: 2rem 2.5rem; 
+    display: flex;
+    flex-direction: column;
+}
 
 .formulario-contacto h2 {
     color: var(--color1);

@@ -20,6 +20,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     background-color: var(--fondo);
     color: var(--blanco);
@@ -224,6 +228,10 @@ section {
     padding: 6rem 5%;
 }
 
+#servicios, #nosotros {
+    background-color: #0b0b12; /* Un tono ligeramente diferente para separar visualmente las zonas */
+}
+
 .titulo-seccion {
     text-align: center;
     margin-bottom: 4rem;
@@ -254,8 +262,8 @@ section {
     justify-content: center;
     text-align: center;
     position: relative;
-    padding: 0 5%;
-    margin-top: -100px;
+    padding: 100px 5% 0 5%;
+    margin-top: 0;
     background: radial-gradient(circle at center, rgba(192, 82, 226, 0.15) 0%, rgba(5, 5, 8, 1) 70%);
 }
 
@@ -434,6 +442,11 @@ section {
     position: relative;
     padding-left: 25px;
     color: var(--blanco);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Cambiado de center para mejorar alineación multilínea */
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .info-servicio li::before {
@@ -570,16 +583,38 @@ section {
 .grupo-formulario label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
 
 .grupo-formulario input,
-.grupo-formulario textarea {
+.grupo-formulario textarea,
+.grupo-formulario select {
     width: 100%;
-    padding: 1rem;
+    padding: 12px 15px;
     background: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--borde-tarjeta);
-    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
     color: var(--blanco);
-    font-family: 'Outfit', sans-serif;
     font-size: 1rem;
+    font-family: 'Outfit', sans-serif;
     transition: all 0.3s ease;
+}
+
+.grupo-formulario select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 12px auto;
+}
+
+.grupo-formulario select option {
+    background: var(--fondo);
+    color: var(--blanco);
+}
+
+.grupo-formulario input:focus,
+.grupo-formulario textarea:focus,
+.grupo-formulario select:focus {
+    border-color: var(--color1);
+    box-shadow: 0 0 10px var(--brillo1);
+    outline: none;
 }
 
 /* PRESUPUESTOS */
@@ -605,7 +640,6 @@ section {
 .contenedor-antes-despues img { width: 100%; border-radius: 8px; border: 2px solid var(--borde-tarjeta); }
 
 .etiqueta-precio {
-    float: right;
     color: var(--color2);
     font-family: 'Bebas Neue', cursive;
     font-size: 1.3rem;
@@ -638,15 +672,19 @@ section {
     padding: 3rem 5%;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
-    justify-content: space-between;
+    flex-direction: column; /* Cambiado para centrar elementos verticalmente */
+    justify-content: center;
     align-items: center;
+    text-align: center;
     flex-wrap: wrap;
+    gap: 1.5rem;
 }
 
 .logo-pie {
     font-family: 'Bebas Neue', cursive;
     font-size: 2.2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    width: 100%; /* Asegura que ocupe todo el ancho para centrarse */
 }
 
 .nav-pie ul,
@@ -691,6 +729,11 @@ section {
     .tarjeta-servicio {
         flex-direction: column !important;
     }
+    .imagen-servicio {
+        width: 100% !important;
+        flex: none !important;
+        aspect-ratio: 16/9;
+    }
 }
 
 @media (max-width: 768px) {
@@ -717,13 +760,61 @@ section {
         gap: 2rem;
     }
 
-    h1 { font-size: 3rem; }
-    h2 { font-size: 2.2rem; }
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 1.8rem; }
+    p { font-size: 0.95rem; }
+
+    /* Fix portad cover spacing below fixed navbar */
+    .portada { 
+        margin-top: 0; 
+        padding-top: 100px; 
+        padding-top: 120px; 
+    }
+    
+    /* Fix buttons being too large */
+    .boton-neon, .boton-secundario { 
+        padding: 10px 15px; 
+        font-size: 1rem; 
+    }
+    
+    /* Fix services list getting cramped */
+    .info-servicio li { 
+        font-size: 0.85rem; 
+        margin-bottom: 0.8rem; 
+        padding-left: 25px; 
+        display: block; /* Cambiado de flex para evitar que la flecha se aleje del texto */
+        text-align: left;
+    }
+    .info-servicio li strong {
+        display: inline-block;
+        margin-right: 5px;
+    }
+    .etiqueta-precio { 
+        font-size: 1rem; 
+        display: block; 
+        margin-top: 0.3rem;
+        color: var(--color2);
+        opacity: 0.9;
+    }
 
     .contenido-portada { padding: 0 1rem; }
     .contenido-nosotros { flex-direction: column; }
     .estadisticas { width: 100%; }
     .contenedor-antes-despues { grid-template-columns: 1fr; }
+    
+    .pie-pagina { 
+        flex-direction: column; 
+        text-align: center; 
+        padding: 2rem 5%; 
+    }
+    .nav-pie ul, .redes-sociales ul { 
+        justify-content: center; 
+        flex-wrap: wrap;
+    }
+    .fondo-pie {
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
     .contenedor-contacto { grid-template-columns: 1fr; }
     .fila-formulario { grid-template-columns: 1fr; }
     .pie-pagina { flex-direction: column; gap: 2rem; text-align: center; }

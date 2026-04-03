@@ -31,7 +31,10 @@ const CATALOGO = {
         ancho: 640, alto: 360,
         carroceria: { top: 0, left: 0, width: '100%', height: '100%' },
         ruedaDelantera: { top: 62,  left: -79,  width: 445, height: 304 },
-        ruedaTrasera:   { top: 62,  left: 282,  width: 445, height: 304 }
+        ruedaTrasera:   { top: 62,  left: 282,  width: 445, height: 304 },
+        // Coordenadas exclusivas para móvil:
+        ruedaDelanteraMovil: { top: 206, left: -48, width: 250, height: 150 },
+        ruedaTraseraMovil:   { top: 206, left: 150, width: 250, height: 150 }
     },
 
     bmw_serie1: {
@@ -46,7 +49,9 @@ const CATALOGO = {
         ancho: 640, alto: 360,
         carroceria: { top: 0, left: 0, width: '100%', height: '100%' },
         ruedaDelantera: { top: -337, left: -79,  width: 445, height: 1110 },
-        ruedaTrasera:   { top: -328, left: 288,  width: 445, height: 1100 }
+        ruedaTrasera:   { top: -328, left: 288,  width: 445, height: 1100 },
+        ruedaDelanteraMovil: { top: 208, left: -41, width: 237, height: 150 },
+        ruedaTraseraMovil:   { top: 208, left: 160, width: 237, height: 150 }
     },
 
     audi_a3: {
@@ -61,7 +66,9 @@ const CATALOGO = {
         ancho: 640, alto: 360,
         carroceria: { top: 0, left: 0, width: '100%', height: '100%' },
         ruedaDelantera: { top: 62, left: -91, width: 462, height: 313 },
-        ruedaTrasera:   { top: 63, left: 290, width: 462, height: 313 }
+        ruedaTrasera:   { top: 63, left: 290, width: 462, height: 313 },
+        ruedaDelanteraMovil: { top: 208, left: -48, width: 250, height: 150 },
+        ruedaTraseraMovil:   { top: 209, left: 159, width: 250, height: 150 }
     },
 
     volkswagen_golf: {
@@ -76,7 +83,9 @@ const CATALOGO = {
         ancho: 640, alto: 360,
         carroceria: { top: 0, left: 0, width: '100%', height: '100%' },
         ruedaDelantera: { top: 46, left: -102, width: 479, height: 324 },
-        ruedaTrasera:   { top: 44, left: 262,  width: 479, height: 324 }
+        ruedaTrasera:   { top: 44, left: 262,  width: 479, height: 324 },
+        ruedaDelanteraMovil: { top: 202, left: -50, width: 250, height: 150 },
+        ruedaTraseraMovil:   { top: 202, left: 149, width: 250, height: 150 }
     },
 
     toyota_supra: {
@@ -91,7 +100,9 @@ const CATALOGO = {
         ancho: 640, alto: 360,
         carroceria: { top: 0, left: 0, width: '100%', height: '100%' },
         ruedaDelantera: { top: 41, left: -87, width: 460, height: 311 },
-        ruedaTrasera:   { top: 37, left: 266, width: 464, height: 317 }
+        ruedaTrasera:   { top: 37, left: 266, width: 464, height: 317 },
+        ruedaDelanteraMovil: { top: 197, left: -47, width: 250, height: 150 },
+        ruedaTraseraMovil:   { top: 197, left: 147, width: 250, height: 150 }
     }
 };
 
@@ -109,10 +120,8 @@ document.addEventListener('DOMContentLoaded', function () {
     cargarDesdeURL();
     setupEventListeners();
     actualizarVista();
+    window.addEventListener('resize', actualizarEscala);
 });
-
-// Escuchar cambios de tamaño de pantalla para escalar el coche en móviles
-window.addEventListener('resize', actualizarEscala);
 
 // ── Cargar configuración desde URL (modo edición) ───────────
 function cargarDesdeURL() {
@@ -170,6 +179,9 @@ function renderizarCoche() {
     const imgRuedaTras  = document.getElementById('capa-rueda-trasera');
     const contenedor    = document.getElementById('contenedor-coche');
 
+    // Detectar si estamos en modo móvil (menos de 768px)
+    const esMovil = window.innerWidth <= 768;
+
     // 1. Carrocería
     if (imgCarroceria) {
         const src = modelo.colores[configuracionActual.color];
@@ -178,7 +190,9 @@ function renderizarCoche() {
 
     // 2. Ruedas — posiciones específicas por modelo
     if (imgRuedaDel) {
-        const rd = modelo.ruedaDelantera;
+        // Priorizar coordenadas móviles si existen y estamos en móvil
+        const rd = (esMovil && modelo.ruedaDelanteraMovil) ? modelo.ruedaDelanteraMovil : modelo.ruedaDelantera;
+        
         imgRuedaDel.src            = RUEDAS[configuracionActual.llantas] || RUEDAS.clasica;
         imgRuedaDel.style.top      = rd.top    + 'px';
         imgRuedaDel.style.left     = rd.left   + 'px';
@@ -187,7 +201,9 @@ function renderizarCoche() {
     }
 
     if (imgRuedaTras) {
-        const rt = modelo.ruedaTrasera;
+        // Priorizar coordenadas móviles si existen y estamos en móvil
+        const rt = (esMovil && modelo.ruedaTraseraMovil) ? modelo.ruedaTraseraMovil : modelo.ruedaTrasera;
+
         imgRuedaTras.src           = RUEDAS[configuracionActual.llantas] || RUEDAS.clasica;
         imgRuedaTras.style.top     = rt.top    + 'px';
         imgRuedaTras.style.left    = rt.left   + 'px';
@@ -216,13 +232,14 @@ function actualizarEscala() {
     // Ancho teórico del coche actual
     const anchoCoche = parseInt(contenedor.style.width) || 640;
 
-    // Si la pantalla es más pequeña que el coche (añadiendo margen)
+    // Si la pantalla es más pequeña que el coche (añadiendo margen para que no se pegue a los bordes)
     if (anchoVisor < (anchoCoche + 40)) {
-        const escala = anchoVisor / (anchoCoche + 40);
+        const escala = (anchoVisor - 40) / anchoCoche;
         contenedor.style.transform = `scale(${escala})`;
         contenedor.style.transformOrigin = 'center center';
     } else {
         contenedor.style.transform = 'scale(1)';
+        contenedor.style.transformOrigin = 'center center';
     }
 }
 
