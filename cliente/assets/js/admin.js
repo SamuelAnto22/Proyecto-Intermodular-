@@ -69,7 +69,7 @@ function cargarDashboard() {
                     <td>
                         <div class="cliente-info">
                             <span class="cliente-nombre">${escaparHtml(p.cliente)}</span>
-                            <span class="cliente-email">${p.cliente_email}</span>
+                            <span class="cliente-email">${escaparHtml(p.cliente_email)}</span>
                         </div>
                     </td>
                     <td class="modelo-texto">${p.modelo.replace('_', ' ')}</td>
