@@ -85,11 +85,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 // --- Lógica según ROL (Admin vs Cliente) ---
                 if (data.rol === 'admin') {
-                    // Ocultar Configurador
-                    const configLink = document.querySelector('a[href="configurador.html"]');
-                    if (configLink && configLink.parentElement) {
-                        configLink.parentElement.style.display = 'none';
+                    // Ocultar sección CTA de Configurador abajo en el index
+                    const seccionConfigCTA = document.getElementById('seccion-cta-configurador');
+                    if (seccionConfigCTA) {
+                        seccionConfigCTA.style.display = 'none';
                     }
+
+                    // Ocultar todos los enlaces al Configurador
+                    const configLinks = document.querySelectorAll('a[href="configurador.html"]');
+                    configLinks.forEach(link => {
+                        if (link.parentElement && link.parentElement.tagName === 'LI') {
+                            link.parentElement.style.display = 'none';
+                        } else {
+                            link.style.display = 'none';
+                        }
+                    });
                     
                     // Insertar Panel Admin antes de su perfil
                     if (liLogin) {
