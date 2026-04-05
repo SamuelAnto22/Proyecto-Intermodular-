@@ -4,8 +4,7 @@
 // GET — devuelve JSON con estado de la sesión
 // ============================================================
 
-header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
+require_once __DIR__ . '/../includes/header.php';
 
 // Arrancar sesión si no está iniciada
 if (session_status() === PHP_SESSION_NONE) {

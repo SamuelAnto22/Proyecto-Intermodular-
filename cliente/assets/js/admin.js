@@ -2,11 +2,19 @@
 // Admin Panel — Midnight Customs
 // ============================================================
 
+
+
 const API_ADMIN = '/Proyecto-Intermodular-/servidor/api/pedidos.php';
 
 document.addEventListener('DOMContentLoaded', function () {
     cargarDashboard();
 });
+
+function escaparHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = String(str ?? '');
+    return div.innerHTML;
+}
 
 // ────────────────────────────────────────────────────────────
 // Cargar pedidos + estadísticas
@@ -60,7 +68,7 @@ function cargarDashboard() {
                     <td>#${String(p.id).padStart(4, '0')}</td>
                     <td>
                         <div class="cliente-info">
-                            <span class="cliente-nombre">${p.cliente}</span>
+                            <span class="cliente-nombre">${escaparHtml(p.cliente)}</span>
                             <span class="cliente-email">${p.cliente_email}</span>
                         </div>
                     </td>
@@ -108,23 +116,23 @@ function cambiarEstado(id) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ accion: 'cambiar_estado', id, estado: nuevoEstado })
     })
-    .then(r => r.json())
-    .then(data => {
-        if (data.ok) {
-            // Actualizar badge sin recargar
-            const badge = document.getElementById(`badge-${id}`);
-            if (badge) {
-                badge.className = `badge-estado badge-${nuevoEstado.replace(' ', '-')}`;
-                badge.textContent = capitalizarEstado(nuevoEstado);
+        .then(r => r.json())
+        .then(data => {
+            if (data.ok) {
+                // Actualizar badge sin recargar
+                const badge = document.getElementById(`badge-${id}`);
+                if (badge) {
+                    badge.className = `badge-estado badge-${nuevoEstado.replace(' ', '-')}`;
+                    badge.textContent = capitalizarEstado(nuevoEstado);
+                }
+                toastAdmin('✅ ' + data.message, 'exito');
+                // Recargar stats
+                actualizarStats();
+            } else {
+                toastAdmin('Error: ' + data.message, 'error');
             }
-            toastAdmin('✅ ' + data.message, 'exito');
-            // Recargar stats
-            actualizarStats();
-        } else {
-            toastAdmin('Error: ' + data.message, 'error');
-        }
-    })
-    .catch(() => toastAdmin('Error de conexión.', 'error'));
+        })
+        .catch(() => toastAdmin('Error de conexión.', 'error'));
 }
 
 // ────────────────────────────────────────────────────────────
@@ -138,24 +146,24 @@ function eliminarPedido(id) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ accion: 'eliminar', id })
     })
-    .then(r => r.json())
-    .then(data => {
-        if (data.ok) {
-            const row = document.getElementById(`pedido-${id}`);
-            if (row) {
-                row.style.transition = 'opacity 0.3s';
-                row.style.opacity = '0';
-                setTimeout(() => {
-                    row.remove();
-                    actualizarStats();
-                }, 300);
+        .then(r => r.json())
+        .then(data => {
+            if (data.ok) {
+                const row = document.getElementById(`pedido-${id}`);
+                if (row) {
+                    row.style.transition = 'opacity 0.3s';
+                    row.style.opacity = '0';
+                    setTimeout(() => {
+                        row.remove();
+                        actualizarStats();
+                    }, 300);
+                }
+                toastAdmin('🗑️ Pedido eliminado.', 'exito');
+            } else {
+                toastAdmin('Error: ' + data.message, 'error');
             }
-            toastAdmin('🗑️ Pedido eliminado.', 'exito');
-        } else {
-            toastAdmin('Error: ' + data.message, 'error');
-        }
-    })
-    .catch(() => toastAdmin('Error de conexión.', 'error'));
+        })
+        .catch(() => toastAdmin('Error de conexión.', 'error'));
 }
 
 // ────────────────────────────────────────────────────────────
@@ -174,7 +182,7 @@ function actualizarStats() {
                 document.getElementById('stat-terminados').textContent = data.stats.terminados;
             }
         })
-        .catch(() => {});
+        .catch(() => { });
 }
 
 // ────────────────────────────────────────────────────────────
