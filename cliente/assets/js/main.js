@@ -111,14 +111,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         liAdmin.innerHTML = '<a href="admin.html" class="boton-neon boton-neon-nav" style="border-color:var(--color2); color:var(--color2); box-shadow: 0 0 10px rgba(80,200,255,0.4)">⚙️ Panel Admin</a>';
                         liLogin.parentNode.insertBefore(liAdmin, liLogin);
                     }
-                } else {
-                    // Si es Cliente asegurar que 'Mi Garaje' aparezca si no estaba hardcodeado
-                    const garageLinkExiste = document.querySelector('a[href="garaje.html"]');
-                    if (!garageLinkExiste && liLogin) {
-                        const liGaraje = document.createElement('li');
-                        liGaraje.innerHTML = '<a href="garaje.html">Mi Garaje</a>';
-                        liLogin.parentNode.insertBefore(liGaraje, liLogin);
-                    }
                 }
 
                 if (liLogin) {
@@ -146,14 +138,30 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => console.error('Error verificando sesión:', error));
 
-    document.addEventListener('click', (e) => {
+    document.body.addEventListener('click', (e) => {
         const a = e.target.closest('#nav-logout-link');
         if (!a) return;
+
         e.preventDefault();
+        e.stopPropagation();
+
+        console.log('Logout click detectado');
+
         fetch(`${basePath}/logout.php`, {
             method: 'POST',
-            headers: { 'X-CSRF-Token': window.__CSRF_TOKEN__ || '' }
-        }).then(() => window.location.href = 'index.html');
+            headers: {
+                'X-CSRF-Token': window.__CSRF_TOKEN__ || ''
+            }
+        })
+            .then(async r => {
+                console.log('Logout status:', r.status);
+                // aunque falle, enviamos a home
+                window.location.href = 'index.html';
+            })
+            .catch(err => {
+                console.error('Logout error:', err);
+                window.location.href = 'index.html';
+            });
     });
 
 });

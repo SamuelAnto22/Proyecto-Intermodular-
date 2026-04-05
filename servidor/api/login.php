@@ -44,6 +44,7 @@ $stmt->execute([$email]);
 $usuario = $stmt->fetch();
 
 if (!$usuario || !password_verify($password, $usuario['password'])) {
+    $_SESSION['login_attempts'][] = time();
     header('Location: ../../cliente/login.html?error=' . urlencode('Credenciales inválidas.'));
     exit;
 }
@@ -53,6 +54,7 @@ session_regenerate_id(true); // Evitar fijación de sesión
 $_SESSION['user_id']   = $usuario['id'];
 $_SESSION['user_name'] = $usuario['nombre'];
 $_SESSION['user_role'] = $usuario['rol'];
+$_SESSION['login_attempts'] = []; // Limpiar intentos tras login exitoso
 
 // --- Redirigir según el rol ---
 if ($usuario['rol'] === 'admin') {

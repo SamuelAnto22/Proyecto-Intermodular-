@@ -27,7 +27,7 @@ if (ini_get("session.use_cookies")) {
         $params["secure"], $params["httponly"]
     );
 }
-
+unset($_SESSION['login_attempts']);
 session_destroy();
 echo json_encode(['ok' => true, 'message' => 'Sesión cerrada']);
 exit;
