@@ -1,7 +1,6 @@
 // ============================================================
 // Mi Garaje — Lógica completa con modal y toast
 // ============================================================
-
 const API_BASE = '/Proyecto-Intermodular-/servidor/api';
 
 // ── Estado del modal de borrado ──────────────────────────────
@@ -11,6 +10,13 @@ document.addEventListener('DOMContentLoaded', function () {
     cargarProyectos();
     iniciarModal();
 });
+
+function escaparHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = String(str ?? '');
+    return div.innerHTML;
+}
+
 
 // ────────────────────────────────────────────────────────────
 // Cargar y renderizar proyectos
@@ -70,7 +76,7 @@ function crearTarjeta(p) {
     card.innerHTML = `
         <div class="tarjeta-banda"></div>
         <div class="tarjeta-body">
-            <div class="tarjeta-modelo">${p.modelo.replace('_', ' ')}</div>
+            <div class="tarjeta-modelo">${escaparHtml(p.modelo.replace('_', ' '))}</div>
 
             <span class="estado-badge ${claseEstado}">${labelEstado}</span>
 
@@ -119,10 +125,10 @@ function crearTarjeta(p) {
 // ── Textos legibles para cada estado ─────────────────────────
 function etiquetaEstado(estado) {
     const labels = {
-        'pendiente'  : 'Pendiente',
-        'solicitado' : 'Solicitado',
-        'en proceso' : 'En proceso',
-        'terminado'  : 'Terminado'
+        'pendiente': 'Pendiente',
+        'solicitado': 'Solicitado',
+        'en proceso': 'En proceso',
+        'terminado': 'Terminado'
     };
     return labels[estado] || estado;
 }
@@ -147,41 +153,41 @@ function solicitarPedido(configId, btn) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ accion: 'solicitar', configuracion_id: configId, estado: 'solicitado' })
     })
-    .then(r => {
-        // Clonar la respuesta para poder leer el texto crudo si falla el JSON
-        const cloned = r.clone();
-        return r.json().catch(() => {
-            // Si no es JSON válido, leer texto crudo para ver el error PHP
-            return cloned.text().then(txt => {
-                console.error('Respuesta no-JSON del servidor:', txt);
-                return { ok: false, message: 'Error del servidor (ver consola)' };
+        .then(r => {
+            // Clonar la respuesta para poder leer el texto crudo si falla el JSON
+            const cloned = r.clone();
+            return r.json().catch(() => {
+                // Si no es JSON válido, leer texto crudo para ver el error PHP
+                return cloned.text().then(txt => {
+                    console.error('Respuesta no-JSON del servidor:', txt);
+                    return { ok: false, message: 'Error del servidor (ver consola)' };
+                });
             });
-        });
-    })
-    .then(data => {
-        if (data.ok) {
-            const card = document.querySelector(`.tarjeta-garaje[data-id="${configId}"]`);
-            if (card) {
-                const badge = card.querySelector('.estado-badge');
-                if (badge) {
-                    badge.className = 'estado-badge estado-solicitado';
-                    badge.textContent = 'Solicitado';
+        })
+        .then(data => {
+            if (data.ok) {
+                const card = document.querySelector(`.tarjeta-garaje[data-id="${configId}"]`);
+                if (card) {
+                    const badge = card.querySelector('.estado-badge');
+                    if (badge) {
+                        badge.className = 'estado-badge estado-solicitado';
+                        badge.textContent = 'Solicitado';
+                    }
                 }
+                btn.textContent = '✅ Solicitado';
+                mostrarToast('📤 ¡Solicitud enviada al taller! Te contactaremos pronto.', 'exito');
+            } else {
+                btn.disabled = false;
+                btn.textContent = '📤 Solicitar';
+                mostrarToast('Error: ' + (data.message || 'Inténtalo de nuevo.'), 'error');
             }
-            btn.textContent = '✅ Solicitado';
-            mostrarToast('📤 ¡Solicitud enviada al taller! Te contactaremos pronto.', 'exito');
-        } else {
+        })
+        .catch(err => {
+            console.error('Error en solicitar:', err);
             btn.disabled = false;
             btn.textContent = '📤 Solicitar';
-            mostrarToast('Error: ' + (data.message || 'Inténtalo de nuevo.'), 'error');
-        }
-    })
-    .catch(err => {
-        console.error('Error en solicitar:', err);
-        btn.disabled = false;
-        btn.textContent = '📤 Solicitar';
-        mostrarToast('Error de conexión.', 'error');
-    });
+            mostrarToast('Error de conexión.', 'error');
+        });
 }
 
 // ────────────────────────────────────────────────────────────
@@ -225,43 +231,43 @@ function ejecutarBorrado(id) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })
     })
-    .then(r => r.json())
-    .then(data => {
-        cerrarModal();
-        btnConfirmar.textContent = 'Sí, eliminar';
-        btnConfirmar.disabled = false;
+        .then(r => r.json())
+        .then(data => {
+            cerrarModal();
+            btnConfirmar.textContent = 'Sí, eliminar';
+            btnConfirmar.disabled = false;
 
-        if (data.ok) {
-            // Eliminar la tarjeta con animación
-            const card = document.querySelector(`.tarjeta-garaje[data-id="${id}"]`);
-            if (card) {
-                card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-                card.style.opacity = '0';
-                card.style.transform = 'scale(0.9)';
-                setTimeout(() => {
-                    card.remove();
-                    // Si no quedan tarjetas, mostrar mensaje vacío
-                    const lista = document.getElementById('proyectos-lista');
-                    if (lista.querySelectorAll('.tarjeta-garaje').length === 0) {
-                        lista.innerHTML = `
+            if (data.ok) {
+                // Eliminar la tarjeta con animación
+                const card = document.querySelector(`.tarjeta-garaje[data-id="${id}"]`);
+                if (card) {
+                    card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        card.remove();
+                        // Si no quedan tarjetas, mostrar mensaje vacío
+                        const lista = document.getElementById('proyectos-lista');
+                        if (lista.querySelectorAll('.tarjeta-garaje').length === 0) {
+                            lista.innerHTML = `
                             <div class="garaje-vacio">
                                 <p>🚘 No tienes proyectos guardados todavía.</p>
                                 <a href="configurador.html">Crea tu primera configuración →</a>
                             </div>`;
-                    }
-                }, 400);
+                        }
+                    }, 400);
+                }
+                mostrarToast('🗑️ Proyecto eliminado correctamente.', 'exito');
+            } else {
+                mostrarToast('Error: ' + (data.message || 'No se pudo eliminar.'), 'error');
             }
-            mostrarToast('🗑️ Proyecto eliminado correctamente.', 'exito');
-        } else {
-            mostrarToast('Error: ' + (data.message || 'No se pudo eliminar.'), 'error');
-        }
-    })
-    .catch(() => {
-        cerrarModal();
-        btnConfirmar.textContent = 'Sí, eliminar';
-        btnConfirmar.disabled = false;
-        mostrarToast('Error de conexión.', 'error');
-    });
+        })
+        .catch(() => {
+            cerrarModal();
+            btnConfirmar.textContent = 'Sí, eliminar';
+            btnConfirmar.disabled = false;
+            mostrarToast('Error de conexión.', 'error');
+        });
 }
 
 // ────────────────────────────────────────────────────────────

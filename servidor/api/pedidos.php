@@ -36,26 +36,37 @@ if ($method === 'GET') {
 
     // Estadísticas
     $totalClientes = $pdo->query("SELECT COUNT(*) FROM usuarios WHERE rol = 'cliente'")->fetchColumn();
-    $totalPedidos  = $pdo->query("SELECT COUNT(*) FROM pedidos")->fetchColumn();
-    $pendientes    = $pdo->query("SELECT COUNT(*) FROM pedidos WHERE estado = 'pendiente'")->fetchColumn();
-    $solicitados   = $pdo->query("SELECT COUNT(*) FROM pedidos WHERE estado = 'solicitado'")->fetchColumn();
-    $enProceso     = $pdo->query("SELECT COUNT(*) FROM pedidos WHERE estado = 'en proceso'")->fetchColumn();
-    $terminados    = $pdo->query("SELECT COUNT(*) FROM pedidos WHERE estado = 'terminado'")->fetchColumn();
 
+    $statsStmt = $pdo->query(
+        "SELECT 
+            COUNT(*) AS total_pedidos,
+            SUM(estado = 'pendiente')   AS pendientes,
+            SUM(estado = 'solicitado')  AS solicitados,
+            SUM(estado = 'en proceso')  AS en_proceso,
+            SUM(estado = 'terminado')   AS terminados
+         FROM pedidos"
+    );
+    
+    // Obtenemos los resultados (PDO::FETCH_ASSOC evita que devuelva un array con índices numéricos dobles)
+    $stats = $statsStmt->fetch(PDO::FETCH_ASSOC);
+
+    // --- RESPUESTA JSON ---
     echo json_encode([
         'ok'   => true,
         'data' => $pedidos,
         'stats' => [
-            'total_clientes' => (int)$totalClientes,
-            'total_pedidos'  => (int)$totalPedidos,
-            'pendientes'     => (int)$pendientes,
-            'solicitados'    => (int)$solicitados,
-            'en_proceso'     => (int)$enProceso,
-            'terminados'     => (int)$terminados
+            'total_clientes' => (int) $totalClientes,
+            // Usamos ?? 0 por si la tabla 'pedidos' está completamente vacía y SUM devuelve null
+            'total_pedidos'  => (int) ($stats['total_pedidos'] ?? 0),
+            'pendientes'     => (int) ($stats['pendientes'] ?? 0),
+            'solicitados'    => (int) ($stats['solicitados'] ?? 0),
+            'en_proceso'     => (int) ($stats['en_proceso'] ?? 0),
+            'terminados'     => (int) ($stats['terminados'] ?? 0)
         ]
     ]);
     exit;
-}
+ 
+    }
 
 // ─── POST: Cambiar estado o eliminar pedido ──────────────────
 if ($method === 'POST') {

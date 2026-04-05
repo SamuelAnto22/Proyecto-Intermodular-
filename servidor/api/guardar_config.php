@@ -57,7 +57,7 @@ if ($method === 'POST') {
 
         if ($id <= 0 || $modelo === '' || $color === '' || $llantas === '') {
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Faltan campos obligatorios.']);
+            echo json_encode(['ok' => false, 'message' => 'Faltan campos obligatorios.']);
             exit;
         }
 
@@ -69,7 +69,7 @@ if ($method === 'POST') {
 
         if ($stmt->rowCount() === 0) {
             http_response_code(404);
-            echo json_encode(['success' => false, 'message' => 'Configuración no encontrada.']);
+            echo json_encode(['ok' => false, 'message' => 'Configuración no encontrada.']);
             exit;
         }
 
@@ -77,7 +77,7 @@ if ($method === 'POST') {
         $stmt2 = $pdo->prepare('UPDATE pedidos SET estado = ? WHERE configuracion_id = ? AND usuario_id = ?');
         $stmt2->execute(['pendiente', $id, $userId]);
 
-        echo json_encode(['success' => true, 'id' => $id, 'message' => 'Configuración actualizada.']);
+        echo json_encode(['ok' => true, 'id' => $id, 'message' => 'Configuración actualizada.']);
         exit;
     }
 
@@ -88,7 +88,7 @@ if ($method === 'POST') {
 
     if ($modelo === '' || $color === '' || $llantas === '') {
         http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Faltan campos obligatorios.']);
+        echo json_encode(['ok' => false, 'message' => 'Faltan campos obligatorios.']);
         exit;
     }
 
@@ -105,7 +105,7 @@ if ($method === 'POST') {
     );
     $stmt->execute([$configId, $userId, 'pendiente']);
 
-    echo json_encode(['success' => true, 'id' => $configId, 'message' => 'Configuración guardada.']);
+    echo json_encode(['ok' => true, 'id' => $configId, 'message' => 'Configuración guardada.']);
     exit;
 }
 
@@ -160,3 +160,16 @@ if ($method === 'DELETE') {
 // ─── Método no soportado ─────────────────────────────────────
 http_response_code(405);
 echo json_encode(['ok' => false, 'error' => 'METHOD_NOT_ALLOWED']);
+
+// Whitelist de valores
+$modelosPermitidos = ['mini_cooper', 'bmw_serie1', 'audi_a3', 'porsche_cayenne', 'toyota_supra'];
+$coloresPermitidos = ['rojo', 'azul', 'verde', 'blanco', 'negro'];
+$llantasPermitidas = ['clasica', 'deportiva', 'competicion', 'multiradio', 'palos'];
+
+if (!in_array($modelo, $modelosPermitidos, true) ||
+    !in_array($color, $coloresPermitidos, true) ||
+    !in_array($llantas, $llantasPermitidas, true)) {
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'message' => 'Valores no permitidos.']);
+    exit;
+}
