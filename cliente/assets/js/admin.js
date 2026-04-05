@@ -113,7 +113,7 @@ function cambiarEstado(id) {
 
     fetch(API_ADMIN, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': window.__CSRF_TOKEN__ || '' },
         body: JSON.stringify({ accion: 'cambiar_estado', id, estado: nuevoEstado })
     })
         .then(r => r.json())
@@ -143,7 +143,7 @@ function eliminarPedido(id) {
 
     fetch(API_ADMIN, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': window.__CSRF_TOKEN__ || '' },
         body: JSON.stringify({ accion: 'eliminar', id })
     })
         .then(r => r.json())

@@ -74,15 +74,19 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch(`${basePath}/sesion.php`)
         .then(response => response.json())
         .then(data => {
+            if (data.csrf) {
+                window.__CSRF_TOKEN__ = data.csrf;
+            }
+
             // El <li> que contiene el enlace login.html
             const liLogin = document.querySelector('li:has(a[href="login.html"])') ||
-                            (() => {
-                                const a = document.querySelector('a[href="login.html"]');
-                                return a ? a.closest('li') : null;
-                            })();
+                (() => {
+                    const a = document.querySelector('a[href="login.html"]');
+                    return a ? a.closest('li') : null;
+                })();
 
             if (data.ok && data.logueado) {
-                
+
                 // --- Lógica según ROL (Admin vs Cliente) ---
                 if (data.rol === 'admin') {
                     // Ocultar sección CTA de Configurador abajo en el index
@@ -100,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             link.style.display = 'none';
                         }
                     });
-                    
+
                     // Insertar Panel Admin antes de su perfil
                     if (liLogin) {
                         const liAdmin = document.createElement('li');
@@ -142,4 +146,15 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => console.error('Error verificando sesión:', error));
 
+    document.addEventListener('click', (e) => {
+        const a = e.target.closest('#nav-logout-link');
+        if (!a) return;
+        e.preventDefault();
+        fetch(`${basePath}/logout.php`, {
+            method: 'POST',
+            headers: { 'X-CSRF-Token': window.__CSRF_TOKEN__ || '' }
+        }).then(() => window.location.href = 'index.html');
+    });
+
 });
+

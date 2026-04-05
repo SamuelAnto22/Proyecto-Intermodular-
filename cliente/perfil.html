@@ -365,7 +365,7 @@
         <button class="boton-menu" aria-label="Abrir menú" aria-expanded="false">☰</button>
         <nav class="navegacion-principal" id="navegacion-principal" aria-label="Navegación principal">
             <ul>
-                
+
                 <li><a href="index.html#servicios">Servicios</a></li>
                 <li><a href="index.html#proyectos">Proyectos</a></li>
                 <li><a href="index.html#nosotros">Nosotros</a></li>
@@ -617,7 +617,7 @@
 
             fetch(`${API}/perfil.php`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': window.__CSRF_TOKEN__ || '' },
                 body: JSON.stringify({
                     password_actual: actual,
                     password_nuevo: nuevo,

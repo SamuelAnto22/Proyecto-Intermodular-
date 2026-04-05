@@ -150,7 +150,7 @@ function solicitarPedido(configId, btn) {
 
     fetch(`${API_BASE}/guardar_config.php`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': window.__CSRF_TOKEN__ || '' },
         body: JSON.stringify({ accion: 'solicitar', configuracion_id: configId, estado: 'solicitado' })
     })
         .then(r => {
@@ -228,7 +228,7 @@ function ejecutarBorrado(id) {
 
     fetch(`${API_BASE}/guardar_config.php`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': window.__CSRF_TOKEN__ || '' },
         body: JSON.stringify({ id })
     })
         .then(r => r.json())

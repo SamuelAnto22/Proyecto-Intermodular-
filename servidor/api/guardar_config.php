@@ -9,14 +9,22 @@
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
 
 $method = $_SERVER['REQUEST_METHOD'];
 
 // ─── POST: Crear, Actualizar o Solicitar ─────────────────────
 if ($method === 'POST') {
     requireLogin();
-
-    $input = json_decode(file_get_contents('php://input'), true);
+    requireCsrfToken();
+    $raw = file_get_contents('php://input');
+    $input = json_decode($raw, true);
+    if (!is_array($input)) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'message' => 'JSON inválido.']);
+        exit;
+    }
     $accion = $input['accion'] ?? 'crear';
     $userId = getUserId();
     // ── Whitelist global para esta acción (aplica a crear y actualizar) ──
@@ -70,9 +78,9 @@ if ($method === 'POST') {
     // ── Acción: ACTUALIZAR (editar config existente) ─────────
     if ($accion === 'actualizar') {
         $id      = (int) ($input['id']     ?? 0);
-        $modelo  = substr(htmlspecialchars(trim($input['modelo']    ?? ''), ENT_QUOTES, 'UTF-8'), 0, 50);
-        $color   = substr(htmlspecialchars(trim($input['color']     ?? ''), ENT_QUOTES, 'UTF-8'), 0, 50);
-        $llantas = substr(htmlspecialchars(trim($input['llantas']   ?? ''), ENT_QUOTES, 'UTF-8'), 0, 50);
+        $modelo  = substr(trim($input['modelo']    ?? ''), 0, 50);
+        $color   = substr(trim($input['color']     ?? ''), 0, 50);
+        $llantas = substr(trim($input['llantas']   ?? ''), 0, 50);
 
         if ($id <= 0 || $modelo === '' || $color === '' || $llantas === '') {
             http_response_code(400);
@@ -101,9 +109,9 @@ if ($method === 'POST') {
     }
 
     // ── Acción: CREAR (nueva configuración — por defecto) ────
-    $modelo  = substr(htmlspecialchars(trim($input['modelo']  ?? ''), ENT_QUOTES, 'UTF-8'), 0, 50);
-    $color   = substr(htmlspecialchars(trim($input['color']   ?? ''), ENT_QUOTES, 'UTF-8'), 0, 50);
-    $llantas = substr(htmlspecialchars(trim($input['llantas'] ?? ''), ENT_QUOTES, 'UTF-8'), 0, 50);
+    $modelo  = substr(trim($input['modelo']  ?? ''), 0, 50);
+    $color   = substr(trim($input['color']   ?? ''), 0, 50);
+    $llantas = substr(trim($input['llantas'] ?? ''), 0, 50);
 
     if ($modelo === '' || $color === '' || $llantas === '') {
         http_response_code(400);
@@ -152,8 +160,15 @@ if ($method === 'GET') {
 // ─── DELETE: Borrar una configuración ────────────────────────
 if ($method === 'DELETE') {
     requireLogin();
+    requireCsrfToken();
 
-    $input = json_decode(file_get_contents('php://input'), true);
+    $raw = file_get_contents('php://input');
+    $input = json_decode($raw, true);
+    if (!is_array($input)) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'message' => 'JSON inválido.']);
+        exit;
+    }
     $id    = (int) ($input['id'] ?? 0);
 
     if ($id <= 0) {

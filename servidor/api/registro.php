@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Recoger datos del formulario (Sanitización básica Día 1)
-$nombre   = htmlspecialchars(trim($_POST['nombre']   ?? ''), ENT_QUOTES, 'UTF-8');
-$email    = filter_var(trim($_POST['email']          ?? ''), FILTER_SANITIZE_EMAIL);
+$nombre   = trim($_POST['nombre']   ?? '');
+$email    = filter_var(trim($_POST['email']?? ''), FILTER_SANITIZE_EMAIL);
 $password = $_POST['password']      ?? '';
 $confirm  = $_POST['confirm-password'] ?? '';
 

@@ -8,6 +8,8 @@
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
 
 requireLogin();
 
@@ -49,7 +51,14 @@ if ($method === 'GET') {
 
 // ─── POST: Actualizar contraseña ──────────────────────────────
 if ($method === 'POST') {
-    $input = json_decode(file_get_contents('php://input'), true);
+    requireCsrfToken();
+    $raw = file_get_contents('php://input');
+    $input = json_decode($raw, true);
+    if (!is_array($input)) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'message' => 'JSON inválido.']);
+        exit;
+    }
 
     $passwordActual  = $input['password_actual']  ?? '';
     $passwordNuevo   = $input['password_nuevo']   ?? '';
