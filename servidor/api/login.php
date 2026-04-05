@@ -15,10 +15,23 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+$maxIntentos = 5;
+$ventanaSeg = 300; // 5 min
+
+if (!isset($_SESSION['login_attempts'])) $_SESSION['login_attempts'] = [];
+$_SESSION['login_attempts'] = array_filter(
+    $_SESSION['login_attempts'],
+    fn($ts) => ($ts > time() - $ventanaSeg)
+);
+
+if (count($_SESSION['login_attempts']) >= $maxIntentos) {
+    header('Location: ../../cliente/login.html?error=' . urlencode('Demasiados intentos. Espera 5 minutos.'));
+    exit;
+}
+
 // Recoger datos del formulario
 $email    = trim($_POST['email']    ?? '');
 $password = $_POST['password']      ?? '';
-
 // --- Validaciones básicas ---
 if ($email === '' || $password === '') {
     header('Location: ../../cliente/login.html?error=' . urlencode('Rellena todos los campos.'));
@@ -31,7 +44,8 @@ $stmt->execute([$email]);
 $usuario = $stmt->fetch();
 
 if (!$usuario || !password_verify($password, $usuario['password'])) {
-    header('Location: ../../cliente/login.html?error=' . urlencode('Email o contraseña incorrectos.'));
+    $_SESSION['login_attempts'][] = time();
+    header('Location: ../../cliente/login.html?error=' . urlencode('Credenciales inválidas.'));
     exit;
 }
 
@@ -40,6 +54,7 @@ session_regenerate_id(true); // Evitar fijación de sesión
 $_SESSION['user_id']   = $usuario['id'];
 $_SESSION['user_name'] = $usuario['nombre'];
 $_SESSION['user_role'] = $usuario['rol'];
+$_SESSION['login_attempts'] = []; // Limpiar intentos tras login exitoso
 
 // --- Redirigir según el rol ---
 if ($usuario['rol'] === 'admin') {

@@ -4,13 +4,23 @@
 // ============================================================
 
 header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
 
 // CORS — permitir peticiones solo desde localhost (ajuste de seguridad Día 1)
+$allowedOrigins = [
+  'http://localhost',
+  'http://127.0.0.1',
+  'http://localhost:80'
+];
+
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-if ($origin === 'http://localhost' || $origin === 'http://127.0.0.1') {
-    header('Access-Control-Allow-Origin: ' . $origin);
+if (in_array($origin, $allowedOrigins, true)) {
+    header("Access-Control-Allow-Origin: $origin");
+    header('Vary: Origin');
+    header('Access-Control-Allow-Credentials: true');
 }
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
+header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
 // Manejar preflight (OPTIONS)

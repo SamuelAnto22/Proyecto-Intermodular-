@@ -74,15 +74,19 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch(`${basePath}/sesion.php`)
         .then(response => response.json())
         .then(data => {
+            if (data.csrf) {
+                window.__CSRF_TOKEN__ = data.csrf;
+            }
+
             // El <li> que contiene el enlace login.html
             const liLogin = document.querySelector('li:has(a[href="login.html"])') ||
-                            (() => {
-                                const a = document.querySelector('a[href="login.html"]');
-                                return a ? a.closest('li') : null;
-                            })();
+                (() => {
+                    const a = document.querySelector('a[href="login.html"]');
+                    return a ? a.closest('li') : null;
+                })();
 
             if (data.ok && data.logueado) {
-                
+
                 // --- Lógica según ROL (Admin vs Cliente) ---
                 if (data.rol === 'admin') {
                     // Ocultar sección CTA de Configurador abajo en el index
@@ -100,20 +104,12 @@ document.addEventListener('DOMContentLoaded', function () {
                             link.style.display = 'none';
                         }
                     });
-                    
+
                     // Insertar Panel Admin antes de su perfil
                     if (liLogin) {
                         const liAdmin = document.createElement('li');
                         liAdmin.innerHTML = '<a href="admin.html" class="boton-neon boton-neon-nav" style="border-color:var(--color2); color:var(--color2); box-shadow: 0 0 10px rgba(80,200,255,0.4)">⚙️ Panel Admin</a>';
                         liLogin.parentNode.insertBefore(liAdmin, liLogin);
-                    }
-                } else {
-                    // Si es Cliente asegurar que 'Mi Garaje' aparezca si no estaba hardcodeado
-                    const garageLinkExiste = document.querySelector('a[href="garaje.html"]');
-                    if (!garageLinkExiste && liLogin) {
-                        const liGaraje = document.createElement('li');
-                        liGaraje.innerHTML = '<a href="garaje.html">Mi Garaje</a>';
-                        liLogin.parentNode.insertBefore(liGaraje, liLogin);
                     }
                 }
 
@@ -142,4 +138,31 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => console.error('Error verificando sesión:', error));
 
+    document.body.addEventListener('click', (e) => {
+        const a = e.target.closest('#nav-logout-link');
+        if (!a) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        console.log('Logout click detectado');
+
+        fetch(`${basePath}/logout.php`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-Token': window.__CSRF_TOKEN__ || ''
+            }
+        })
+            .then(async r => {
+                console.log('Logout status:', r.status);
+                // aunque falle, enviamos a home
+                window.location.href = 'index.html';
+            })
+            .catch(err => {
+                console.error('Logout error:', err);
+                window.location.href = 'index.html';
+            });
+    });
+
 });
+

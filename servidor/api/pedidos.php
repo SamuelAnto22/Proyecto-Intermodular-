@@ -9,6 +9,8 @@
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -71,8 +73,15 @@ if ($method === 'GET') {
 // ─── POST: Cambiar estado o eliminar pedido ──────────────────
 if ($method === 'POST') {
     requireAdmin();
+    requireCsrfToken();
 
-    $input  = json_decode(file_get_contents('php://input'), true);
+    $raw = file_get_contents('php://input');
+    $input = json_decode($raw, true);
+    if (!is_array($input)) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'message' => 'JSON inválido.']);
+        exit;
+    }
     $accion = $input['accion'] ?? '';
 
     // ── Cambiar estado ───────────────────────────────────────
@@ -83,8 +92,8 @@ if ($method === 'POST') {
         $estadosValidos = ['pendiente', 'solicitado', 'en proceso', 'terminado'];
 
         if ($id <= 0 || !in_array($estado, $estadosValidos, true)) {
-            http_response_code(400);
-            echo json_encode(['ok' => false, 'message' => 'Datos no válidos.']);
+            http_response_code(404);
+            echo json_encode(['ok'=>false,'message'=>'No encontrado o sin cambios.']);
             exit;
         }
 
@@ -100,15 +109,35 @@ if ($method === 'POST') {
         $id = (int) ($input['id'] ?? 0);
 
         if ($id <= 0) {
-            http_response_code(400);
-            echo json_encode(['ok' => false, 'message' => 'ID no válido.']);
+            http_response_code(404);
+            echo json_encode(['ok'=>false,'message'=>'No encontrado o sin cambios.']);
             exit;
         }
 
-        $stmt = $pdo->prepare('DELETE FROM pedidos WHERE id = ?');
+        // 1) Buscar configuracion_id del pedido
+        $stmt = $pdo->prepare('SELECT configuracion_id FROM pedidos WHERE id = ?');
         $stmt->execute([$id]);
+        $row = $stmt->fetch();
 
-        echo json_encode(['ok' => true, 'message' => 'Pedido eliminado.']);
+        if (!$row) {
+            http_response_code(404);
+            echo json_encode(['ok' => false, 'message' => 'Pedido no encontrado.']);
+            exit;
+        }
+
+        $configId = (int)$row['configuracion_id'];
+
+        // 2) Borrar configuración (esto elimina también su pedido por ON DELETE CASCADE)
+        $stmt = $pdo->prepare('DELETE FROM configuraciones WHERE id = ?');
+        $stmt->execute([$configId]);
+
+        if ($stmt->rowCount() === 0) {
+            http_response_code(404);
+            echo json_encode(['ok' => false, 'message' => 'Configuración asociada no encontrada.']);
+            exit;
+        }
+
+        echo json_encode(['ok' => true, 'message' => 'Pedido y configuración eliminados.']);
         exit;
     }
 
