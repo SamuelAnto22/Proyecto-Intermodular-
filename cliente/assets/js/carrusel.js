@@ -1,4 +1,4 @@
-// Lógica del carrusel de proyectos
+// Lógica general del carrusel de proyectos
 (function () {
     const diapositivas = document.querySelectorAll('.carrusel-diapositiva');
     const contenedorInd = document.getElementById('carruselIndicadores');
@@ -22,9 +22,7 @@
         diapositivas[indiceActual].classList.remove('activa');
         contenedorInd.children[indiceActual].classList.remove('activa');
         if (miniaturas[indiceActual]) miniaturas[indiceActual].classList.remove('activa');
-
         indiceActual = (indice + diapositivas.length) % diapositivas.length;
-
         diapositivas[indiceActual].classList.add('activa');
         contenedorInd.children[indiceActual].classList.add('activa');
         if (miniaturas[indiceActual]) miniaturas[indiceActual].classList.add('activa');
@@ -32,16 +30,10 @@
 
     function siguiente() { irA(indiceActual + 1); }
     function anterior() { irA(indiceActual - 1); }
-
     if (btnSiguiente) btnSiguiente.addEventListener('click', () => { siguiente(); reiniciarIntervalo(); });
     if (btnAnterior) btnAnterior.addEventListener('click', () => { anterior(); reiniciarIntervalo(); });
-
-    miniaturas.forEach((img, i) => {
-        img.addEventListener('click', () => { irA(i); reiniciarIntervalo(); });
-    });
-
+    miniaturas.forEach((img, i) => { img.addEventListener('click', () => { irA(i); reiniciarIntervalo(); }); });
     function iniciarIntervalo() { intervalo = setInterval(siguiente, 4000); }
     function reiniciarIntervalo() { clearInterval(intervalo); iniciarIntervalo(); }
-
     iniciarIntervalo();
 })();

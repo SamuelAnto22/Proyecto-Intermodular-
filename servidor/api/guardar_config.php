@@ -19,6 +19,25 @@ if ($method === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
     $accion = $input['accion'] ?? 'crear';
     $userId = getUserId();
+    // ── Whitelist global para esta acción (aplica a crear y actualizar) ──
+    $modelosPermitidos = ['mini_cooper', 'bmw_serie1', 'audi_a3', 'porsche_cayenne', 'toyota_supra'];
+    $coloresPermitidos = ['rojo', 'azul', 'verde', 'blanco', 'negro'];
+    $llantasPermitidas = ['clasica', 'deportiva', 'competicion', 'multiradio', 'palos'];
+
+    if ($accion === 'crear' || $accion === 'actualizar') {
+        $modelo  = trim($input['modelo']  ?? '');
+        $color   = trim($input['color']   ?? '');
+        $llantas = trim($input['llantas'] ?? '');
+
+        if (!in_array($modelo, $modelosPermitidos, true) ||
+            !in_array($color,   $coloresPermitidos, true) ||
+            !in_array($llantas, $llantasPermitidas, true)) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'message' => 'Valores no permitidos.']);
+            exit;
+        }
+    }
+   
 
     // ── Acción: SOLICITAR (cambiar estado del pedido) ────────
     if ($accion === 'solicitar') {
@@ -160,16 +179,4 @@ if ($method === 'DELETE') {
 // ─── Método no soportado ─────────────────────────────────────
 http_response_code(405);
 echo json_encode(['ok' => false, 'error' => 'METHOD_NOT_ALLOWED']);
-
-// Whitelist de valores
-$modelosPermitidos = ['mini_cooper', 'bmw_serie1', 'audi_a3', 'porsche_cayenne', 'toyota_supra'];
-$coloresPermitidos = ['rojo', 'azul', 'verde', 'blanco', 'negro'];
-$llantasPermitidas = ['clasica', 'deportiva', 'competicion', 'multiradio', 'palos'];
-
-if (!in_array($modelo, $modelosPermitidos, true) ||
-    !in_array($color, $coloresPermitidos, true) ||
-    !in_array($llantas, $llantasPermitidas, true)) {
-    http_response_code(400);
-    echo json_encode(['ok' => false, 'message' => 'Valores no permitidos.']);
-    exit;
-}
+exit;
