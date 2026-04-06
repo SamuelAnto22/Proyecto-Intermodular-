@@ -98,6 +98,12 @@ if ($method === 'POST') {
     $stmt = $pdo->prepare('UPDATE usuarios SET password = ? WHERE id = ?');
     $stmt->execute([$hash, $userId]);
 
+    if ($stmt->rowCount() === 0) {
+        http_response_code(404);
+        echo json_encode(['ok' => false, 'message' => 'Usuario no encontrado o contraseña sin cambios.']);
+        exit;
+    }
+
     echo json_encode(['ok' => true, 'message' => '¡Contraseña actualizada correctamente!']);
     exit;
 }
