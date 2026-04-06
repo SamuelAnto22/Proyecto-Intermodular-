@@ -54,8 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    // Opcional: si solo queremos animar una vez
-                    // observer.unobserve(entry.target);
                 }
             });
         }, {

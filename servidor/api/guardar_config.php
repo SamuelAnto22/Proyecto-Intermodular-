@@ -187,6 +187,12 @@ if ($method === 'DELETE') {
         $stmt->execute([$id, $userId]);
     }
 
+    if ($stmt->rowCount() === 0) {
+        http_response_code(404);
+        echo json_encode(['ok' => false, 'message' => 'Configuración no encontrada.']);
+        exit;
+    }
+
     echo json_encode(['ok' => true, 'message' => 'Configuración eliminada.']);
     exit;
 }

@@ -16,6 +16,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+unset($_SESSION['login_attempts']);
+
 // Destruir todos los datos de sesión
 $_SESSION = [];
 
@@ -27,7 +29,7 @@ if (ini_get("session.use_cookies")) {
         $params["secure"], $params["httponly"]
     );
 }
-unset($_SESSION['login_attempts']);
+
 session_destroy();
 echo json_encode(['ok' => true, 'message' => 'Sesión cerrada']);
 exit;

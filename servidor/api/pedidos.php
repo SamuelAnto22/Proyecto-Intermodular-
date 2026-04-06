@@ -96,12 +96,18 @@ if ($method === 'POST') {
             echo json_encode(['ok'=>false,'message'=>'No encontrado o sin cambios.']);
             exit;
         }
-
         $stmt = $pdo->prepare('UPDATE pedidos SET estado = ? WHERE id = ?');
         $stmt->execute([$estado, $id]);
 
+        if ($stmt->rowCount() === 0) {
+            http_response_code(404);
+            echo json_encode(['ok' => false, 'message' => 'Pedido no encontrado o estado sin cambios.']);
+            exit;
+        }
+
         echo json_encode(['ok' => true, 'message' => 'Estado actualizado a: ' . $estado]);
         exit;
+
     }
 
     // ── Eliminar pedido ──────────────────────────────────────
