@@ -16,8 +16,12 @@ function createNavItem({ href, id, text, title, className, style }) {
 
 function getLoginNavItem() {
     const selectorConHas = 'li:has(a[href="login.html"])';
-    const loginLi = document.querySelector(selectorConHas);
-    if (loginLi) return loginLi;
+    try {
+        const loginLi = document.querySelector(selectorConHas);
+        if (loginLi) return loginLi;
+    } catch (_) {
+        // Fallback para navegadores sin soporte de :has()
+    }
 
     const loginLink = document.querySelector('a[href="login.html"]');
     return loginLink ? loginLink.closest('li') : null;
