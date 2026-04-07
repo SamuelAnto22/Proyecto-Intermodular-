@@ -21,22 +21,11 @@ function responder(int $status, bool $ok, string $message, ?string $error = null
     exit;
 }
 
-function rutaCliente(string $archivo): string
-{
-    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
-    $base = preg_replace('#/servidor/api/[^/]+$#', '', $scriptName) ?? '';
-
-    return rtrim($base, '/') . '/cliente/' . ltrim($archivo, '/');
-}
-
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    responder(405, false, 'Método no permitido.', 'METHOD_NOT_ALLOWED');
-}
-
-$nombre = trim($_POST['nombre'] ?? '');
-$email = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
-$password = $_POST['password'] ?? '';
-$confirm = $_POST['confirm-password'] ?? '';
+// Recoger datos del formulario (Sanitización básica Día 1)
+$nombre   = trim($_POST['nombre']   ?? '');
+$email    = filter_var(trim($_POST['email']?? ''), FILTER_SANITIZE_EMAIL);
+$password = $_POST['password']      ?? '';
+$confirm  = $_POST['confirm-password'] ?? '';
 
 $errores = [];
 
@@ -77,7 +66,6 @@ try {
     $stmt = $pdo->prepare('INSERT INTO usuarios (nombre, email, password, rol) VALUES (?, ?, ?, ?)');
     $stmt->execute([$nombre, $email, $hash, 'cliente']);
 
-    responder(200, true, 'Cuenta creada correctamente. Inicia sesión.', null, ['redirect' => rutaCliente('login.html')]);
-} catch (Throwable $e) {
-    responder(500, false, 'Error interno al registrar la cuenta.', 'INTERNAL_ERROR');
-}
+// --- Redirigir al login con éxito ---
+header('Location: ../../cliente/login.html?ok=' . urlencode('Cuenta creada correctamente. Inicia sesión.'));
+exit;
