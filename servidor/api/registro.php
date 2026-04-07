@@ -21,6 +21,14 @@ function responder(int $status, bool $ok, string $message, ?string $error = null
     exit;
 }
 
+function rutaCliente(string $archivo): string
+{
+    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+    $base = preg_replace('#/servidor/api/[^/]+$#', '', $scriptName) ?? '';
+
+    return rtrim($base, '/') . '/cliente/' . ltrim($archivo, '/');
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder(405, false, 'Método no permitido.', 'METHOD_NOT_ALLOWED');
 }
@@ -69,7 +77,10 @@ try {
     $stmt = $pdo->prepare('INSERT INTO usuarios (nombre, email, password, rol) VALUES (?, ?, ?, ?)');
     $stmt->execute([$nombre, $email, $hash, 'cliente']);
 
-    responder(200, true, 'Cuenta creada correctamente. Inicia sesión.', null, ['redirect' => '../../cliente/login.html']);
+    responder(200, true, 'Cuenta creada correctamente. Inicia sesión.', null, [
+        'redirect' => rutaCliente('login.html')
+    ]);
 } catch (Throwable $e) {
+    error_log('[registro.php] ' . $e->getMessage());
     responder(500, false, 'Error interno al registrar la cuenta.', 'INTERNAL_ERROR');
 }
