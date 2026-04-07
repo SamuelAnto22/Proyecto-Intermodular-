@@ -89,35 +89,77 @@ function cargarDashboard() {
                 const fecha = formatFecha(p.fecha);
                 const row = document.createElement('tr');
                 row.id = `pedido-${p.id}`;
-                row.innerHTML = `
-                    <td>#${String(p.id).padStart(4, '0')}</td>
-                    <td>
-                        <div class="cliente-info">
-                            <span class="cliente-nombre">${escaparHtml(p.cliente)}</span>
-                            <span class="cliente-email">${escaparHtml(p.cliente_email)}</span>
-                        </div>
-                    </td>
-                    <td class="modelo-texto">${p.modelo.replace('_', ' ')}</td>
-                    <td>
-                        <span class="detalle-config">🎨 ${p.color} · 🛞 ${p.llantas}</span>
-                    </td>
-                    <td>
-                        <span class="badge-estado badge-${estadoSlug}" id="badge-${p.id}">${capitalizarEstado(p.estado)}</span>
-                    </td>
-                    <td>${fecha}</td>
-                    <td>
-                        <div class="acciones-cell">
-                            <select class="select-estado" id="select-${p.id}">
-                                <option value="pendiente" ${p.estado === 'pendiente' ? 'selected' : ''}>Pendiente</option>
-                                <option value="solicitado" ${p.estado === 'solicitado' ? 'selected' : ''}>Solicitado</option>
-                                <option value="en proceso" ${p.estado === 'en proceso' ? 'selected' : ''}>En proceso</option>
-                                <option value="terminado" ${p.estado === 'terminado' ? 'selected' : ''}>Terminado</option>
-                            </select>
-                            <button class="btn-admin btn-guardar" data-action="cambiar_estado" data-id="${p.id}" title="Guardar estado">✓</button>
-                            <button class="btn-admin btn-borrar" data-action="eliminar" data-id="${p.id}" title="Eliminar pedido">✕</button>
-                        </div>
-                    </td>
-                `;
+
+                const idCell = document.createElement('td');
+                idCell.textContent = `#${String(p.id).padStart(4, '0')}`;
+
+                const clienteCell = document.createElement('td');
+                const clienteInfo = document.createElement('div');
+                clienteInfo.className = 'cliente-info';
+                const clienteNombre = document.createElement('span');
+                clienteNombre.className = 'cliente-nombre';
+                clienteNombre.textContent = p.cliente || '';
+                const clienteEmail = document.createElement('span');
+                clienteEmail.className = 'cliente-email';
+                clienteEmail.textContent = p.cliente_email || '';
+                clienteInfo.append(clienteNombre, clienteEmail);
+                clienteCell.appendChild(clienteInfo);
+
+                const modeloCell = document.createElement('td');
+                modeloCell.className = 'modelo-texto';
+                modeloCell.textContent = p.modelo?.replace('_', ' ') || '';
+
+                const detalleCell = document.createElement('td');
+                const detalleConfig = document.createElement('span');
+                detalleConfig.className = 'detalle-config';
+                detalleConfig.textContent = `🎨 ${p.color || ''} · 🛞 ${p.llantas || ''}`;
+                detalleCell.appendChild(detalleConfig);
+
+                const estadoCell = document.createElement('td');
+                const badge = document.createElement('span');
+                badge.className = `badge-estado badge-${estadoSlug}`;
+                badge.id = `badge-${p.id}`;
+                badge.textContent = capitalizarEstado(p.estado);
+                estadoCell.appendChild(badge);
+
+                const fechaCell = document.createElement('td');
+                fechaCell.textContent = fecha;
+
+                const accionesCellWrap = document.createElement('td');
+                const accionesCell = document.createElement('div');
+                accionesCell.className = 'acciones-cell';
+
+                const selectEstado = document.createElement('select');
+                selectEstado.className = 'select-estado';
+                selectEstado.id = `select-${p.id}`;
+
+                const estados = ['pendiente', 'solicitado', 'en proceso', 'terminado'];
+                estados.forEach((estado) => {
+                    const option = document.createElement('option');
+                    option.value = estado;
+                    option.textContent = capitalizarEstado(estado);
+                    option.selected = p.estado === estado;
+                    selectEstado.appendChild(option);
+                });
+
+                const btnGuardar = document.createElement('button');
+                btnGuardar.className = 'btn-admin btn-guardar';
+                btnGuardar.dataset.action = 'cambiar_estado';
+                btnGuardar.dataset.id = p.id;
+                btnGuardar.title = 'Guardar estado';
+                btnGuardar.textContent = '✓';
+
+                const btnBorrar = document.createElement('button');
+                btnBorrar.className = 'btn-admin btn-borrar';
+                btnBorrar.dataset.action = 'eliminar';
+                btnBorrar.dataset.id = p.id;
+                btnBorrar.title = 'Eliminar pedido';
+                btnBorrar.textContent = '✕';
+
+                accionesCell.append(selectEstado, btnGuardar, btnBorrar);
+                accionesCellWrap.appendChild(accionesCell);
+
+                row.append(idCell, clienteCell, modeloCell, detalleCell, estadoCell, fechaCell, accionesCellWrap);
                 body.appendChild(row);
             });
         })

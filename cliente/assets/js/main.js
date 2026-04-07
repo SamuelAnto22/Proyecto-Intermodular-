@@ -3,19 +3,11 @@ import { initNav } from './modules/nav.js';
 import { initSessionUI, initLogout } from './modules/session-ui.js';
 import { initScrollEffects } from './modules/scroll-effects.js';
 
-const PAGES_WITH_SESSION_UI = new Set([
-    'perfil.html',
-    'garaje.html',
-    'configurador.html',
-    'admin.html'
-]);
-
-function getCurrentPage() {
-    return window.location.pathname.split('/').pop() || 'index.html';
-}
-
-function shouldInitSessionUI(pageName) {
-    return PAGES_WITH_SESSION_UI.has(pageName);
+function shouldInitSessionUI() {
+    return Boolean(
+        document.querySelector('a[href="login.html"]') ||
+        document.querySelector('#nav-logout-link')
+    );
 }
 
 async function initPage() {
@@ -23,9 +15,10 @@ async function initPage() {
     initLoader();
     initScrollEffects();
 
-    const pageName = getCurrentPage();
-    if (!shouldInitSessionUI(pageName)) return;
+    if (!shouldInitSessionUI()) return;
 
+    // La UI de sesión (incluyendo nombre de usuario en navbar) se construye
+    // con nodos DOM + textContent en modules/session-ui.js para evitar XSS.
     const basePath = await initSessionUI();
     initLogout(basePath);
 }

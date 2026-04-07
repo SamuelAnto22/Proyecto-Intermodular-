@@ -121,3 +121,22 @@ Todos los endpoints devuelven JSON con la misma forma base:
 | `422` | `false` | `VALIDATION_ERROR` | Validaciones de nombre/email/contraseña. |
 | `500` | `false` | `INTERNAL_ERROR` | Error interno inesperado. |
 
+---
+
+## Checklist de seguridad Frontend
+
+Antes de cerrar cualquier cambio en la capa cliente, revisar:
+
+1. [ ] **XSS (Cross-Site Scripting)**
+   - Evitar interpolar datos de API con `innerHTML`.
+   - Preferir `createElement`, `setAttribute` y `textContent` para render dinámico.
+   - Si por compatibilidad se usa HTML string, aplicar escaping explícito como fallback.
+
+2. [ ] **CSRF**
+   - Enviar siempre token CSRF en operaciones sensibles (`POST`, `PUT`, `DELETE`), por ejemplo en cabecera `X-CSRF-Token`.
+   - Verificar que el backend rechaza peticiones sin token o con token inválido.
+
+3. [ ] **Escaping y validación de salida**
+   - Tratar como no confiable cualquier texto proveniente de API, query params o storage del navegador.
+   - Confirmar que nombres de usuario, emails, modelos y campos libres se insertan con `textContent`.
+   - Mantener helpers de escape (como `escaparHtml`) únicamente para casos de respaldo puntuales, no como patrón principal de render.
