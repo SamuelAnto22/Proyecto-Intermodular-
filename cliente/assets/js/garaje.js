@@ -112,51 +112,79 @@ function crearTarjeta(p) {
     // El botón "Solicitar" solo está activo si el estado es "pendiente"
     const puedesolicitar = (estado === 'pendiente');
 
-    card.innerHTML = `
-        <div class="tarjeta-banda"></div>
-        <div class="tarjeta-body">
-            <div class="tarjeta-modelo">${escaparHtml(p.modelo.replace('_', ' '))}</div>
+    const banda = document.createElement('div');
+    banda.className = 'tarjeta-banda';
 
-            <span class="estado-badge ${claseEstado}">${labelEstado}</span>
+    const body = document.createElement('div');
+    body.className = 'tarjeta-body';
 
-            <div class="tarjeta-specs">
-                <div class="spec-item">
-                    <span class="spec-label">🎨 Color</span>
-                    <span class="spec-valor">${p.color}</span>
-                </div>
-                <div class="spec-item">
-                    <span class="spec-label">🛞 Llantas</span>
-                    <span class="spec-valor">${p.llantas}</span>
-                </div>
+    const modelo = document.createElement('div');
+    modelo.className = 'tarjeta-modelo';
+    modelo.textContent = p.modelo?.replace('_', ' ') || '';
 
-                <div class="spec-item">
-                    <span class="spec-label">📋 ID pedido</span>
-                    <span class="spec-valor">#${String(p.id).padStart(4, '0')}</span>
-                </div>
-            </div>
+    const badge = document.createElement('span');
+    badge.className = `estado-badge ${claseEstado}`;
+    badge.textContent = labelEstado;
 
-            <p class="tarjeta-fecha">Guardado el ${fecha}</p>
-        </div>
-        <div class="tarjeta-acciones">
-            <button class="btn-accion btn-editar"
-                    data-action="editar" data-id="${p.id}"
-                    title="Cargar en el configurador para editar">
-                ✏️ Editar
-            </button>
-            <button class="btn-accion btn-solicitar"
-                    id="btn-solicitar-${p.id}"
-                    data-action="solicitar" data-id="${p.id}"
-                    ${puedesolicitar ? '' : 'disabled'}
-                    title="${puedesolicitar ? 'Enviar solicitud al taller' : 'Ya solicitado'}">
-                ${puedesolicitar ? '📤 Solicitar' : '✅ Solicitado'}
-            </button>
-            <button class="btn-accion btn-eliminar"
-                    data-action="eliminar" data-id="${p.id}"
-                    title="Eliminar proyecto">
-                🗑️ Borrar
-            </button>
-        </div>
-    `;
+    const specs = document.createElement('div');
+    specs.className = 'tarjeta-specs';
+
+    const crearSpec = (label, valor) => {
+        const item = document.createElement('div');
+        item.className = 'spec-item';
+
+        const labelEl = document.createElement('span');
+        labelEl.className = 'spec-label';
+        labelEl.textContent = label;
+
+        const valorEl = document.createElement('span');
+        valorEl.className = 'spec-valor';
+        valorEl.textContent = valor;
+
+        item.append(labelEl, valorEl);
+        return item;
+    };
+
+    specs.append(
+        crearSpec('🎨 Color', p.color || ''),
+        crearSpec('🛞 Llantas', p.llantas || ''),
+        crearSpec('📋 ID pedido', `#${String(p.id).padStart(4, '0')}`)
+    );
+
+    const fechaEl = document.createElement('p');
+    fechaEl.className = 'tarjeta-fecha';
+    fechaEl.textContent = `Guardado el ${fecha}`;
+
+    body.append(modelo, badge, specs, fechaEl);
+
+    const acciones = document.createElement('div');
+    acciones.className = 'tarjeta-acciones';
+
+    const btnEditar = document.createElement('button');
+    btnEditar.className = 'btn-accion btn-editar';
+    btnEditar.dataset.action = 'editar';
+    btnEditar.dataset.id = p.id;
+    btnEditar.title = 'Cargar en el configurador para editar';
+    btnEditar.textContent = '✏️ Editar';
+
+    const btnSolicitar = document.createElement('button');
+    btnSolicitar.className = 'btn-accion btn-solicitar';
+    btnSolicitar.id = `btn-solicitar-${p.id}`;
+    btnSolicitar.dataset.action = 'solicitar';
+    btnSolicitar.dataset.id = p.id;
+    btnSolicitar.disabled = !puedesolicitar;
+    btnSolicitar.title = puedesolicitar ? 'Enviar solicitud al taller' : 'Ya solicitado';
+    btnSolicitar.textContent = puedesolicitar ? '📤 Solicitar' : '✅ Solicitado';
+
+    const btnEliminar = document.createElement('button');
+    btnEliminar.className = 'btn-accion btn-eliminar';
+    btnEliminar.dataset.action = 'eliminar';
+    btnEliminar.dataset.id = p.id;
+    btnEliminar.title = 'Eliminar proyecto';
+    btnEliminar.textContent = '🗑️ Borrar';
+
+    acciones.append(btnEditar, btnSolicitar, btnEliminar);
+    card.append(banda, body, acciones);
 
     return card;
 }

@@ -26,6 +26,8 @@ async function initPage() {
     const pageName = getCurrentPage();
     if (!shouldInitSessionUI(pageName)) return;
 
+    // La UI de sesión (incluyendo nombre de usuario en navbar) se construye
+    // con nodos DOM + textContent en modules/session-ui.js para evitar XSS.
     const basePath = await initSessionUI();
     initLogout(basePath);
 }
