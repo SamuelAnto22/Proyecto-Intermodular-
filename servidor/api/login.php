@@ -21,14 +21,6 @@ function responder(int $status, bool $ok, string $message, ?string $error = null
     exit;
 }
 
-function rutaCliente(string $archivo): string
-{
-    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
-    $base = preg_replace('#/servidor/api/[^/]+$#', '', $scriptName) ?? '';
-
-    return rtrim($base, '/') . '/cliente/' . ltrim($archivo, '/');
-}
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder(405, false, 'Método no permitido.', 'METHOD_NOT_ALLOWED');
 }
@@ -76,12 +68,9 @@ try {
     $_SESSION['user_role'] = $usuario['rol'];
     $_SESSION['login_attempts'] = [];
 
-    $destino = ($usuario['rol'] === 'admin')
-        ? rutaCliente('admin.html')
-        : rutaCliente('index.html');
+    $destino = ($usuario['rol'] === 'admin') ? '../../cliente/admin.html' : '../../cliente/index.html';
 
     responder(200, true, 'Inicio de sesión correcto.', null, ['redirect' => $destino]);
 } catch (Throwable $e) {
-    error_log('[login.php] ' . $e->getMessage());
     responder(500, false, 'Error interno al iniciar sesión.', 'INTERNAL_ERROR');
 }
