@@ -21,10 +21,6 @@ function responder(int $status, bool $ok, string $message, ?string $error = null
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    responder(405, false, 'Método no permitido.', 'METHOD_NOT_ALLOWED');
-}
-
 $maxIntentos = 5;
 $ventanaSeg = 300; // 5 min
 
@@ -62,15 +58,16 @@ try {
         responder(401, false, 'Credenciales inválidas.', 'INVALID_CREDENTIALS');
     }
 
-    session_regenerate_id(true);
-    $_SESSION['user_id'] = $usuario['id'];
-    $_SESSION['user_name'] = $usuario['nombre'];
-    $_SESSION['user_role'] = $usuario['rol'];
-    $_SESSION['login_attempts'] = [];
+// --- Crear sesión ---
+session_regenerate_id(true); // Evitar fijación de sesión
+$_SESSION['user_id']   = $usuario['id'];
+$_SESSION['user_name'] = $usuario['nombre'];
+$_SESSION['user_role'] = $usuario['rol'];
+$_SESSION['login_attempts'] = []; // Limpiar intentos tras login exitoso
 
-    $destino = ($usuario['rol'] === 'admin') ? '../../cliente/admin.html' : '../../cliente/index.html';
-
-    responder(200, true, 'Inicio de sesión correcto.', null, ['redirect' => $destino]);
-} catch (Throwable $e) {
-    responder(500, false, 'Error interno al iniciar sesión.', 'INTERNAL_ERROR');
+// --- Redirigir según el rol ---
+if ($usuario['rol'] === 'admin') {
+    header('Location: ../../cliente/admin.html');
+} else {
+    header('Location: ../../cliente/index.html');
 }
