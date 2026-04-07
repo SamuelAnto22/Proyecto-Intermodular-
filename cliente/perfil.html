@@ -479,10 +479,11 @@
     </main>
 
     <script src="assets/js/pie-pagina.js?v=7"></script>
+    <script src="assets/js/env.js?v=1"></script>
     <script src="assets/js/main.js?v=7"></script>
     <script>
         // ── perfil.js (inline) ──────────────────────────────────
-        const API = '/Proyecto-Intermodular-/servidor/api';
+        const API = window.API_BASE;
 
         document.addEventListener('DOMContentLoaded', () => {
             cargarPerfil();

@@ -13,13 +13,13 @@ El objetivo pedagógico y técnico del proyecto es:
 
 ##  Guía de Instalación para Profesores/Evaluadores
 
-1. Copiar este proyecto en la carpeta del servidor local (e.g. `C:/xampp/htdocs/Proyecto-Intermodular-`).
+1. Copiar este proyecto en la carpeta del servidor local (por ejemplo `C:/xampp/htdocs/mi-carpeta-proyecto`).
 2. Levantar los servicios de **Apache** y **MySQL** desde el panel de XAMPP.
 3. Importar la Base de Datos con todos los datos de demostración incluidos.
    - Ir a **phpMyAdmin** (`http://localhost/phpmyadmin`).
    - Importar el archivo alojado en `servidor/sql/midnight_demo.sql`. Este archivo crea la BD automáticamente y le inserta datos de demostración para no evaluar un sistema en blanco.
 4. Confirmar las credenciales en `servidor/includes/db.php` si tiene configurada otra contraseña en su motor MySQL local (por defecto asume `root` sin contraseña).
-5. Visitar a través de localhost: [http://localhost/Proyecto-Intermodular-/cliente/](http://localhost/Proyecto-Intermodular-/cliente/) *(asegúrese de utilizar la ruta local exacta donde guardó la carpeta)*.
+5. Visitar el frontend con la ruta real de su carpeta, por ejemplo: `http://localhost/mi-carpeta-proyecto/cliente/`.
 
 ---
 
@@ -69,3 +69,20 @@ Hemos diseñado una experiencia con atención al detalle que pedimos encarecidam
 *   `servidor/sql/`: Los esquemas y los tests de base de datos automatizados instalables.
 
 ¡Gracias por evaluar este proyecto final! Esperamos que os guste.
+
+
+---
+
+## Estrategia de rutas Frontend/API (local y hosting)
+
+Para evitar rutas hardcodeadas al nombre de la carpeta del proyecto, el frontend usa una constante global compartida `API_BASE` definida en `cliente/assets/js/env.js`.
+
+- `env.js` calcula dinámicamente la base del backend a partir de `window.location.origin` y del prefijo detectado antes de `/cliente` en la URL actual.
+- El resultado es: `${window.location.origin}/{prefijoProyecto}/servidor/api`.
+- Así, si se renombra la carpeta local (ej. `Proyecto-Intermodular-` -> `midnight-app`), login/sesión/logout y el resto de llamadas `fetch` siguen funcionando sin tocar JS.
+
+### Ejemplos
+- Local XAMPP con carpeta `midnight-app`: `http://localhost/midnight-app/cliente/` -> `API_BASE = http://localhost/midnight-app/servidor/api`
+- Hosting en subcarpeta `coches`: `https://dominio.com/coches/cliente/` -> `API_BASE = https://dominio.com/coches/servidor/api`
+
+Esta estrategia mantiene el código preparado para despliegue local y para mover el proyecto a hosting sin rehacer endpoints frontend.

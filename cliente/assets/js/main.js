@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // --- Comprobar sesión para transformar el menú "Login" en dos botones separados ---
-    const basePath = '/Proyecto-Intermodular-/servidor/api';
+    const basePath = window.API_BASE;
 
     fetch(`${basePath}/sesion.php`)
         .then(response => response.json())

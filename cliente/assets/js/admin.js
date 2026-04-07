@@ -4,7 +4,7 @@
 
 
 
-const API_ADMIN = '/Proyecto-Intermodular-/servidor/api/pedidos.php';
+const API_ADMIN = `${window.API_BASE}/pedidos.php`;
 
 document.addEventListener('DOMContentLoaded', function () {
     cargarDashboard();
