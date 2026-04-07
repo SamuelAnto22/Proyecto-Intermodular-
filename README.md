@@ -86,3 +86,38 @@ Para evitar rutas hardcodeadas al nombre de la carpeta del proyecto, el frontend
 - Hosting en subcarpeta `coches`: `https://dominio.com/coches/cliente/` -> `API_BASE = https://dominio.com/coches/servidor/api`
 
 Esta estrategia mantiene el código preparado para despliegue local y para mover el proyecto a hosting sin rehacer endpoints frontend.
+
+
+## Contrato común de errores (API)
+
+Todos los endpoints devuelven JSON con la misma forma base:
+
+```json
+{
+  "ok": false,
+  "message": "Mensaje legible para UI",
+  "error": "CODIGO_DE_ERROR"
+}
+```
+
+> En errores de validación (`422`) también se puede devolver `details` con una lista de mensajes.
+
+### `POST /servidor/api/login.php`
+
+| HTTP | ok | error | Uso |
+|---|---|---|---|
+| `200` | `true` | `null` | Login correcto (`redirect` según rol). |
+| `400` | `false` | `MISSING_FIELDS` | Faltan campos obligatorios. |
+| `401` | `false` | `INVALID_CREDENTIALS` / `TOO_MANY_ATTEMPTS` | Credenciales inválidas o bloqueo temporal. |
+| `422` | `false` | `INVALID_EMAIL` | Formato de email inválido. |
+| `500` | `false` | `INTERNAL_ERROR` | Error interno inesperado. |
+
+### `POST /servidor/api/registro.php`
+
+| HTTP | ok | error | Uso |
+|---|---|---|---|
+| `200` | `true` | `null` | Registro correcto (`redirect` a login). |
+| `409` | `false` | `EMAIL_ALREADY_EXISTS` | El correo ya está registrado. |
+| `422` | `false` | `VALIDATION_ERROR` | Validaciones de nombre/email/contraseña. |
+| `500` | `false` | `INTERNAL_ERROR` | Error interno inesperado. |
+
