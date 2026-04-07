@@ -9,7 +9,46 @@ let idParaBorrar = null;
 document.addEventListener('DOMContentLoaded', function () {
     cargarProyectos();
     iniciarModal();
+    iniciarEventosTarjetas();
 });
+
+function iniciarEventosTarjetas() {
+    const lista = document.getElementById('proyectos-lista');
+    if (!lista) return;
+
+    lista.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-action][data-id]');
+        if (!btn) return;
+
+        const action = btn.dataset.action;
+        const id = parseInt(btn.dataset.id, 10);
+        if (!id) return;
+
+        const card = btn.closest('.tarjeta-garaje');
+
+        if (action === 'editar') {
+            // sacamos datos de la tarjeta renderizada
+            const modelo = card?.querySelector('.tarjeta-modelo')?.textContent?.trim() || '';
+            const color = card?.querySelectorAll('.spec-valor')?.[0]?.textContent?.trim() || '';
+            const llantas = card?.querySelectorAll('.spec-valor')?.[1]?.textContent?.trim() || '';
+
+            // tu función ya existente
+            editarEnConfigurador(id, modelo, color, llantas);
+            return;
+        }
+
+        if (action === 'solicitar') {
+            solicitarPedido(id, btn);
+            return;
+        }
+
+        if (action === 'eliminar') {
+            const nombre = card?.querySelector('.tarjeta-modelo')?.textContent?.trim() || `Proyecto #${id}`;
+            abrirModalBorrar(id, nombre);
+            return;
+        }
+    });
+}
 
 function escaparHtml(str) {
     const div = document.createElement('div');
@@ -100,19 +139,19 @@ function crearTarjeta(p) {
         </div>
         <div class="tarjeta-acciones">
             <button class="btn-accion btn-editar"
-                    onclick="editarEnConfigurador(${p.id},'${p.modelo}','${p.color}','${p.llantas}')"
+                    data-action="editar" data-id="${p.id}"
                     title="Cargar en el configurador para editar">
                 ✏️ Editar
             </button>
             <button class="btn-accion btn-solicitar"
                     id="btn-solicitar-${p.id}"
-                    onclick="solicitarPedido(${p.id}, this)"
+                    data-action="solicitar" data-id="${p.id}"
                     ${puedesolicitar ? '' : 'disabled'}
                     title="${puedesolicitar ? 'Enviar solicitud al taller' : 'Ya solicitado'}">
                 ${puedesolicitar ? '📤 Solicitar' : '✅ Solicitado'}
             </button>
             <button class="btn-accion btn-eliminar"
-                    onclick="abrirModalBorrar(${p.id}, '${p.modelo.replace('_', ' ')}')"
+                    data-action="eliminar" data-id="${p.id}"
                     title="Eliminar proyecto">
                 🗑️ Borrar
             </button>
