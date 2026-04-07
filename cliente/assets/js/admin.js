@@ -8,7 +8,32 @@ const API_ADMIN = '/Proyecto-Intermodular-/servidor/api/pedidos.php';
 
 document.addEventListener('DOMContentLoaded', function () {
     cargarDashboard();
+    iniciarEventosAdmin();
 });
+
+function iniciarEventosAdmin() {
+    const body = document.getElementById('pedidos-body');
+    if (!body) return;
+
+    body.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-action][data-id]');
+        if (!btn) return;
+
+        const action = btn.dataset.action;
+        const id = parseInt(btn.dataset.id, 10);
+        if (!id) return;
+
+        if (action === 'cambiar_estado') {
+            cambiarEstado(id);
+            return;
+        }
+
+        if (action === 'eliminar') {
+            eliminarPedido(id);
+            return;
+        }
+    });
+}
 
 function escaparHtml(str) {
     const div = document.createElement('div');
@@ -88,8 +113,8 @@ function cargarDashboard() {
                                 <option value="en proceso" ${p.estado === 'en proceso' ? 'selected' : ''}>En proceso</option>
                                 <option value="terminado" ${p.estado === 'terminado' ? 'selected' : ''}>Terminado</option>
                             </select>
-                            <button class="btn-admin btn-guardar" onclick="cambiarEstado(${p.id})" title="Guardar estado">✓</button>
-                            <button class="btn-admin btn-borrar" onclick="eliminarPedido(${p.id})" title="Eliminar pedido">✕</button>
+                            <button class="btn-admin btn-guardar" data-action="cambiar_estado" data-id="${p.id}" title="Guardar estado">✓</button>
+                            <button class="btn-admin btn-borrar" data-action="eliminar" data-id="${p.id}" title="Eliminar pedido">✕</button>
                         </div>
                     </td>
                 `;
