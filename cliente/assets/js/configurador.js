@@ -2,7 +2,7 @@
 // Configurador de Coches — Midnight Customs (Multi-Coche)
 // ============================================================
 
-const API_CONFIG = '/Proyecto-Intermodular-/servidor/api/guardar_config.php';
+const API_CONFIG = `${window.API_BASE}/guardar_config.php`;
 
 // ── Estado global ────────────────────────────────────────────
 let configuracionActual = {

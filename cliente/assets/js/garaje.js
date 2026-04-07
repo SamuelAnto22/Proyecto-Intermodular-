@@ -1,7 +1,7 @@
 // ============================================================
 // Mi Garaje — Lógica completa con modal y toast
 // ============================================================
-const API_BASE = '/Proyecto-Intermodular-/servidor/api';
+const API_BASE = window.API_BASE;
 
 // ── Estado del modal de borrado ──────────────────────────────
 let idParaBorrar = null;
