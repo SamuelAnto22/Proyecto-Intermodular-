@@ -260,6 +260,18 @@ Las pruebas **no dependen de estado manual**:
 npm run test
 ```
 
+---
+
+## Mini checklist de accesibilidad (Frontend)
+
+Antes de dar por cerrado un cambio visual o de formularios:
+
+1. [ ] **Labels y campos**: cada `input/select/textarea` tiene `label` asociado y mensajes inline con `aria-describedby`.
+2. [ ] **Teclado**: todos los elementos interactivos se alcanzan con **TAB** en orden lógico; el foco visible no se pierde.
+3. [ ] **Modales**: se pueden cerrar con `Escape`, atrapan foco mientras están abiertos y devuelven foco al disparador.
+4. [ ] **Lectores de pantalla**: toasts y alertas usan `aria-live` (`polite` para éxito, `assertive` para error).
+5. [ ] **Contraste**: botones neón y textos pequeños mantienen contraste suficiente sobre fondo oscuro.
+
 Alternativa directa (sin npm):
 
 ```bash

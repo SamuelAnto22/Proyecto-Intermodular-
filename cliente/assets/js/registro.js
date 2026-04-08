@@ -6,10 +6,18 @@ const AUTH_TIMEOUT_MS = 10000;
 
 document.addEventListener('DOMContentLoaded', function () {
     const registroForm = document.getElementById('registroForm');
+    const nombre = document.getElementById('nombre');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const confirm = document.getElementById('confirm-password');
 
     if (registroForm) {
         registroForm.addEventListener('submit', onRegistroSubmit);
     }
+    nombre?.addEventListener('input', () => validarRequerido(nombre, 'El nombre es obligatorio.'));
+    email?.addEventListener('input', () => validarEmail(email));
+    password?.addEventListener('input', () => validarPassword(password));
+    confirm?.addEventListener('input', () => validarConfirmPassword(password, confirm));
 });
 
 async function onRegistroSubmit(e) {
@@ -18,6 +26,16 @@ async function onRegistroSubmit(e) {
     const form = e.currentTarget;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
+
+    const nombreOk = validarRequerido(document.getElementById('nombre'), 'El nombre es obligatorio.');
+    const emailOk = validarEmail(document.getElementById('email'));
+    const passOk = validarPassword(document.getElementById('password'));
+    const confirmOk = validarConfirmPassword(document.getElementById('password'), document.getElementById('confirm-password'));
+
+    if (!nombreOk || !emailOk || !passOk || !confirmOk) {
+        mostrarAlerta('Revisa los campos marcados antes de enviar.', 'error');
+        return;
+    }
 
     if (password.length < 6) {
         mostrarAlerta('La contraseña debe tener al menos 6 caracteres.', 'error');
@@ -101,26 +119,45 @@ function mensajeErrorComun(error) {
 }
 
 function mostrarAlerta(texto, tipo) {
-    const loginBox = document.querySelector('.caja-auth');
-    if (!loginBox) return;
-
-    const existente = loginBox.querySelector('.alerta-msg');
-    if (existente) existente.remove();
-
-    const div = document.createElement('div');
-    div.className = 'alerta-msg';
+    const div = document.getElementById('mensajeError');
+    if (!div) return;
+    div.style.display = 'block';
     div.textContent = texto;
-    div.style.cssText = `
-        padding: 0.8rem 1rem;
-        border-radius: 10px;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
-        text-align: center;
-        ${tipo === 'error'
-            ? 'background: rgba(255,50,50,0.15); color: #ff4444; border: 1px solid rgba(255,50,50,0.3);'
-            : 'background: rgba(50,200,50,0.15); color: #33cc33; border: 1px solid rgba(50,200,50,0.3);'
-        }
-    `;
+    div.style.background = tipo === 'error' ? 'rgba(255,50,50,0.15)' : 'rgba(50,200,50,0.15)';
+    div.style.color = tipo === 'error' ? '#ff8080' : '#80ff80';
+    div.style.borderColor = tipo === 'error' ? 'rgba(255,50,50,0.3)' : 'rgba(50,200,50,0.3)';
+}
 
-    loginBox.insertBefore(div, loginBox.querySelector('form'));
+function setError(input, mensaje) {
+    if (!input) return false;
+    const errorEl = document.getElementById(`error-${input.id}`);
+    const error = Boolean(mensaje);
+    input.setAttribute('aria-invalid', error ? 'true' : 'false');
+    if (errorEl) errorEl.textContent = mensaje || '';
+    return !error;
+}
+
+function validarRequerido(input, mensaje) {
+    return setError(input, input?.value.trim() ? '' : mensaje);
+}
+
+function validarEmail(input) {
+    if (!input) return false;
+    const valor = input.value.trim();
+    if (!valor) return setError(input, 'El correo electrónico es obligatorio.');
+    const valido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+    return setError(input, valido ? '' : 'Introduce un correo con formato válido.');
+}
+
+function validarPassword(input) {
+    if (!input) return false;
+    const valor = input.value;
+    if (!valor) return setError(input, 'La contraseña es obligatoria.');
+    return setError(input, valor.length >= 6 ? '' : 'Debe tener al menos 6 caracteres.');
+}
+
+function validarConfirmPassword(passwordInput, confirmInput) {
+    if (!confirmInput) return false;
+    if (!confirmInput.value) return setError(confirmInput, 'Debes confirmar la contraseña.');
+    return setError(confirmInput, confirmInput.value === passwordInput?.value ? '' : 'Las contraseñas no coinciden.');
 }

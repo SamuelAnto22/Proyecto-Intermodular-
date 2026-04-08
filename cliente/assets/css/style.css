@@ -9,7 +9,7 @@
     --color2: #e68dff;
     --brillo2: rgba(230, 141, 255, 0.8);
     --blanco: #ffffff;
-    --gris: #b3b3b3;
+    --gris: #c8c8cf;
     --fondo-tarjeta: rgba(25, 25, 30, 0.6);
     --borde-tarjeta: rgba(255, 255, 255, 0.1);
 }
@@ -34,7 +34,7 @@ body {
 
 /* Mejora de Accesibilidad: foco visible con teclado */
 :focus-visible {
-    outline: 2px solid var(--color2);
+    outline: 3px solid #f2b6ff;
     outline-offset: 4px;
     border-radius: 2px;
 }
@@ -162,9 +162,9 @@ p {
     font-size: 1.2rem;
     font-family: 'Bebas Neue', sans-serif;
     letter-spacing: 2px;
-    color: var(--blanco);
+    color: #f9f4ff;
     text-decoration: none;
-    background: transparent;
+    background: rgba(192, 82, 226, 0.08);
     border: 2px solid var(--color1);
     border-radius: 4px;
     position: relative;
@@ -173,6 +173,13 @@ p {
     z-index: 1;
     cursor: pointer;
     box-shadow: 0 0 15px var(--brillo1);
+    font-weight: 700;
+}
+
+.boton-neon:hover,
+.boton-neon:focus-visible {
+    color: #ffffff;
+    border-color: #d37cf0;
 }
 
 .boton-neon::before {

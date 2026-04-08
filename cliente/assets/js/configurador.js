@@ -158,9 +158,18 @@ function cargarDesdeURL() {
 
 // ── Event listeners ─────────────────────────────────────────
 function setupEventListeners() {
-    document.getElementById('modelo')?.addEventListener('change', actualizarVista);
-    document.getElementById('color')?.addEventListener('change', actualizarVista);
-    document.getElementById('llantas')?.addEventListener('change', actualizarVista);
+    document.getElementById('modelo')?.addEventListener('change', () => {
+        validarSelect('modelo', 'Selecciona un modelo.');
+        actualizarVista();
+    });
+    document.getElementById('color')?.addEventListener('change', () => {
+        validarSelect('color', 'Selecciona un color.');
+        actualizarVista();
+    });
+    document.getElementById('llantas')?.addEventListener('change', () => {
+        validarSelect('llantas', 'Selecciona un tipo de llantas.');
+        actualizarVista();
+    });
 
     document.getElementById('guardarConfig')?.addEventListener('click', guardarConfiguracion);
 }
@@ -260,6 +269,13 @@ function actualizarEscala() {
 function guardarConfiguracion() {
     const btn = document.getElementById('guardarConfig');
     const esEdicion = editandoId !== null;
+    const modeloOk = validarSelect('modelo', 'Selecciona un modelo.');
+    const colorOk = validarSelect('color', 'Selecciona un color.');
+    const llantasOk = validarSelect('llantas', 'Selecciona un tipo de llantas.');
+    if (!modeloOk || !colorOk || !llantasOk) {
+        mostrarMensaje('error', 'Revisa los campos marcados antes de guardar.');
+        return;
+    }
 
     const payload = { ...configuracionActual };
     if (esEdicion) {
@@ -316,6 +332,16 @@ function guardarConfiguracion() {
                 mostrarMensaje('error', 'Error de conexión con el servidor.');
             }
         });
+}
+
+function validarSelect(id, mensaje) {
+    const select = document.getElementById(id);
+    const errorEl = document.getElementById(`error-${id}`);
+    if (!select) return false;
+    const ok = Boolean(select.value);
+    select.setAttribute('aria-invalid', ok ? 'false' : 'true');
+    if (errorEl) errorEl.textContent = ok ? '' : mensaje;
+    return ok;
 }
 
 // ── Mensajes visuales ───────────────────────────────────────
