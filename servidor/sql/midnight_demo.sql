@@ -11,6 +11,7 @@ USE midnight_customs_demo;
 
 -- 2. Eliminar tablas antiguas si existen (orden inverso)
 DROP TABLE IF EXISTS pedidos;
+DROP TABLE IF EXISTS login_attempts;
 DROP TABLE IF EXISTS configuraciones;
 DROP TABLE IF EXISTS usuarios;
 
@@ -42,6 +43,16 @@ CREATE TABLE pedidos (
     fecha            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (configuracion_id) REFERENCES configuraciones(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE login_attempts (
+    id            BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    email         VARCHAR(150)    NOT NULL,
+    ip            VARCHAR(45)     NOT NULL,
+    attempted_at  TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_login_attempts_email_time (email, attempted_at),
+    INDEX idx_login_attempts_ip_time (ip, attempted_at)
 );
 
 -- ==========================================================
