@@ -109,6 +109,41 @@ Hemos diseñado una experiencia con atención al detalle que pedimos encarecidam
 
 ¡Gracias por evaluar este proyecto final! Esperamos que os guste.
 
+---
+
+## Convención de nombres y estructura de carpetas
+
+### Convención de nombres
+
+- **HTML (`cliente/*.html`)**: usar nombres en minúsculas y sin espacios (`configurador.html`, `garaje.html`).
+- **JavaScript (`cliente/assets/js/`)**:
+  - Archivos de página en minúsculas y `snake_case` cuando aplique (`configurador.js`, `guardar_config.js`).
+  - Módulos reutilizables en `modules/` y con nombre funcional corto (`nav.js`, `loader.js`).
+- **PHP API (`servidor/api/`)**: endpoints en minúsculas con `snake_case` (`guardar_config.php`, `reset_demo_data.sql`).
+- **SQL (`servidor/sql/`)**: scripts con intención explícita (`schema.sql`, `midnight_demo.sql`, `reset_demo_data.sql`).
+- **CSS (`cliente/assets/css/`)**: nombres en minúsculas, sin espacios, alineados con la página o tema visual.
+
+### Estructura recomendada
+
+```text
+Proyecto-Intermodular-/
+├── cliente/
+│   ├── *.html                  # Vistas estáticas
+│   └── assets/
+│       ├── css/                # Estilos globales y por página
+│       ├── img/                # Recursos gráficos
+│       └── js/
+│           ├── modules/        # Módulos JS reutilizables
+│           └── *.js            # Scripts por página/flujo
+├── servidor/
+│   ├── api/                    # Endpoints HTTP (JSON)
+│   ├── includes/               # Helpers compartidos (DB, auth, headers)
+│   └── sql/                    # Esquema y datasets demo
+└── tests/                      # Pruebas de humo y utilidades de verificación
+```
+
+> Para pasos rápidos de colaboración, consultar también `CONTRIBUTING.md`.
+
 
 ---
 
@@ -259,6 +294,46 @@ Las pruebas **no dependen de estado manual**:
 ```bash
 npm run test
 ```
+
+---
+
+## Flujo funcional (auth, configuraciones y pedidos)
+
+```mermaid
+flowchart TD
+    A[Usuario abre cliente/login.html] --> B{POST /api/login.php válido?}
+    B -- No --> C[Mostrar error uniforme]
+    B -- Sí --> D[Sesión iniciada + rol]
+    D --> E{Rol admin?}
+    E -- No --> F[Cliente accede a configurador.html]
+    F --> G[POST /api/guardar_config.php]
+    G --> H[Crear/actualizar configuración + pedido]
+    H --> I[garaje.html consulta /api/pedidos.php]
+    E -- Sí --> J[Admin accede a admin.html]
+    J --> K[GET /api/pedidos.php]
+    K --> L[POST cambiar_estado/eliminar]
+    L --> M[Dashboard actualizado]
+```
+
+---
+
+## Roadmap (mejoras futuras)
+
+- **Despliegue**
+  - Pipeline CI/CD (build + smoke tests automáticos).
+  - Entornos separados (`staging` y `production`) con variables por entorno.
+- **Logs y trazabilidad**
+  - Logs estructurados por endpoint (JSON + correlation id).
+  - Rotación y retención de logs para auditoría.
+- **Monitorización**
+  - Métricas básicas (latencia, ratio de errores, uptime).
+  - Alertas por degradación de API y fallos de login anómalos.
+- **Seguridad**
+  - Cabeceras de seguridad reforzadas (CSP más estricta, HSTS en producción).
+  - Revisión periódica de dependencias y políticas de sesión.
+- **Calidad**
+  - Formateo/linting automático para PHP/JS en pre-commit.
+  - Cobertura incremental de pruebas de integración E2E.
 
 ---
 

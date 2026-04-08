@@ -2,8 +2,6 @@
 // Admin Panel — Midnight Customs
 // ============================================================
 
-
-
 const API_ADMIN = `${window.API_BASE}/pedidos.php`;
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -41,9 +39,9 @@ function escaparHtml(str) {
     return div.innerHTML;
 }
 
-// ────────────────────────────────────────────────────────────
+// ============================================================
 // Cargar pedidos + estadísticas
-// ────────────────────────────────────────────────────────────
+// ============================================================
 function cargarDashboard() {
     const body = document.getElementById('pedidos-body');
 
@@ -67,7 +65,7 @@ function cargarDashboard() {
                 return;
             }
 
-            // Stats
+            // Estadísticas.
             if (data.stats) {
                 document.getElementById('stat-clientes').textContent = data.stats.total_clientes;
                 document.getElementById('stat-pedidos').textContent = data.stats.total_pedidos;
@@ -77,7 +75,7 @@ function cargarDashboard() {
                 document.getElementById('stat-terminados').textContent = data.stats.terminados;
             }
 
-            // Tabla
+            // Tabla de pedidos.
             if (data.data.length === 0) {
                 body.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gris);padding:2rem;">No hay pedidos registrados.</td></tr>';
                 return;
@@ -171,9 +169,9 @@ function cargarDashboard() {
         });
 }
 
-// ────────────────────────────────────────────────────────────
+// ============================================================
 // Cambiar estado (con select)
-// ────────────────────────────────────────────────────────────
+// ============================================================
 function cambiarEstado(id) {
     const select = document.getElementById(`select-${id}`);
     const nuevoEstado = select.value;
@@ -186,14 +184,14 @@ function cambiarEstado(id) {
         .then(r => r.json())
         .then(data => {
             if (data.ok) {
-                // Actualizar badge sin recargar
+                // Actualizar badge sin recargar.
                 const badge = document.getElementById(`badge-${id}`);
                 if (badge) {
                     badge.className = `badge-estado badge-${nuevoEstado.replace(' ', '-')}`;
                     badge.textContent = capitalizarEstado(nuevoEstado);
                 }
                 toastAdmin('✅ ' + data.message, 'exito');
-                // Recargar stats
+                // Recargar estadísticas.
                 actualizarStats();
             } else {
                 toastAdmin('Error: ' + data.message, 'error');
@@ -202,9 +200,9 @@ function cambiarEstado(id) {
         .catch(() => toastAdmin('Error de conexión.', 'error'));
 }
 
-// ────────────────────────────────────────────────────────────
+// ============================================================
 // Eliminar pedido
-// ────────────────────────────────────────────────────────────
+// ============================================================
 function eliminarPedido(id) {
     if (!confirm(`¿Eliminar pedido #${String(id).padStart(4, '0')}?`)) return;
 
@@ -233,9 +231,9 @@ function eliminarPedido(id) {
         .catch(() => toastAdmin('Error de conexión.', 'error'));
 }
 
-// ────────────────────────────────────────────────────────────
+// ============================================================
 // Recargar solo las estadísticas
-// ────────────────────────────────────────────────────────────
+// ============================================================
 function actualizarStats() {
     fetch(API_ADMIN)
         .then(r => r.json())
@@ -252,9 +250,9 @@ function actualizarStats() {
         .catch(() => { });
 }
 
-// ────────────────────────────────────────────────────────────
+// ============================================================
 // Toast
-// ────────────────────────────────────────────────────────────
+// ============================================================
 let toastTimerAdmin = null;
 
 function toastAdmin(msg, tipo) {
@@ -267,9 +265,9 @@ function toastAdmin(msg, tipo) {
     toastTimerAdmin = setTimeout(() => el.classList.remove('visible'), 4000);
 }
 
-// ────────────────────────────────────────────────────────────
-// Utils
-// ────────────────────────────────────────────────────────────
+// ============================================================
+// Utilidades
+// ============================================================
 function capitalizarEstado(e) {
     return e.charAt(0).toUpperCase() + e.slice(1);
 }
