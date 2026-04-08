@@ -218,3 +218,59 @@ Antes de cerrar cualquier cambio en la capa cliente, revisar:
 - Se eliminaron ambos archivos JS huérfanos para reducir deuda técnica y evitar confusión en mantenimiento.
 - Se revisó CSS específico (`contacto.css`, `nosotros.css`) frente a `style.css` y se limpió duplicidad en `style.css` para que los estilos de contacto/nosotros vivan solo en sus hojas dedicadas.
 - Revisión manual de navegación completada a nivel de estructura/flujo (enlaces, menú responsive y anclas), sin detectar regresiones funcionales derivadas de esta limpieza.
+
+---
+
+## Pruebas de humo API (automatizadas)
+
+Se añadió un runner único para validar endpoints críticos:
+
+- `servidor/api/sesion.php`
+- `servidor/api/login.php`
+- `servidor/api/registro.php`
+- `servidor/api/guardar_config.php`
+- `servidor/api/pedidos.php`
+
+### Cobertura incluida
+
+El script `tests/smoke_api.php` cubre:
+
+- **Happy path** de `login`, `registro`, `guardar_config` y `pedidos` (admin).
+- Errores esperados:
+  - `400` (campos inválidos / JSON inválido)
+  - `401` (sin sesión o credenciales erróneas)
+  - `403` (sin permisos admin o token CSRF inválido)
+- Validación explícita de `JSON inválido` y `CSRF inválido` en endpoints JSON.
+
+### Aislamiento de datos de prueba
+
+Las pruebas **no dependen de estado manual**:
+
+- Crean usuarios temporales únicos (`cliente` y `admin`) con sufijo aleatorio.
+- Ejecutan pruebas con esos usuarios.
+- Eliminan los datos temporales al terminar (incluyendo relaciones por `ON DELETE CASCADE`).
+
+### Ejecución local (docente/evaluación)
+
+1. Tener **MySQL** activo y la BD `midnight_customs` importada.
+2. Verificar credenciales en `servidor/includes/db.php` (por defecto `root` sin contraseña).
+3. Ejecutar desde la raíz del proyecto:
+
+```bash
+npm run test
+```
+
+Alternativa directa (sin npm):
+
+```bash
+php tests/smoke_api.php
+```
+
+### Notas técnicas
+
+- El runner levanta un servidor embebido PHP automáticamente en `127.0.0.1:8099`.
+- Si el puerto está ocupado, se puede cambiar con:
+
+```bash
+SMOKE_PORT=8100 npm run test
+```
