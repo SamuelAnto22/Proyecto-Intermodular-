@@ -1,0 +1,7 @@
+{
+  "name": "midnight-customs-smoke-tests",
+  "private": true,
+  "scripts": {
+    "test": "php tests/smoke_api.php"
+  }
+}
