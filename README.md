@@ -39,6 +39,45 @@ Tiene acceso al configurador interactivo y un garaje donde ve la progresión del
 
 ---
 
+
+## Dataset demo oficial (control de versión)
+
+Para evitar desalineaciones entre profesores/equipos durante la evaluación, la demo SQL queda congelada con:
+
+- `dataset_version: demo-2026.04`
+- `dataset_date: 2026-04-08`
+- Archivos fuente: `servidor/sql/midnight_demo.sql` y `servidor/sql/reset_demo_data.sql`
+
+Si se cambia cualquier dato (usuarios, pedidos, estados, etc.), se debe incrementar la versión y actualizar la fecha en ambos scripts.
+
+## Regenerar hashes bcrypt y credenciales (paso a paso exacto)
+
+1. Generar hash para administrador:
+   ```bash
+   php -r "echo password_hash('admin123', PASSWORD_BCRYPT, ['cost' => 12]), PHP_EOL;"
+   ```
+2. Generar hash para cliente:
+   ```bash
+   php -r "echo password_hash('cliente123', PASSWORD_BCRYPT, ['cost' => 12]), PHP_EOL;"
+   ```
+3. Sustituir hashes en:
+   - `servidor/sql/schema.sql`
+   - `servidor/sql/midnight_demo.sql`
+   - `servidor/sql/reset_demo_data.sql`
+4. Verificar que cada hash corresponde a su contraseña:
+   ```bash
+   php -r "var_export(password_verify('admin123', 'AQUI_HASH_ADMIN'));"
+   ```
+   ```bash
+   php -r "var_export(password_verify('cliente123', 'AQUI_HASH_CLIENTE'));"
+   ```
+5. Reimportar datos demo:
+   - Inicial completo: importar `servidor/sql/midnight_demo.sql`
+   - Reseteo rápido (sin recrear tablas):
+     ```bash
+     mysql -u root -p < servidor/sql/reset_demo_data.sql
+     ```
+
 ##  Checklist de Pruebas recomendadas para el Profesor
 
 Hemos diseñado una experiencia con atención al detalle que pedimos encarecidamente probar para validar la evaluación:
