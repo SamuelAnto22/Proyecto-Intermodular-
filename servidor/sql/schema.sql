@@ -64,5 +64,9 @@ CREATE TABLE IF NOT EXISTS login_attempts (
 ) ENGINE=InnoDB;
 
 
+-- Usuarios demo funcionales (bcrypt válido)
+-- admin@midnight.com  / admin123
+-- carlos@ejemplo.com  / cliente123
 INSERT INTO usuarios (nombre, email, password, rol) VALUES
-('Administrador', 'admin@midnight.com', '$2y$10$YJ1Xk0V3fK7vGxq5q5Q5eO9J6Z8zH4d2wKk5r3nA1bC7dE9fG0hI2', 'admin');
+('Administrador', 'admin@midnight.com', '$2y$12$K3TUmUf1FktjPCf0mBbbz.cmlvNxlB5EDB0.HFbpgkPEHkUvhnggW', 'admin'),
+('Carlos Cliente', 'carlos@ejemplo.com', '$2y$12$R78QE9AzzOKvR65M/h6DQukw.76Xgvv4qGpDjJg9QrD.fAIFAR2MO', 'cliente');

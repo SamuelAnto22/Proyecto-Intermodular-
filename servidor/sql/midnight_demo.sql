@@ -59,11 +59,15 @@ CREATE TABLE login_attempts (
 -- DATOS DE PRUEBA PARA DEFENSA DE 2º DAW
 -- ==========================================================
 
--- Usuarios (contraseña para todos: cliente123 y admin123)
+-- Usuarios demo funcionales (bcrypt validado con password_verify)
 INSERT INTO usuarios (id, nombre, email, password, rol) VALUES
 (1, 'Admin Midnight', 'admin@midnight.com', '$2y$12$K3TUmUf1FktjPCf0mBbbz.cmlvNxlB5EDB0.HFbpgkPEHkUvhnggW', 'admin'),
 (2, 'Carlos Cliente', 'carlos@ejemplo.com', '$2y$12$R78QE9AzzOKvR65M/h6DQukw.76Xgvv4qGpDjJg9QrD.fAIFAR2MO', 'cliente'),
 (3, 'Elena Prueba', 'elena@ejemplo.com', '$2y$12$R78QE9AzzOKvR65M/h6DQukw.76Xgvv4qGpDjJg9QrD.fAIFAR2MO', 'cliente');
+
+-- Dataset de referencia para defensas (evita desalineaciones entre profesores)
+-- dataset_version: demo-2026.04
+-- dataset_date: 2026-04-08
 
 -- Configuraciones de coches (Usuario 2 y 3)
 INSERT INTO configuraciones (id, usuario_id, modelo, color, llantas) VALUES
