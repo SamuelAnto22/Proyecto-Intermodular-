@@ -49,5 +49,20 @@ CREATE TABLE IF NOT EXISTS pedidos (
 ) ENGINE=InnoDB;
 
 
+
+
+-- ============================================================
+-- Tabla: login_attempts (protección anti fuerza bruta)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS login_attempts (
+    id            BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    email         VARCHAR(150)    NOT NULL,
+    ip            VARCHAR(45)     NOT NULL,
+    attempted_at  TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_login_attempts_email_time (email, attempted_at),
+    INDEX idx_login_attempts_ip_time (ip, attempted_at)
+) ENGINE=InnoDB;
+
+
 INSERT INTO usuarios (nombre, email, password, rol) VALUES
 ('Administrador', 'admin@midnight.com', '$2y$10$YJ1Xk0V3fK7vGxq5q5Q5eO9J6Z8zH4d2wKk5r3nA1bC7dE9fG0hI2', 'admin');

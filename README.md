@@ -108,7 +108,7 @@ Todos los endpoints devuelven JSON con la misma forma base:
 |---|---|---|---|
 | `200` | `true` | `null` | Login correcto (`redirect` según rol). |
 | `400` | `false` | `MISSING_FIELDS` | Faltan campos obligatorios. |
-| `401` | `false` | `INVALID_CREDENTIALS` / `TOO_MANY_ATTEMPTS` | Credenciales inválidas o bloqueo temporal. |
+| `401` | `false` | `INVALID_CREDENTIALS` / `TOO_MANY_ATTEMPTS` | Credenciales inválidas, retardo progresivo y/o bloqueo temporal por sesión+IP/email. |
 | `422` | `false` | `INVALID_EMAIL` | Formato de email inválido. |
 | `500` | `false` | `INTERNAL_ERROR` | Error interno inesperado. |
 
@@ -140,3 +140,33 @@ Antes de cerrar cualquier cambio en la capa cliente, revisar:
    - Tratar como no confiable cualquier texto proveniente de API, query params o storage del navegador.
    - Confirmar que nombres de usuario, emails, modelos y campos libres se insertan con `textContent`.
    - Mantener helpers de escape (como `escaparHtml`) únicamente para casos de respaldo puntuales, no como patrón principal de render.
+
+
+## Seguridad: modo local académico vs producción
+
+### Contraseñas (`registro.php`)
+
+- **Regla base (siempre):** longitud entre **8 y 10** caracteres.
+- **Complejidad opcional:** si `PASSWORD_REQUIRE_COMPLEXITY=true`, se exige al menos una mayúscula, una minúscula, un número y un símbolo.
+- Recomendación:
+  - **Local académico:** `PASSWORD_REQUIRE_COMPLEXITY=false` para facilitar pruebas en clase.
+  - **Producción:** `PASSWORD_REQUIRE_COMPLEXITY=true`.
+
+### Login y anti fuerza bruta (`login.php`)
+
+- Se mantiene el límite por sesión (`5` intentos / `5` minutos).
+- Se añade:
+  - **Retardo incremental** por intento fallido (hasta 3s).
+  - **Persistencia en BD** (`login_attempts`) por **IP o email** en ventana de 5 minutos para evitar evasión cerrando sesión o cambiando cookie.
+- Al autenticar correctamente, se limpian los intentos del email/IP.
+
+### Cookies de sesión (`auth.php`)
+
+- Variable `APP_ENV`:
+  - `local` (por defecto): `secure` depende de HTTPS real.
+  - `production`: cookie de sesión con `secure=true` forzado.
+- Variable `SESSION_SAMESITE` (`Lax`, `Strict`, `None`; default `Lax`):
+  - Si se usa `None`, se fuerza `secure=true` (requisito de navegadores modernos).
+- Recomendación de flujo:
+  - Si frontend y backend comparten mismo sitio -> usar `Lax` o `Strict` tras validar UX.
+  - Si hay flujo cross-site (subdominios terceros/embeds) -> evaluar `None` + HTTPS obligatorio.

@@ -52,8 +52,20 @@ if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $errores[] = 'El email es demasiado largo (máximo 100 caracteres).';
 }
 
-if (strlen($password) < 6) {
-    $errores[] = 'La contraseña debe tener al menos 6 caracteres.';
+if (strlen($password) < 8 || strlen($password) > 10) {
+    $errores[] = 'La contraseña debe tener entre 8 y 10 caracteres.';
+}
+
+$forzarComplejidad = filter_var($_ENV['PASSWORD_REQUIRE_COMPLEXITY'] ?? getenv('PASSWORD_REQUIRE_COMPLEXITY') ?: '0', FILTER_VALIDATE_BOOL);
+if ($forzarComplejidad) {
+    $tieneMayus = preg_match('/[A-Z]/', $password) === 1;
+    $tieneMinus = preg_match('/[a-z]/', $password) === 1;
+    $tieneNumero = preg_match('/\d/', $password) === 1;
+    $tieneSimbolo = preg_match('/[^a-zA-Z\d]/', $password) === 1;
+
+    if (!$tieneMayus || !$tieneMinus || !$tieneNumero || !$tieneSimbolo) {
+        $errores[] = 'La contraseña debe incluir mayúscula, minúscula, número y símbolo (modo producción).';
+    }
 }
 
 if ($password !== $confirm) {
