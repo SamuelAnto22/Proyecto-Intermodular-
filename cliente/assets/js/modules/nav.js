@@ -24,12 +24,23 @@ export function initNav() {
     botonMenu.addEventListener('click', () => {
         nav.classList.toggle('activo');
         botonMenu.textContent = nav.classList.contains('activo') ? '✕' : '☰';
+        botonMenu.setAttribute('aria-expanded', nav.classList.contains('activo') ? 'true' : 'false');
     });
 
     nav.querySelectorAll('a').forEach((enlace) => {
         enlace.addEventListener('click', () => {
             nav.classList.remove('activo');
             botonMenu.textContent = '☰';
+            botonMenu.setAttribute('aria-expanded', 'false');
         });
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && nav.classList.contains('activo')) {
+            nav.classList.remove('activo');
+            botonMenu.textContent = '☰';
+            botonMenu.setAttribute('aria-expanded', 'false');
+            botonMenu.focus();
+        }
     });
 }

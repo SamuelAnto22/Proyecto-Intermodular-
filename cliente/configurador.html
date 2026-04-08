@@ -98,6 +98,17 @@
             border-color: var(--color1);
             box-shadow: 0 0 10px var(--brillo1);
         }
+        .opcion-grupo .campo-ayuda {
+            margin-top: 0.35rem;
+            font-size: 0.82rem;
+            color: #ff9ea8;
+            min-height: 1.1rem;
+            display: block;
+        }
+        .opcion-grupo select[aria-invalid="true"] {
+            border-color: #ff5f6d;
+            box-shadow: 0 0 0 2px rgba(255,95,109,0.25);
+        }
 
         .opcion-grupo select option {
             background: #12121e;
@@ -194,7 +205,7 @@
                     style="color:var(--color2);">Customs</span>
             </a>
         </div>
-        <button class="boton-menu" aria-label="Abrir menú">☰</button>
+        <button class="boton-menu" aria-label="Abrir menú" aria-expanded="false">☰</button>
         <nav class="navegacion-principal" id="navegacion-principal">
             <ul>
 
@@ -252,42 +263,45 @@
 
                 <div class="opcion-grupo">
                     <label for="modelo">Modelo</label>
-                    <select id="modelo">
+                    <select id="modelo" aria-describedby="error-modelo">
                         <option value="mini_cooper">Mini Cooper</option>
                         <option value="bmw_serie1">BMW Serie 1</option>
                         <option value="audi_a3">Audi A3</option>
                         <option value="porsche_cayenne">Porsche Cayenne</option>
                         <option value="toyota_supra">Toyota Supra</option>
                     </select>
+                    <span class="campo-ayuda" id="error-modelo" aria-live="polite"></span>
                 </div>
 
                 <div class="opcion-grupo">
                     <label for="color">Color</label>
-                    <select id="color">
+                    <select id="color" aria-describedby="error-color">
                         <option value="rojo">Rojo (Default)</option>
                         <option value="azul">Azul</option>
                         <option value="verde">Verde</option>
                         <option value="blanco">Blanco</option>
                         <option value="negro">Negro</option>
                     </select>
+                    <span class="campo-ayuda" id="error-color" aria-live="polite"></span>
                 </div>
 
                 <div class="opcion-grupo">
                     <label for="llantas">Llantas</label>
-                    <select id="llantas">
+                    <select id="llantas" aria-describedby="error-llantas">
                         <option value="clasica">Clásica</option>
                         <option value="deportiva">Deportiva</option>
                         <option value="competicion">Competición</option>
                         <option value="multiradio">Lujo Multi-radio</option>
                         <option value="palos">Clásica 5 Palos</option>
                     </select>
+                    <span class="campo-ayuda" id="error-llantas" aria-live="polite"></span>
                 </div>
 
 
 
                 <button class="boton-neon" id="guardarConfig">💾 Guardar Configuración</button>
-                <div id="mensajeGuardado">✅ ¡Configuración guardada!</div>
-                <div id="mensajeError">⚠ Debes iniciar sesión para guardar. <a href="login.html"
+                <div id="mensajeGuardado" role="status" aria-live="polite" aria-atomic="true">✅ ¡Configuración guardada!</div>
+                <div id="mensajeError" role="alert" aria-live="assertive" aria-atomic="true">⚠ Debes iniciar sesión para guardar. <a href="login.html"
                         style="color:var(--color2);">Ir al login</a></div>
             </div>
         </div>

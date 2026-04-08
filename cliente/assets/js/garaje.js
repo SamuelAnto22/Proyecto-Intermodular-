@@ -5,6 +5,7 @@ const API_BASE = window.API_BASE;
 
 // ── Estado del modal de borrado ──────────────────────────────
 let idParaBorrar = null;
+let ultimoElementoEnfocado = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     cargarProyectos();
@@ -262,6 +263,7 @@ function solicitarPedido(configId, btn) {
 // ────────────────────────────────────────────────────────────
 function iniciarModal() {
     const overlay = document.getElementById('modal-borrar');
+    const modalBox = overlay?.querySelector('.modal-box');
     const btnCancelar = document.getElementById('modal-cancelar');
     const btnConfirmar = document.getElementById('modal-confirmar');
 
@@ -270,6 +272,9 @@ function iniciarModal() {
 
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape' && overlay.classList.contains('activo')) cerrarModal();
+        if (e.key === 'Tab' && overlay.classList.contains('activo')) {
+            atraparFocoModal(e, modalBox);
+        }
     });
 
     btnConfirmar.addEventListener('click', () => {
@@ -279,13 +284,19 @@ function iniciarModal() {
 
 function abrirModalBorrar(id, nombre) {
     idParaBorrar = id;
+    ultimoElementoEnfocado = document.activeElement;
     document.getElementById('modal-nombre-proyecto').textContent = nombre;
-    document.getElementById('modal-borrar').classList.add('activo');
+    const overlay = document.getElementById('modal-borrar');
+    overlay.classList.add('activo');
+    document.getElementById('modal-cancelar')?.focus();
 }
 
 function cerrarModal() {
     document.getElementById('modal-borrar').classList.remove('activo');
     idParaBorrar = null;
+    if (ultimoElementoEnfocado && typeof ultimoElementoEnfocado.focus === 'function') {
+        ultimoElementoEnfocado.focus();
+    }
 }
 
 function ejecutarBorrado(id) {
@@ -346,6 +357,8 @@ function mostrarToast(mensaje, tipo = 'exito') {
     const toast = document.getElementById('toast');
     if (toastTimer) clearTimeout(toastTimer);
 
+    toast.setAttribute('aria-live', tipo === 'error' ? 'assertive' : 'polite');
+    toast.setAttribute('role', tipo === 'error' ? 'alert' : 'status');
     toast.textContent = (tipo === 'exito' ? '✅ ' : '⚠️ ') + mensaje;
     toast.className = `toast ${tipo}`;
 
@@ -354,6 +367,23 @@ function mostrarToast(mensaje, tipo = 'exito') {
     toast.classList.add('visible');
 
     toastTimer = setTimeout(() => toast.classList.remove('visible'), 4000);
+}
+
+function atraparFocoModal(event, modalBox) {
+    if (!modalBox) return;
+    const focuseables = modalBox.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (!focuseables.length) return;
+
+    const primero = focuseables[0];
+    const ultimo = focuseables[focuseables.length - 1];
+
+    if (event.shiftKey && document.activeElement === primero) {
+        event.preventDefault();
+        ultimo.focus();
+    } else if (!event.shiftKey && document.activeElement === ultimo) {
+        event.preventDefault();
+        primero.focus();
+    }
 }
 
 // ────────────────────────────────────────────────────────────

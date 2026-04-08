@@ -6,10 +6,14 @@ const AUTH_TIMEOUT_MS = 10000;
 
 document.addEventListener('DOMContentLoaded', function () {
     const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
 
     if (loginForm) {
         loginForm.addEventListener('submit', onLoginSubmit);
     }
+    emailInput?.addEventListener('input', () => validarCampoEmail(emailInput));
+    passwordInput?.addEventListener('input', () => validarCampoRequerido(passwordInput, 'La contraseña es obligatoria.'));
 });
 
 async function onLoginSubmit(e) {
@@ -19,7 +23,9 @@ async function onLoginSubmit(e) {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
-    if (!email || !password) {
+    const emailValido = validarCampoEmail(document.getElementById('email'));
+    const passwordValida = validarCampoRequerido(document.getElementById('password'), 'La contraseña es obligatoria.');
+    if (!email || !password || !emailValido || !passwordValida) {
         mostrarAlerta('Por favor, rellena todos los campos.', 'error');
         return;
     }
@@ -96,26 +102,33 @@ function mensajeErrorComun(error) {
 }
 
 function mostrarAlerta(texto, tipo) {
-    const loginBox = document.querySelector('.caja-auth');
-    if (!loginBox) return;
-
-    const existente = loginBox.querySelector('.alerta-msg');
-    if (existente) existente.remove();
-
-    const div = document.createElement('div');
-    div.className = 'alerta-msg';
+    const div = document.getElementById('mensajeError');
+    if (!div) return;
+    div.style.display = 'block';
     div.textContent = texto;
-    div.style.cssText = `
-        padding: 0.8rem 1rem;
-        border-radius: 10px;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
-        text-align: center;
-        ${tipo === 'error'
-            ? 'background: rgba(255,50,50,0.15); color: #ff4444; border: 1px solid rgba(255,50,50,0.3);'
-            : 'background: rgba(50,200,50,0.15); color: #33cc33; border: 1px solid rgba(50,200,50,0.3);'
-        }
-    `;
+    div.style.background = tipo === 'error' ? 'rgba(255,50,50,0.15)' : 'rgba(50,200,50,0.15)';
+    div.style.color = tipo === 'error' ? '#ff8080' : '#80ff80';
+    div.style.borderColor = tipo === 'error' ? 'rgba(255,50,50,0.3)' : 'rgba(50,200,50,0.3)';
+}
 
-    loginBox.insertBefore(div, loginBox.querySelector('form'));
+function actualizarErrorCampo(input, mensaje) {
+    if (!input) return false;
+    const errorEl = document.getElementById(`error-${input.id}`);
+    const tieneError = Boolean(mensaje);
+    input.setAttribute('aria-invalid', tieneError ? 'true' : 'false');
+    if (errorEl) errorEl.textContent = mensaje || '';
+    return !tieneError;
+}
+
+function validarCampoEmail(input) {
+    if (!input) return false;
+    const valor = input.value.trim();
+    if (!valor) return actualizarErrorCampo(input, 'El correo electrónico es obligatorio.');
+    const valido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+    return actualizarErrorCampo(input, valido ? '' : 'Introduce un correo con formato válido.');
+}
+
+function validarCampoRequerido(input, mensaje) {
+    if (!input) return false;
+    return actualizarErrorCampo(input, input.value.trim() ? '' : mensaje);
 }
