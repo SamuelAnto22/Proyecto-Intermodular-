@@ -209,3 +209,12 @@ Antes de cerrar cualquier cambio en la capa cliente, revisar:
 - Recomendación de flujo:
   - Si frontend y backend comparten mismo sitio -> usar `Lax` o `Strict` tras validar UX.
   - Si hay flujo cross-site (subdominios terceros/embeds) -> evaluar `None` + HTTPS obligatorio.
+
+---
+
+## Mantenimiento (2026-04-08)
+
+- Se verificó la referencia real de `cliente/assets/js/contacto.js` y `cliente/assets/js/nosotros.js` en todos los HTML del frontend: no estaban enlazados ni importados.
+- Se eliminaron ambos archivos JS huérfanos para reducir deuda técnica y evitar confusión en mantenimiento.
+- Se revisó CSS específico (`contacto.css`, `nosotros.css`) frente a `style.css` y se limpió duplicidad en `style.css` para que los estilos de contacto/nosotros vivan solo en sus hojas dedicadas.
+- Revisión manual de navegación completada a nivel de estructura/flujo (enlaces, menú responsive y anclas), sin detectar regresiones funcionales derivadas de esta limpieza.
