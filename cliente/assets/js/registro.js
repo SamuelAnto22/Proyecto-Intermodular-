@@ -2,7 +2,15 @@
 // Registro — envío por fetch + manejo uniforme de errores
 // ============================================================
 
-const AUTH_TIMEOUT_MS = 10000;
+import {
+    fetchConTimeout,
+    parseJsonSeguro,
+    mensajeErrorComun,
+    mostrarAlerta,
+    setFieldError,
+    validarEmail,
+    validarRequerido,
+} from './modules/auth-helpers.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     const registroForm = document.getElementById('registroForm');
@@ -37,8 +45,8 @@ async function onRegistroSubmit(e) {
         return;
     }
 
-    if (password.length < 6) {
-        mostrarAlerta('La contraseña debe tener al menos 6 caracteres.', 'error');
+    if (password.length < 8 || password.length > 10) {
+        mostrarAlerta('La contraseña debe tener entre 8 y 10 caracteres.', 'error');
         return;
     }
 
@@ -87,77 +95,18 @@ async function onRegistroSubmit(e) {
     }
 }
 
-async function fetchConTimeout(url, options, timeoutMs = AUTH_TIMEOUT_MS) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-    try {
-        return await fetch(url, { ...options, signal: controller.signal });
-    } finally {
-        clearTimeout(timeoutId);
-    }
-}
-
-async function parseJsonSeguro(response) {
-    try {
-        return await response.json();
-    } catch (_) {
-        throw new Error('Respuesta inválida del servidor.');
-    }
-}
-
-function mensajeErrorComun(error) {
-    if (error.name === 'AbortError') {
-        return 'La solicitud tardó demasiado. Inténtalo de nuevo.';
-    }
-
-    if (error.message === 'Failed to fetch') {
-        return 'No se pudo conectar con el servidor. Revisa tu conexión.';
-    }
-
-    return error.message || 'Ha ocurrido un error inesperado. Inténtalo de nuevo.';
-}
-
-function mostrarAlerta(texto, tipo) {
-    const div = document.getElementById('mensajeError');
-    if (!div) return;
-    div.style.display = 'block';
-    div.textContent = texto;
-    div.style.background = tipo === 'error' ? 'rgba(255,50,50,0.15)' : 'rgba(50,200,50,0.15)';
-    div.style.color = tipo === 'error' ? '#ff8080' : '#80ff80';
-    div.style.borderColor = tipo === 'error' ? 'rgba(255,50,50,0.3)' : 'rgba(50,200,50,0.3)';
-}
-
-function setError(input, mensaje) {
-    if (!input) return false;
-    const errorEl = document.getElementById(`error-${input.id}`);
-    const error = Boolean(mensaje);
-    input.setAttribute('aria-invalid', error ? 'true' : 'false');
-    if (errorEl) errorEl.textContent = mensaje || '';
-    return !error;
-}
-
-function validarRequerido(input, mensaje) {
-    return setError(input, input?.value.trim() ? '' : mensaje);
-}
-
-function validarEmail(input) {
-    if (!input) return false;
-    const valor = input.value.trim();
-    if (!valor) return setError(input, 'El correo electrónico es obligatorio.');
-    const valido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
-    return setError(input, valido ? '' : 'Introduce un correo con formato válido.');
-}
-
 function validarPassword(input) {
     if (!input) return false;
     const valor = input.value;
-    if (!valor) return setError(input, 'La contraseña es obligatoria.');
-    return setError(input, valor.length >= 6 ? '' : 'Debe tener al menos 6 caracteres.');
+    if (!valor) return setFieldError(input, 'La contraseña es obligatoria.');
+    if (valor.length < 8 || valor.length > 10) {
+        return setFieldError(input, 'Debe tener entre 8 y 10 caracteres.');
+    }
+    return setFieldError(input, '');
 }
 
 function validarConfirmPassword(passwordInput, confirmInput) {
     if (!confirmInput) return false;
-    if (!confirmInput.value) return setError(confirmInput, 'Debes confirmar la contraseña.');
-    return setError(confirmInput, confirmInput.value === passwordInput?.value ? '' : 'Las contraseñas no coinciden.');
+    if (!confirmInput.value) return setFieldError(confirmInput, 'Debes confirmar la contraseña.');
+    return setFieldError(confirmInput, confirmInput.value === passwordInput?.value ? '' : 'Las contraseñas no coinciden.');
 }

@@ -9,10 +9,10 @@
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Pragma: no-cache');
 
 $method = $_SERVER['REQUEST_METHOD'];
+
+try {
 
 // ============================================================
 // GET: Listar todos los pedidos + estadísticas
@@ -95,8 +95,8 @@ if ($method === 'POST') {
         $estadosValidos = ['pendiente', 'solicitado', 'en proceso', 'terminado'];
 
         if ($id <= 0 || !in_array($estado, $estadosValidos, true)) {
-            http_response_code(404);
-            echo json_encode(['ok' => false, 'message' => 'No encontrado o sin cambios.']);
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'message' => 'Datos de entrada no válidos.']);
             exit;
         }
         $stmt = $pdo->prepare('UPDATE pedidos SET estado = ? WHERE id = ?');
@@ -118,8 +118,8 @@ if ($method === 'POST') {
         $id = (int) ($input['id'] ?? 0);
 
         if ($id <= 0) {
-            http_response_code(404);
-            echo json_encode(['ok' => false, 'message' => 'No encontrado o sin cambios.']);
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'message' => 'ID no válido.']);
             exit;
         }
 
@@ -160,3 +160,10 @@ if ($method === 'POST') {
 // ============================================================
 http_response_code(405);
 echo json_encode(['ok' => false, 'error' => 'METHOD_NOT_ALLOWED']);
+exit;
+
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'message' => 'Error interno del servidor.']);
+    exit;
+}

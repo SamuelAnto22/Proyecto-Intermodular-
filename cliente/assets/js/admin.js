@@ -1,6 +1,7 @@
 // ============================================================
 // Admin Panel — Midnight Customs
 // ============================================================
+import { formatFecha, capitalizarPrimera } from './modules/utils.js';
 
 const API_ADMIN = `${window.API_BASE}/pedidos.php`;
 
@@ -33,11 +34,7 @@ function iniciarEventosAdmin() {
     });
 }
 
-function escaparHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = String(str ?? '');
-    return div.innerHTML;
-}
+
 
 // ============================================================
 // Cargar pedidos + estadísticas
@@ -45,7 +42,7 @@ function escaparHtml(str) {
 function cargarDashboard() {
     const body = document.getElementById('pedidos-body');
 
-    fetch(API_ADMIN)
+    fetch(API_ADMIN, { credentials: 'same-origin' })
         .then(r => {
             if (r.status === 401) {
                 document.querySelector('.admin-page').querySelectorAll('.admin-hero, .stats-grid, .tabla-seccion').forEach(el => el.style.display = 'none');
@@ -117,7 +114,7 @@ function cargarDashboard() {
                 const badge = document.createElement('span');
                 badge.className = `badge-estado badge-${estadoSlug}`;
                 badge.id = `badge-${p.id}`;
-                badge.textContent = capitalizarEstado(p.estado);
+                badge.textContent = capitalizarPrimera(p.estado);
                 estadoCell.appendChild(badge);
 
                 const fechaCell = document.createElement('td');
@@ -135,7 +132,7 @@ function cargarDashboard() {
                 estados.forEach((estado) => {
                     const option = document.createElement('option');
                     option.value = estado;
-                    option.textContent = capitalizarEstado(estado);
+                    option.textContent = capitalizarPrimera(estado);
                     option.selected = p.estado === estado;
                     selectEstado.appendChild(option);
                 });
@@ -179,6 +176,7 @@ function cambiarEstado(id) {
     fetch(API_ADMIN, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': window.__CSRF_TOKEN__ || '' },
+        credentials: 'same-origin',
         body: JSON.stringify({ accion: 'cambiar_estado', id, estado: nuevoEstado })
     })
         .then(r => r.json())
@@ -188,7 +186,7 @@ function cambiarEstado(id) {
                 const badge = document.getElementById(`badge-${id}`);
                 if (badge) {
                     badge.className = `badge-estado badge-${nuevoEstado.replace(' ', '-')}`;
-                    badge.textContent = capitalizarEstado(nuevoEstado);
+                    badge.textContent = capitalizarPrimera(nuevoEstado);
                 }
                 toastAdmin('✅ ' + data.message, 'exito');
                 // Recargar estadísticas.
@@ -209,6 +207,7 @@ function eliminarPedido(id) {
     fetch(API_ADMIN, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': window.__CSRF_TOKEN__ || '' },
+        credentials: 'same-origin',
         body: JSON.stringify({ accion: 'eliminar', id })
     })
         .then(r => r.json())
@@ -235,7 +234,7 @@ function eliminarPedido(id) {
 // Recargar solo las estadísticas
 // ============================================================
 function actualizarStats() {
-    fetch(API_ADMIN)
+    fetch(API_ADMIN, { credentials: 'same-origin' })
         .then(r => r.json())
         .then(data => {
             if (data.ok && data.stats) {
@@ -265,15 +264,4 @@ function toastAdmin(msg, tipo) {
     toastTimerAdmin = setTimeout(() => el.classList.remove('visible'), 4000);
 }
 
-// ============================================================
-// Utilidades
-// ============================================================
-function capitalizarEstado(e) {
-    return e.charAt(0).toUpperCase() + e.slice(1);
-}
 
-function formatFecha(f) {
-    if (!f) return '—';
-    const d = new Date(f);
-    return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
-}

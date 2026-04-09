@@ -9,10 +9,10 @@
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Pragma: no-cache');
 
 $method = $_SERVER['REQUEST_METHOD'];
+
+try {
 
 // ─── POST: Crear, Actualizar o Solicitar ─────────────────────
 if ($method === 'POST') {
@@ -26,6 +26,12 @@ if ($method === 'POST') {
         exit;
     }
     $accion = $input['accion'] ?? 'crear';
+    $accionesPermitidas = ['crear', 'actualizar', 'solicitar'];
+    if (!in_array($accion, $accionesPermitidas, true)) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'message' => 'Acción no válida.']);
+        exit;
+    }
     $userId = getUserId();
     // ── Whitelist global para esta acción (aplica a crear y actualizar) ──
     $modelosPermitidos = ['mini_cooper', 'bmw_serie1', 'audi_a3', 'porsche_cayenne', 'toyota_supra'];
@@ -201,3 +207,9 @@ if ($method === 'DELETE') {
 http_response_code(405);
 echo json_encode(['ok' => false, 'error' => 'METHOD_NOT_ALLOWED']);
 exit;
+
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'message' => 'Error interno del servidor.']);
+    exit;
+}

@@ -8,10 +8,10 @@
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Pragma: no-cache');
 
 requireLogin();
+
+try {
 
 $method = $_SERVER['REQUEST_METHOD'];
 $userId = getUserId();
@@ -108,6 +108,13 @@ if ($method === 'POST') {
     exit;
 }
 
-// ─── Método no soportado ──────────────────────────────────────
+// ─── Método no soportado ──────────────────────────────────────────
 http_response_code(405);
 echo json_encode(['ok' => false, 'error' => 'METHOD_NOT_ALLOWED']);
+exit;
+
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'message' => 'Error interno del servidor.']);
+    exit;
+}

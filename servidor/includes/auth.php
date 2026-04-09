@@ -1,6 +1,12 @@
 <?php
 // ============================================================
 // Helpers de Autenticación (basado en sesiones PHP)
+//
+// Convención de nombres:
+//   - Funciones de lógica de negocio en español (usuarioLogueado, esAdmin,
+//     requireLogin, requireAdmin, requireCsrfToken, getCsrfToken).
+//   - Funciones getters de sesión en inglés (getUserId, getUserName,
+//     getUserRole) por seguir la convención estándar getter de PHP/OOP.
 // ============================================================
 
 function appEnv(): string

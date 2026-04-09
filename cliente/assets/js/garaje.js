@@ -1,6 +1,8 @@
 // ============================================================
 // Mi Garaje — Lógica completa con modal y toast
 // ============================================================
+import { formatFecha } from './modules/utils.js';
+
 const API_BASE = window.API_BASE;
 
 // ── Estado del modal de borrado ──────────────────────────────
@@ -51,11 +53,7 @@ function iniciarEventosTarjetas() {
     });
 }
 
-function escaparHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = String(str ?? '');
-    return div.innerHTML;
-}
+
 
 
 // ────────────────────────────────────────────────────────────
@@ -64,7 +62,7 @@ function escaparHtml(str) {
 function cargarProyectos() {
     const lista = document.getElementById('proyectos-lista');
 
-    fetch(`${API_BASE}/guardar_config.php`)
+    fetch(`${API_BASE}/guardar_config.php`, { credentials: 'same-origin' })
         .then(response => {
             if (response.status === 401) {
                 lista.innerHTML = `
@@ -219,6 +217,7 @@ function solicitarPedido(configId, btn) {
     fetch(`${API_BASE}/guardar_config.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': window.__CSRF_TOKEN__ || '' },
+        credentials: 'same-origin',
         body: JSON.stringify({ accion: 'solicitar', configuracion_id: configId, estado: 'solicitado' })
     })
         .then(r => {
@@ -307,6 +306,7 @@ function ejecutarBorrado(id) {
     fetch(`${API_BASE}/guardar_config.php`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': window.__CSRF_TOKEN__ || '' },
+        credentials: 'same-origin',
         body: JSON.stringify({ id })
     })
         .then(r => r.json())
@@ -386,11 +386,4 @@ function atraparFocoModal(event, modalBox) {
     }
 }
 
-// ────────────────────────────────────────────────────────────
-// Utilidades
-// ────────────────────────────────────────────────────────────
-function formatFecha(fechaStr) {
-    if (!fechaStr) return '—';
-    const d = new Date(fechaStr);
-    return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
-}
+

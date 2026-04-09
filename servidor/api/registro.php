@@ -4,30 +4,10 @@
 // POST — recibe nombre, email, password (form-data)
 // ============================================================
 
+require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
-
-header('Content-Type: application/json; charset=utf-8');
-
-function responder(int $status, bool $ok, string $message, ?string $error = null, array $extra = []): void
-{
-    http_response_code($status);
-    $payload = array_merge([
-        'ok' => $ok,
-        'message' => $message,
-    ], $error ? ['error' => $error] : [], $extra);
-
-    echo json_encode($payload, JSON_UNESCAPED_UNICODE);
-    exit;
-}
-
-function rutaCliente(string $archivo): string
-{
-    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
-    $base = preg_replace('#/servidor/api/[^/]+$#', '', $scriptName) ?? '';
-
-    return rtrim($base, '/') . '/cliente/' . ltrim($archivo, '/');
-}
+require_once __DIR__ . '/../includes/helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder(405, false, 'Método no permitido.', 'METHOD_NOT_ALLOWED');

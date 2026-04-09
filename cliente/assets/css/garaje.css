@@ -1,0 +1,422 @@
+/* ============================================================
+   Estilos específicos de la página Mi Garaje
+   ============================================================ */
+.garaje-page {
+    padding: 2rem 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.garaje-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.garaje-header h2 {
+    font-size: 2.8rem;
+    color: var(--color1);
+    text-shadow: 0 0 15px var(--brillo1);
+    margin: 0;
+}
+
+.garaje-header-actions {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.btn-nueva-config {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.4rem;
+    background: transparent;
+    border: 2px solid var(--color1);
+    border-radius: 8px;
+    color: var(--blanco);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 0 12px var(--brillo1);
+}
+
+.btn-nueva-config:hover {
+    background: var(--color1);
+    box-shadow: 0 0 22px var(--brillo1);
+}
+
+/* ── Grid de tarjetas ── */
+.grid-proyectos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.8rem;
+}
+
+/* ── Tarjeta ── */
+.tarjeta-garaje {
+    background: var(--fondo-tarjeta);
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 16px;
+    overflow: hidden;
+    backdrop-filter: blur(14px);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    animation: aparecerFadeIn 0.5s ease-out forwards;
+}
+
+.tarjeta-garaje:hover {
+    transform: translateY(-6px);
+    border-color: var(--color1);
+    box-shadow: 0 12px 35px rgba(192,82,226,0.2);
+}
+
+/* Banda superior de color */
+.tarjeta-banda {
+    height: 4px;
+    background: linear-gradient(90deg, var(--color1), var(--color2));
+    box-shadow: 0 0 10px var(--brillo1);
+}
+
+.tarjeta-body {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.tarjeta-modelo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    color: var(--color2);
+    text-shadow: 0 0 8px var(--brillo2);
+    margin-bottom: 1rem;
+}
+
+.tarjeta-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    flex: 1;
+}
+
+.spec-item {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 0.5rem 0.7rem;
+}
+
+.spec-label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gris);
+    margin-bottom: 2px;
+}
+
+.spec-valor {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--blanco);
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+/* Estado badge */
+.estado-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 1.2rem;
+    width: fit-content;
+}
+
+.estado-badge::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.estado-pendiente {
+    background: rgba(255,180,0,0.15);
+    color: #ffb300;
+    border: 1px solid rgba(255,180,0,0.35);
+}
+.estado-pendiente::before { background: #ffb300; box-shadow: 0 0 6px #ffb300; }
+
+.estado-solicitado {
+    background: rgba(80,200,255,0.15);
+    color: #50c8ff;
+    border: 1px solid rgba(80,200,255,0.35);
+}
+.estado-solicitado::before { background: #50c8ff; box-shadow: 0 0 6px #50c8ff; animation: parpadear 1.5s infinite; }
+
+.estado-en-proceso {
+    background: rgba(100,130,255,0.15);
+    color: #8899ff;
+    border: 1px solid rgba(100,130,255,0.35);
+}
+.estado-en-proceso::before { background: #8899ff; box-shadow: 0 0 6px #8899ff; animation: parpadear 1.2s infinite; }
+
+.estado-terminado {
+    background: rgba(50,200,100,0.15);
+    color: #33cc66;
+    border: 1px solid rgba(50,200,100,0.35);
+}
+.estado-terminado::before { background: #33cc66; box-shadow: 0 0 6px #33cc66; }
+
+@keyframes parpadear {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Fecha */
+.tarjeta-fecha {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.28);
+    margin-bottom: 1.2rem;
+}
+
+/* ── Acciones de tarjeta ── */
+.tarjeta-acciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--borde-tarjeta);
+    background: rgba(0,0,0,0.2);
+}
+
+.btn-accion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 0.55rem 0.5rem;
+    border-radius: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    background: transparent;
+    color: var(--blanco);
+    text-decoration: none;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+
+.btn-editar {
+    border-color: rgba(192,82,226,0.4);
+    color: var(--color2);
+}
+.btn-editar:hover {
+    border-color: var(--color1);
+    background: rgba(192,82,226,0.15);
+    box-shadow: 0 0 10px var(--brillo1);
+}
+
+.btn-solicitar {
+    border-color: rgba(80,200,255,0.4);
+    color: #50c8ff;
+}
+.btn-solicitar:hover {
+    border-color: #50c8ff;
+    background: rgba(80,200,255,0.12);
+    box-shadow: 0 0 10px rgba(80,200,255,0.3);
+}
+
+.btn-solicitar:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.btn-eliminar {
+    border-color: rgba(255,85,85,0.3);
+    color: #ff7777;
+}
+.btn-eliminar:hover {
+    border-color: #ff5555;
+    background: rgba(255,85,85,0.12);
+    box-shadow: 0 0 10px rgba(255,85,85,0.2);
+}
+
+/* ── Vacío / carga ── */
+.garaje-vacio {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--gris);
+}
+
+.garaje-vacio p { font-size: 1.1rem; }
+.garaje-vacio a { color: var(--color2); }
+
+/* ── Modal de confirmación ── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.modal-overlay.activo {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-box {
+    background: #0e0e14;
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 16px;
+    padding: 2.5rem;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.25s ease;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(192,82,226,0.1);
+}
+
+.modal-overlay.activo .modal-box {
+    transform: scale(1);
+}
+
+.modal-icono {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.modal-titulo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: #ff5555;
+    text-shadow: 0 0 12px rgba(255,85,85,0.5);
+    margin-bottom: 0.5rem;
+}
+
+.modal-texto {
+    color: var(--gris);
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+}
+
+.modal-texto strong {
+    color: var(--blanco);
+}
+
+.modal-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.modal-btn {
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.25s;
+}
+
+.modal-btn-cancelar {
+    background: transparent;
+    border-color: var(--borde-tarjeta);
+    color: var(--gris);
+}
+
+.modal-btn-cancelar:hover {
+    border-color: var(--gris);
+    color: var(--blanco);
+}
+
+.modal-btn-confirmar {
+    background: transparent;
+    border-color: #ff5555;
+    color: #ff5555;
+}
+
+.modal-btn-confirmar:hover {
+    background: #ff5555;
+    color: var(--blanco);
+    box-shadow: 0 0 20px rgba(255,85,85,0.4);
+}
+
+/* ── Toast de notificación ── */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #0e0e14;
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 10px;
+    padding: 0.9rem 1.8rem;
+    font-size: 0.95rem;
+    color: var(--blanco);
+    z-index: 6000;
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.toast.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast.exito { border-color: rgba(50,200,100,0.5); }
+.toast.error { border-color: rgba(255,85,85,0.5); }
+
+@media (max-width: 600px) {
+    .garaje-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+    .garaje-header-actions {
+        width: 100%;
+    }
+    .btn-nueva-config {
+        width: 100%;
+        justify-content: center;
+    }
+    .tarjeta-specs { grid-template-columns: 1fr; }
+    .tarjeta-acciones { 
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .btn-solicitar { grid-column: auto; }
+}

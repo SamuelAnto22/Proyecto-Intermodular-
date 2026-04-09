@@ -1,7 +1,7 @@
 <?php
 // ============================================================
 // API: Cerrar sesión
-// GET — destruye la sesión y redirige al inicio
+// POST — destruye la sesión y redirige al inicio
 // ============================================================
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/auth.php';
@@ -12,9 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 requireCsrfToken();
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
 unset($_SESSION['login_attempts']);
 
@@ -32,9 +29,4 @@ if (ini_get("session.use_cookies")) {
 
 session_destroy();
 echo json_encode(['ok' => true, 'message' => 'Sesión cerrada']);
-exit;
-
-
-// Redirigir al inicio
-header('Location: ../../cliente/index.html');
 exit;
