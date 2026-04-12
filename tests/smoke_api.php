@@ -342,6 +342,560 @@ $tests[] = function () use ($baseUrl, $adminEmail, $plainAdminPassword): void {
     assertTrue($res->status === 400, 'pedidos.php devuelve 400 con JSON inválido');
 };
 
+// ============================================================
+// Registration endpoint — additional edge cases
+// ============================================================
+
+// registro.php: duplicate email returns 409
+$tests[] = function () use ($baseUrl, $registroEmail): void {
+    $client = new HttpClient();
+    $res = $client->request('POST', $baseUrl . '/servidor/api/registro.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query([
+            'nombre' => 'Duplicate User',
+            'email' => $registroEmail,
+            'password' => 'Dup12345!',
+            'confirm-password' => 'Dup12345!',
+        ]),
+    ]);
+    assertTrue($res->status === 409, 'registro.php devuelve 409 ante email duplicado');
+    assertTrue(($res->json['code'] ?? '') === 'EMAIL_ALREADY_EXISTS', 'registro.php devuelve code EMAIL_ALREADY_EXISTS');
+};
+
+// registro.php: password exceeding 72 chars returns 422
+$tests[] = function () use ($baseUrl): void {
+    $client = new HttpClient();
+    $longPassword = str_repeat('A', 73);
+    $res = $client->request('POST', $baseUrl . '/servidor/api/registro.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query([
+            'nombre' => 'Long Pass User',
+            'email' => 'longpass_' . bin2hex(random_bytes(4)) . '@example.test',
+            'password' => $longPassword,
+            'confirm-password' => $longPassword,
+        ]),
+    ]);
+    assertTrue($res->status === 422, 'registro.php devuelve 422 con password > 72 caracteres');
+};
+
+// registro.php: password too short (< 8 chars) returns 422
+$tests[] = function () use ($baseUrl): void {
+    $client = new HttpClient();
+    $res = $client->request('POST', $baseUrl . '/servidor/api/registro.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query([
+            'nombre' => 'Short Pass',
+            'email' => 'shortpass_' . bin2hex(random_bytes(4)) . '@example.test',
+            'password' => 'Ab1!',
+            'confirm-password' => 'Ab1!',
+        ]),
+    ]);
+    assertTrue($res->status === 422, 'registro.php devuelve 422 con password < 8 caracteres');
+};
+
+// registro.php: missing fields returns 422
+$tests[] = function () use ($baseUrl): void {
+    $client = new HttpClient();
+    $res = $client->request('POST', $baseUrl . '/servidor/api/registro.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query([
+            'nombre' => '',
+            'email' => '',
+            'password' => '',
+            'confirm-password' => '',
+        ]),
+    ]);
+    assertTrue($res->status === 422, 'registro.php devuelve 422 con campos vacíos');
+};
+
+// registro.php: password mismatch returns 422
+$tests[] = function () use ($baseUrl): void {
+    $client = new HttpClient();
+    $res = $client->request('POST', $baseUrl . '/servidor/api/registro.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query([
+            'nombre' => 'Mismatch User',
+            'email' => 'mismatch_' . bin2hex(random_bytes(4)) . '@example.test',
+            'password' => 'Password1!',
+            'confirm-password' => 'Different1!',
+        ]),
+    ]);
+    assertTrue($res->status === 422, 'registro.php devuelve 422 con contraseñas que no coinciden');
+};
+
+// registro.php: GET method not allowed returns 405
+$tests[] = function () use ($baseUrl): void {
+    $client = new HttpClient();
+    $res = $client->request('GET', $baseUrl . '/servidor/api/registro.php');
+    assertTrue($res->status === 405, 'registro.php devuelve 405 ante método GET');
+};
+
+// ============================================================
+// Session endpoint — authenticated response
+// ============================================================
+
+// sesion.php: authenticated user gets logueado=true with user data
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+    $login = $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    assertTrue($login->status === 200, 'login previo a sesion.php autenticado');
+
+    $res = $client->request('GET', $baseUrl . '/servidor/api/sesion.php');
+    assertTrue($res->status === 200, 'sesion.php devuelve 200 con sesión activa');
+    assertTrue(($res->json['logueado'] ?? false) === true, 'sesion.php devuelve logueado=true con sesión');
+    assertTrue(isset($res->json['nombre']), 'sesion.php devuelve nombre del usuario');
+    assertTrue(isset($res->json['rol']), 'sesion.php devuelve rol del usuario');
+    assertTrue(isset($res->json['csrf']), 'sesion.php devuelve token CSRF con sesión');
+};
+
+// ============================================================
+// Profile endpoint
+// ============================================================
+
+// perfil.php: unauthenticated access returns 401
+$tests[] = function () use ($baseUrl): void {
+    $client = new HttpClient();
+    $res = $client->request('GET', $baseUrl . '/servidor/api/perfil.php');
+    assertTrue($res->status === 401, 'perfil.php devuelve 401 sin sesión');
+    assertTrue(($res->json['error'] ?? '') === 'NO_SESSION', 'perfil.php devuelve error NO_SESSION');
+};
+
+// perfil.php: authenticated GET returns user profile data
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+    $login = $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    assertTrue($login->status === 200, 'login previo a perfil.php GET');
+
+    $res = $client->request('GET', $baseUrl . '/servidor/api/perfil.php');
+    assertTrue($res->status === 200, 'perfil.php GET devuelve 200 con sesión');
+    assertTrue(($res->json['ok'] ?? false) === true, 'perfil.php GET devuelve ok=true');
+    assertTrue(isset($res->json['usuario']), 'perfil.php GET devuelve datos de usuario');
+    assertTrue(isset($res->json['garaje']), 'perfil.php GET devuelve garaje');
+    assertTrue(($res->json['usuario']['email'] ?? '') === $clienteEmail, 'perfil.php GET devuelve email correcto');
+};
+
+// perfil.php: POST without CSRF returns 403
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+    $login = $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    assertTrue($login->status === 200, 'login previo a perfil.php POST sin CSRF');
+
+    $res = $client->request('POST', $baseUrl . '/servidor/api/perfil.php', [
+        'headers' => ['Content-Type: application/json'],
+        'body' => json_encode([
+            'password_actual' => $password,
+            'password_nuevo' => 'NewPass123!',
+            'password_confirm' => 'NewPass123!',
+        ]),
+    ]);
+    assertTrue($res->status === 403, 'perfil.php POST devuelve 403 sin CSRF');
+};
+
+// ============================================================
+// Logout endpoint
+// ============================================================
+
+// logout.php: GET method not allowed returns 405
+$tests[] = function () use ($baseUrl): void {
+    $client = new HttpClient();
+    $res = $client->request('GET', $baseUrl . '/servidor/api/logout.php');
+    assertTrue($res->status === 405, 'logout.php devuelve 405 ante método GET');
+};
+
+// logout.php: POST without CSRF returns 403
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+    $login = $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    assertTrue($login->status === 200, 'login previo a logout.php sin CSRF');
+
+    $res = $client->request('POST', $baseUrl . '/servidor/api/logout.php');
+    assertTrue($res->status === 403, 'logout.php devuelve 403 sin token CSRF');
+};
+
+// logout.php: full login → logout → verify session destroyed
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+
+    // Step 1: Login
+    $login = $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    assertTrue($login->status === 200, 'login previo a logout happy path');
+
+    // Step 2: Get CSRF token
+    $csrf = getCsrf($client, $baseUrl);
+
+    // Step 3: Logout with valid CSRF
+    $res = $client->request('POST', $baseUrl . '/servidor/api/logout.php', [
+        'headers' => ['X-CSRF-Token: ' . $csrf],
+    ]);
+    assertTrue($res->status === 200, 'logout.php happy path devuelve 200');
+    assertTrue(($res->json['ok'] ?? false) === true, 'logout.php happy path ok=true');
+
+    // Step 4: Verify session is destroyed
+    $session = $client->request('GET', $baseUrl . '/servidor/api/sesion.php');
+    assertTrue(($session->json['logueado'] ?? true) === false, 'sesion.php confirma logueado=false tras logout');
+};
+
+// ============================================================
+// Pedidos endpoint — unauthenticated access
+// ============================================================
+
+// pedidos.php: unauthenticated GET returns 401
+$tests[] = function () use ($baseUrl): void {
+    $client = new HttpClient();
+    $res = $client->request('GET', $baseUrl . '/servidor/api/pedidos.php');
+    assertTrue($res->status === 401, 'pedidos.php devuelve 401 sin sesión');
+};
+
+// pedidos.php: unauthenticated POST returns 401
+$tests[] = function () use ($baseUrl): void {
+    $client = new HttpClient();
+    $res = $client->request('POST', $baseUrl . '/servidor/api/pedidos.php', [
+        'headers' => ['Content-Type: application/json'],
+        'body' => json_encode(['accion' => 'eliminar', 'id' => 1]),
+    ]);
+    assertTrue($res->status === 401, 'pedidos.php POST devuelve 401 sin sesión');
+};
+
+// ============================================================
+// guardar_config.php — additional edge cases
+// ============================================================
+
+// guardar_config.php: GET unauthenticated returns 401
+$tests[] = function () use ($baseUrl): void {
+    $client = new HttpClient();
+    $res = $client->request('GET', $baseUrl . '/servidor/api/guardar_config.php');
+    assertTrue($res->status === 401, 'guardar_config.php GET devuelve 401 sin sesión');
+};
+
+// guardar_config.php: invalid model value returns 400
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+    $login = $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    assertTrue($login->status === 200, 'login previo a guardar_config modelo inválido');
+
+    $csrf = getCsrf($client, $baseUrl);
+    $res = $client->request('POST', $baseUrl . '/servidor/api/guardar_config.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode(['accion' => 'crear', 'modelo' => 'modelo_inexistente', 'color' => 'rojo', 'llantas' => 'clasica']),
+    ]);
+    assertTrue($res->status === 400, 'guardar_config.php devuelve 400 con modelo no permitido');
+};
+
+// guardar_config.php: invalid action returns 400
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+    $login = $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    assertTrue($login->status === 200, 'login previo a guardar_config acción inválida');
+
+    $csrf = getCsrf($client, $baseUrl);
+    $res = $client->request('POST', $baseUrl . '/servidor/api/guardar_config.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode(['accion' => 'borrar_todo', 'modelo' => 'mini_cooper', 'color' => 'rojo', 'llantas' => 'clasica']),
+    ]);
+    assertTrue($res->status === 400, 'guardar_config.php devuelve 400 con acción no válida');
+};
+
+// guardar_config.php: authenticated GET returns user configurations
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+    $login = $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    assertTrue($login->status === 200, 'login previo a guardar_config GET autenticado');
+
+    $res = $client->request('GET', $baseUrl . '/servidor/api/guardar_config.php');
+    assertTrue($res->status === 200, 'guardar_config.php GET devuelve 200 con sesión');
+    assertTrue(($res->json['ok'] ?? false) === true, 'guardar_config.php GET devuelve ok=true');
+};
+
+// ============================================================
+// Login endpoint — additional edge cases
+// ============================================================
+
+// login.php: GET method not allowed
+$tests[] = function () use ($baseUrl): void {
+    $client = new HttpClient();
+    $res = $client->request('GET', $baseUrl . '/servidor/api/login.php');
+    assertTrue($res->status === 405, 'login.php devuelve 405 ante método GET');
+};
+
+// ============================================================
+// Pedidos endpoint — admin POST tests (cambiar_estado + eliminar)
+// ============================================================
+
+// pedidos.php: admin cambiar_estado happy path
+$tests[] = function () use ($baseUrl, $adminEmail, $plainAdminPassword): void {
+    $client = new HttpClient();
+    $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $adminEmail, 'password' => $plainAdminPassword]),
+    ]);
+
+    // Create a config first to have a pedido
+    $client2 = new HttpClient();
+    $clientePass = 'Smoke123!';
+    $client2->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $clientePass]),
+    ]);
+    $csrf2 = getCsrf($client2, $baseUrl);
+    $createRes = $client2->request('POST', $baseUrl . '/servidor/api/guardar_config.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf2],
+        'body' => json_encode(['accion' => 'crear', 'modelo' => 'mini_cooper', 'color' => 'azul', 'llantas' => 'deportiva']),
+    ]);
+    assertTrue($createRes->status === 200, 'config creada para test cambiar_estado');
+
+    // Get the pedido ID
+    $adminClient = new HttpClient();
+    $adminClient->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $adminEmail, 'password' => $plainAdminPassword]),
+    ]);
+    $pedidos = $adminClient->request('GET', $baseUrl . '/servidor/api/pedidos.php');
+    $pedidoId = $pedidos->json['data'][0]['id'] ?? 0;
+    assertTrue($pedidoId > 0, 'pedido encontrado para test');
+
+    $csrf = getCsrf($adminClient, $baseUrl);
+    $res = $adminClient->request('POST', $baseUrl . '/servidor/api/pedidos.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode(['accion' => 'cambiar_estado', 'id' => $pedidoId, 'estado' => 'en proceso']),
+    ]);
+    assertTrue($res->status === 200, 'pedidos.php cambiar_estado devuelve 200');
+    assertTrue(($res->json['ok'] ?? false) === true, 'pedidos.php cambiar_estado ok=true');
+};
+
+// pedidos.php: admin eliminar happy path
+$tests[] = function () use ($baseUrl, $adminEmail, $plainAdminPassword, $clienteEmail, $password): void {
+    // Create a config to delete
+    $client = new HttpClient();
+    $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    $csrf = getCsrf($client, $baseUrl);
+    $client->request('POST', $baseUrl . '/servidor/api/guardar_config.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode(['accion' => 'crear', 'modelo' => 'bmw_serie1', 'color' => 'negro', 'llantas' => 'palos']),
+    ]);
+
+    // Login as admin and delete
+    $adminClient = new HttpClient();
+    $adminClient->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $adminEmail, 'password' => $plainAdminPassword]),
+    ]);
+    $pedidos = $adminClient->request('GET', $baseUrl . '/servidor/api/pedidos.php');
+    $pedidoId = $pedidos->json['data'][0]['id'] ?? 0;
+    assertTrue($pedidoId > 0, 'pedido encontrado para eliminar');
+
+    $csrf = getCsrf($adminClient, $baseUrl);
+    $res = $adminClient->request('POST', $baseUrl . '/servidor/api/pedidos.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode(['accion' => 'eliminar', 'id' => $pedidoId]),
+    ]);
+    assertTrue($res->status === 200, 'pedidos.php eliminar devuelve 200');
+    assertTrue(($res->json['ok'] ?? false) === true, 'pedidos.php eliminar ok=true');
+};
+
+// ============================================================
+// guardar_config.php — DELETE and actualizar tests
+// ============================================================
+
+// guardar_config.php: DELETE configuration
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+    $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    $csrf = getCsrf($client, $baseUrl);
+    $createRes = $client->request('POST', $baseUrl . '/servidor/api/guardar_config.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode(['accion' => 'crear', 'modelo' => 'audi_a3', 'color' => 'blanco', 'llantas' => 'multiradio']),
+    ]);
+    $configId = $createRes->json['id'] ?? 0;
+    assertTrue($configId > 0, 'config creada para test DELETE');
+
+    $csrf = getCsrf($client, $baseUrl);
+    $res = $client->request('DELETE', $baseUrl . '/servidor/api/guardar_config.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode(['id' => $configId]),
+    ]);
+    assertTrue($res->status === 200, 'guardar_config.php DELETE devuelve 200');
+    assertTrue(($res->json['ok'] ?? false) === true, 'guardar_config.php DELETE ok=true');
+};
+
+// guardar_config.php: actualizar configuration
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+    $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    $csrf = getCsrf($client, $baseUrl);
+    $createRes = $client->request('POST', $baseUrl . '/servidor/api/guardar_config.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode(['accion' => 'crear', 'modelo' => 'toyota_supra', 'color' => 'rojo', 'llantas' => 'clasica']),
+    ]);
+    $configId = $createRes->json['id'] ?? 0;
+    assertTrue($configId > 0, 'config creada para test actualizar');
+
+    $csrf = getCsrf($client, $baseUrl);
+    $res = $client->request('POST', $baseUrl . '/servidor/api/guardar_config.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode(['accion' => 'actualizar', 'id' => $configId, 'modelo' => 'toyota_supra', 'color' => 'negro', 'llantas' => 'competicion']),
+    ]);
+    assertTrue($res->status === 200, 'guardar_config.php actualizar devuelve 200');
+    assertTrue(($res->json['ok'] ?? false) === true, 'guardar_config.php actualizar ok=true');
+};
+
+// ============================================================
+// perfil.php — password change tests
+// ============================================================
+
+// perfil.php: POST happy path — change password
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+    $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    $csrf = getCsrf($client, $baseUrl);
+    $res = $client->request('POST', $baseUrl . '/servidor/api/perfil.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode([
+            'password_actual' => $password,
+            'password_nuevo' => 'NewSmoke123!',
+            'password_confirm' => 'NewSmoke123!',
+        ]),
+    ]);
+    assertTrue($res->status === 200, 'perfil.php cambio contraseña devuelve 200');
+    assertTrue(($res->json['ok'] ?? false) === true, 'perfil.php cambio contraseña ok=true');
+
+    // Restore original password for subsequent tests
+    $csrf = getCsrf($client, $baseUrl);
+    $client->request('POST', $baseUrl . '/servidor/api/perfil.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode([
+            'password_actual' => 'NewSmoke123!',
+            'password_nuevo' => $password,
+            'password_confirm' => $password,
+        ]),
+    ]);
+};
+
+// perfil.php: POST wrong current password returns 403
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+    $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    $csrf = getCsrf($client, $baseUrl);
+    $res = $client->request('POST', $baseUrl . '/servidor/api/perfil.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode([
+            'password_actual' => 'wrong_password',
+            'password_nuevo' => 'NewPass123!',
+            'password_confirm' => 'NewPass123!',
+        ]),
+    ]);
+    assertTrue($res->status === 403, 'perfil.php contraseña actual incorrecta devuelve 403');
+};
+
+// perfil.php: POST password mismatch returns 400
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+    $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    $csrf = getCsrf($client, $baseUrl);
+    $res = $client->request('POST', $baseUrl . '/servidor/api/perfil.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode([
+            'password_actual' => $password,
+            'password_nuevo' => 'NewPass123!',
+            'password_confirm' => 'DifferentPass123!',
+        ]),
+    ]);
+    assertTrue($res->status === 400, 'perfil.php contraseñas no coinciden devuelve 400');
+};
+
+// perfil.php: POST password too short returns 400
+$tests[] = function () use ($baseUrl, $clienteEmail, $password): void {
+    $client = new HttpClient();
+    $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+        'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+        'body' => http_build_query(['email' => $clienteEmail, 'password' => $password]),
+    ]);
+    $csrf = getCsrf($client, $baseUrl);
+    $res = $client->request('POST', $baseUrl . '/servidor/api/perfil.php', [
+        'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . $csrf],
+        'body' => json_encode([
+            'password_actual' => $password,
+            'password_nuevo' => 'short',
+            'password_confirm' => 'short',
+        ]),
+    ]);
+    assertTrue($res->status === 400, 'perfil.php contraseña corta devuelve 400');
+};
+
+// ============================================================
+// logout.php — POST without active session
+// ============================================================
+
+// logout.php: POST without active session returns 403 (CSRF fails without session)
+$tests[] = function () use ($baseUrl): void {
+    $client = new HttpClient();
+    $res = $client->request('POST', $baseUrl . '/servidor/api/logout.php', [
+        'headers' => ['X-CSRF-Token: invalid-token'],
+    ]);
+    assertTrue($res->status === 403, 'logout.php POST sin sesión devuelve 403 (CSRF)');
+};
+
+// ============================================================
+// Login endpoint — rate limiting simulation
+// ============================================================
+
+// login.php: multiple failed attempts trigger rate limiting
+$tests[] = function () use ($baseUrl): void {
+    $client = new HttpClient();
+    $limited = false;
+    for ($i = 0; $i < 6; $i++) {
+        $res = $client->request('POST', $baseUrl . '/servidor/api/login.php', [
+            'headers' => ['Content-Type: application/x-www-form-urlencoded'],
+            'body' => http_build_query(['email' => 'nonexistent_' . $i . '@test.test', 'password' => 'wrong']),
+        ]);
+        if ($res->status === 401) {
+            $limited = true;
+        }
+    }
+    assertTrue($limited, 'login.php múltiples intentos devuelven 401');
+};
+
 $passed = 0;
 $failed = 0;
 

@@ -1,6 +1,21 @@
 /* ============================================================
    Estilos específicos de la página Perfil
    ============================================================ */
+
+/* Utilidad para ocultar contenido inicialmente */
+.oculto-inicial { display: none; }
+
+/* Estado sin sesión */
+#perfil-sin-sesion {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.perfil-sin-sesion-texto {
+    font-size: 1.2rem;
+    color: var(--gris);
+}
+
 .perfil-page {
     padding: 2rem 5%;
     max-width: 1100px;
@@ -287,21 +302,21 @@
 }
 
 .estado-pendiente {
-    background: rgba(255, 200, 0, 0.2);
-    color: #ffcc00;
-    border: 1px solid rgba(255, 200, 0, 0.4);
+    background: var(--pendiente-bg);
+    color: var(--pendiente);
+    border: 1px solid var(--pendiente-border);
 }
 
 .estado-en-proceso {
-    background: rgba(0, 150, 255, 0.2);
-    color: #5599ff;
-    border: 1px solid rgba(0, 150, 255, 0.4);
+    background: var(--en-proceso-bg);
+    color: var(--en-proceso);
+    border: 1px solid var(--en-proceso-border);
 }
 
 .estado-terminado {
-    background: rgba(50, 200, 100, 0.2);
-    color: #33cc33;
-    border: 1px solid rgba(50, 200, 100, 0.4);
+    background: var(--terminado-bg);
+    color: var(--terminado);
+    border: 1px solid var(--terminado-border);
 }
 
 #garaje-vacio {

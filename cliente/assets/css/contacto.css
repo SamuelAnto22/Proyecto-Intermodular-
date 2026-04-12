@@ -118,7 +118,6 @@
     transition: border-color 0.2s, box-shadow 0.2s;
     outline: none;
     width: 100%;
-    box-sizing: border-box;
 }
 
 .grupo-formulario input::placeholder,
@@ -133,7 +132,7 @@
     box-shadow: 0 0 10px var(--brillo1);
 }
 
-.grupo-formulario select option { background: #12121e; color: var(--blanco); }
+.grupo-formulario select option { background: var(--fondo-opcion); color: var(--blanco); }
 .grupo-formulario textarea { resize: vertical; min-height: 130px; }
 
 .grupo-checkbox {

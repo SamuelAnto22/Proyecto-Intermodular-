@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 // ============================================================
 // API: Gestión de Pedidos (Admin)
 // GET  — listar todos los pedidos
@@ -163,7 +165,8 @@ echo json_encode(['ok' => false, 'error' => 'METHOD_NOT_ALLOWED']);
 exit;
 
 } catch (Throwable $e) {
+    error_log('[pedidos.php] ' . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['ok' => false, 'message' => 'Error interno del servidor.']);
+    echo json_encode(['ok' => false, 'message' => 'Error interno del servidor.', 'error' => 'INTERNAL_ERROR']);
     exit;
 }

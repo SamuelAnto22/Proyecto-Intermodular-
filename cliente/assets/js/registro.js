@@ -45,8 +45,8 @@ async function onRegistroSubmit(e) {
         return;
     }
 
-    if (password.length < 8 || password.length > 10) {
-        mostrarAlerta('La contraseña debe tener entre 8 y 10 caracteres.', 'error');
+    if (password.length < 8 || password.length > 72) {
+        mostrarAlerta('La contraseña debe tener entre 8 y 72 caracteres.', 'error');
         return;
     }
 
@@ -99,8 +99,8 @@ function validarPassword(input) {
     if (!input) return false;
     const valor = input.value;
     if (!valor) return setFieldError(input, 'La contraseña es obligatoria.');
-    if (valor.length < 8 || valor.length > 10) {
-        return setFieldError(input, 'Debe tener entre 8 y 10 caracteres.');
+    if (valor.length < 8 || valor.length > 72) {
+        return setFieldError(input, 'Debe tener entre 8 y 72 caracteres.');
     }
     return setFieldError(input, '');
 }

@@ -2,5 +2,6 @@
 .idea/
 *.log
 error_log
+.env
 
 

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 // ============================================================
 // API: Login de Usuario
 // POST — recibe email, password (form-data)
@@ -8,68 +10,6 @@ require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/helpers.php';
-
-function getClientIp(): string
-{
-    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-    if (str_contains($ip, ',')) {
-        $ip = trim(explode(',', $ip)[0]);
-    }
-
-    return mb_substr($ip, 0, 45);
-}
-
-function asegurarTablaIntentos(PDO $pdo): void
-{
-    static $tablaInicializada = false;
-    if ($tablaInicializada) {
-        return;
-    }
-
-    $pdo->exec(
-        "CREATE TABLE IF NOT EXISTS login_attempts (
-            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            email VARCHAR(150) NOT NULL,
-            ip VARCHAR(45) NOT NULL,
-            attempted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            INDEX idx_login_attempts_email_time (email, attempted_at),
-            INDEX idx_login_attempts_ip_time (ip, attempted_at)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
-    );
-
-    $tablaInicializada = true;
-}
-
-function limpiarIntentosAntiguos(PDO $pdo, int $ventanaSeg): void
-{
-    $stmt = $pdo->prepare('DELETE FROM login_attempts WHERE attempted_at < (NOW() - INTERVAL ? SECOND)');
-    $stmt->execute([$ventanaSeg]);
-}
-
-function contarIntentosRecientes(PDO $pdo, string $email, string $ip, int $ventanaSeg): int
-{
-    $stmt = $pdo->prepare(
-        'SELECT COUNT(*) AS total
-         FROM login_attempts
-         WHERE attempted_at >= (NOW() - INTERVAL ? SECOND)
-           AND (email = ? OR ip = ?)'
-    );
-    $stmt->execute([$ventanaSeg, $email, $ip]);
-
-    return (int) ($stmt->fetch()['total'] ?? 0);
-}
-
-function registrarIntentoFallido(PDO $pdo, string $email, string $ip): void
-{
-    $stmt = $pdo->prepare('INSERT INTO login_attempts (email, ip) VALUES (?, ?)');
-    $stmt->execute([$email, $ip]);
-}
-
-function limpiarIntentosExitosos(PDO $pdo, string $email, string $ip): void
-{
-    $stmt = $pdo->prepare('DELETE FROM login_attempts WHERE email = ? OR ip = ?');
-    $stmt->execute([$email, $ip]);
-}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder(405, false, 'Método no permitido.', 'METHOD_NOT_ALLOWED');
@@ -107,7 +47,6 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 try {
-    asegurarTablaIntentos($pdo);
     limpiarIntentosAntiguos($pdo, $ventanaSeg);
 
     $intentosGlobales = contarIntentosRecientes($pdo, $email, $ip, $ventanaSeg);

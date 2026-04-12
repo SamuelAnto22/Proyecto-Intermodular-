@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 // ============================================================
 // Conexión a la Base de Datos (PDO)
+// Las credenciales se cargan desde variables de entorno.
+// Para desarrollo local con XAMPP, se pueden definir aquí como fallback.
 // ============================================================
 
-$DB_HOST = '127.0.0.1';
-$DB_NAME = 'midnight_customs';
-$DB_USER = 'root';
-$DB_PASS = '';
+$DB_HOST = getenv('DB_HOST') ?: '127.0.0.1';
+$DB_NAME = getenv('DB_NAME') ?: 'midnight_customs';
+$DB_USER = getenv('DB_USER') ?: 'root';
+$DB_PASS = getenv('DB_PASS') ?: '';
 
 try {
     $pdo = new PDO(

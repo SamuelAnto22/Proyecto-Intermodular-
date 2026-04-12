@@ -30,7 +30,9 @@ CREATE TABLE IF NOT EXISTS configuraciones (
     color       VARCHAR(50)     NOT NULL,
     llantas     VARCHAR(50)     NOT NULL,
     created_at  TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
+    INDEX idx_configuraciones_usuario (usuario_id),
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -43,12 +45,15 @@ CREATE TABLE IF NOT EXISTS pedidos (
     usuario_id        INT             NOT NULL,
     estado            ENUM('pendiente','solicitado','en proceso','terminado') NOT NULL DEFAULT 'pendiente',
     fecha             TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at        TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (configuracion_id) REFERENCES configuraciones(id) ON DELETE CASCADE,
-    FOREIGN KEY (usuario_id)       REFERENCES usuarios(id)        ON DELETE CASCADE
+    INDEX idx_pedidos_configuracion (configuracion_id),
+    INDEX idx_pedidos_usuario (usuario_id),
+    INDEX idx_pedidos_estado (estado),
+    UNIQUE KEY uq_pedidos_configuracion (configuracion_id),
+    FOREIGN KEY (configuracion_id) REFERENCES configuraciones(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (usuario_id)       REFERENCES usuarios(id)        ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
-
-
 
 
 -- ============================================================
@@ -62,11 +67,3 @@ CREATE TABLE IF NOT EXISTS login_attempts (
     INDEX idx_login_attempts_email_time (email, attempted_at),
     INDEX idx_login_attempts_ip_time (ip, attempted_at)
 ) ENGINE=InnoDB;
-
-
--- Usuarios demo funcionales (bcrypt válido)
--- admin@midnight.com  / admin123
--- carlos@ejemplo.com  / cliente123
-INSERT INTO usuarios (nombre, email, password, rol) VALUES
-('Administrador', 'admin@midnight.com', '$2y$12$K3TUmUf1FktjPCf0mBbbz.cmlvNxlB5EDB0.HFbpgkPEHkUvhnggW', 'admin'),
-('Carlos Cliente', 'carlos@ejemplo.com', '$2y$12$R78QE9AzzOKvR65M/h6DQukw.76Xgvv4qGpDjJg9QrD.fAIFAR2MO', 'cliente');

@@ -1,6 +1,14 @@
 /* ============================================================
    Estilos compartidos de autenticación (login y registro)
    ============================================================ */
+
+/* Logo en páginas auth */
+.auth-logo-img {
+    height: 60px;
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 8px var(--brillo1));
+}
+
 .contenedor-auth {
     min-height: 100vh;
     display: flex;
@@ -54,7 +62,6 @@
     font-size: 1rem;
     transition: border-color 0.2s, box-shadow 0.2s;
     outline: none;
-    box-sizing: border-box;
 }
 .auth-grupo input:focus {
     border-color: var(--color1);

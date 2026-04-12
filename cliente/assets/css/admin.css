@@ -37,10 +37,10 @@
 }
 .stat-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gris); margin-top: 0.3rem; }
 
-.stat-pendiente .stat-numero { color: #ffb300; text-shadow: 0 0 10px rgba(255,180,0,0.5); }
-.stat-solicitado .stat-numero { color: #50c8ff; text-shadow: 0 0 10px rgba(80,200,255,0.5); }
-.stat-proceso .stat-numero { color: #8899ff; text-shadow: 0 0 10px rgba(100,130,255,0.5); }
-.stat-terminado .stat-numero { color: #33cc66; text-shadow: 0 0 10px rgba(50,200,100,0.5); }
+.stat-pendiente .stat-numero { color: var(--pendiente); text-shadow: 0 0 10px rgba(255,180,0,0.5); }
+.stat-solicitado .stat-numero { color: var(--solicitado); text-shadow: 0 0 10px rgba(80,200,255,0.5); }
+.stat-proceso .stat-numero { color: var(--en-proceso); text-shadow: 0 0 10px rgba(100,130,255,0.5); }
+.stat-terminado .stat-numero { color: var(--terminado); text-shadow: 0 0 10px rgba(50,200,100,0.5); }
 
 /* ── Tabla de pedidos ── */
 .tabla-seccion {
@@ -83,14 +83,14 @@
 .badge-estado::before {
     content: ''; width: 6px; height: 6px; border-radius: 50%;
 }
-.badge-pendiente { background: rgba(255,180,0,0.15); color: #ffb300; border: 1px solid rgba(255,180,0,0.3); }
-.badge-pendiente::before { background: #ffb300; }
-.badge-solicitado { background: rgba(80,200,255,0.15); color: #50c8ff; border: 1px solid rgba(80,200,255,0.3); }
-.badge-solicitado::before { background: #50c8ff; }
-.badge-en-proceso { background: rgba(100,130,255,0.15); color: #8899ff; border: 1px solid rgba(100,130,255,0.3); }
-.badge-en-proceso::before { background: #8899ff; }
-.badge-terminado { background: rgba(50,200,100,0.15); color: #33cc66; border: 1px solid rgba(50,200,100,0.3); }
-.badge-terminado::before { background: #33cc66; }
+.badge-pendiente { background: var(--pendiente-bg); color: var(--pendiente); border: 1px solid var(--pendiente-border); }
+.badge-pendiente::before { background: var(--pendiente); }
+.badge-solicitado { background: var(--solicitado-bg); color: var(--solicitado); border: 1px solid var(--solicitado-border); }
+.badge-solicitado::before { background: var(--solicitado); }
+.badge-en-proceso { background: var(--en-proceso-bg); color: var(--en-proceso); border: 1px solid var(--en-proceso-border); }
+.badge-en-proceso::before { background: var(--en-proceso); }
+.badge-terminado { background: var(--terminado-bg); color: var(--terminado); border: 1px solid var(--terminado-border); }
+.badge-terminado::before { background: var(--terminado); }
 
 /* Selector de estado */
 .select-estado {
@@ -100,7 +100,7 @@
     cursor: pointer; transition: border-color 0.3s;
 }
 .select-estado:focus { border-color: var(--color1); outline: none; }
-.select-estado option { background: #12121e; }
+.select-estado option { background: var(--fondo-opcion); }
 
 /* Botones de acción */
 .btn-admin {
@@ -119,7 +119,7 @@
 /* Toast */
 .toast-admin {
     position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px);
-    background: #0e0e14; border: 1px solid var(--borde-tarjeta); border-radius: 10px;
+    background: var(--fondo-modal); border: 1px solid var(--borde-tarjeta); border-radius: 10px;
     padding: 0.9rem 1.8rem; font-size: 0.95rem; color: var(--blanco);
     z-index: 6000; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s;
     opacity: 0; pointer-events: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5);

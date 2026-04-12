@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 // ============================================================
 // API: Registro de Usuario
 // POST — recibe nombre, email, password (form-data)
@@ -32,8 +34,8 @@ if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $errores[] = 'El email es demasiado largo (máximo 100 caracteres).';
 }
 
-if (strlen($password) < 8 || strlen($password) > 10) {
-    $errores[] = 'La contraseña debe tener entre 8 y 10 caracteres.';
+if (strlen($password) < 8 || strlen($password) > 72) {
+    $errores[] = 'La contraseña debe tener entre 8 y 72 caracteres.';
 }
 
 $forzarComplejidad = filter_var($_ENV['PASSWORD_REQUIRE_COMPLEXITY'] ?? getenv('PASSWORD_REQUIRE_COMPLEXITY') ?: '0', FILTER_VALIDATE_BOOL);
@@ -64,7 +66,7 @@ try {
         responder(409, false, 'Ese email ya está registrado.', 'EMAIL_ALREADY_EXISTS');
     }
 
-    $hash = password_hash($password, PASSWORD_BCRYPT);
+    $hash = password_hash($password, PASSWORD_DEFAULT);
 
     $stmt = $pdo->prepare('INSERT INTO usuarios (nombre, email, password, rol) VALUES (?, ?, ?, ?)');
     $stmt->execute([$nombre, $email, $hash, 'cliente']);

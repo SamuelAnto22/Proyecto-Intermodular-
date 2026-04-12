@@ -4,7 +4,6 @@
 .configurador-page {
     padding: 8rem 5% 2rem 5%;
     width: 100%;
-    box-sizing: border-box;
     overflow-x: hidden;
 }
 
@@ -16,7 +15,6 @@
     max-width: 1300px;
     width: 100%;
     margin: 0 auto;
-    box-sizing: border-box;
 }
 
 .vista-coche {
@@ -81,7 +79,6 @@ canvas {
     transition: border-color 0.2s, box-shadow 0.2s;
     outline: none;
     cursor: pointer;
-    box-sizing: border-box;
 }
 
 .opcion-grupo select:focus {
@@ -101,7 +98,7 @@ canvas {
 }
 
 .opcion-grupo select option {
-    background: #12121e;
+    background: var(--fondo-opcion);
     color: var(--blanco);
 }
 
@@ -163,7 +160,6 @@ canvas {
         width: 100%;
         text-align: center;
         display: block;
-        box-sizing: border-box;
     }
 
     .botones-cta-container {

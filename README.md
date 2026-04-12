@@ -361,3 +361,56 @@ php tests/smoke_api.php
 ```bash
 SMOKE_PORT=8100 npm run test
 ```
+
+---
+
+## Mejoras de calidad aplicadas (post-auditoría)
+
+Tras una auditoría interna exhaustiva, se aplicaron **+50 mejoras** organizadas en 6 fases:
+
+###  Seguridad
+- Credenciales DB externalizadas a variables de entorno (`.env.example` incluido)
+- `declare(strict_types=1)` en todos los archivos PHP
+- Validación de contraseña (máx. 72 chars + coherencia de complejidad) en `perfil.php`
+- `try-catch` añadido a `logout.php` y `sesion.php`
+- Logging de excepciones en todos los catch blocks
+- Corrección de IP spoofing: `REMOTE_ADDR` como fuente principal
+- Constante nombrada `SESSION_EXPIRE_SECONDS` en lugar de magic number
+
+###  Backend — Consistencia
+- Formato JSON unificado con `responder()` en todos los endpoints
+- Query SQL de configuraciones extraída a función helper compartida (`obtenerConfiguracionesUsuario()`)
+- Nombre de BD corregido (`midnight_customs_demo` → `midnight_customs`)
+- Datos sincronizados entre `midnight_demo.sql` y `reset_demo_data.sql`
+- Hashes de contraseña únicos por usuario demo (elena tiene contraseña propia: `elena123`)
+- Índice añadido en `pedidos.estado` + columnas `updated_at` en `configuraciones` y `pedidos`
+- Constraint `UNIQUE` en `pedidos(configuracion_id)` para integridad referencial
+- Validación whitelist movida dentro de cada branch en `guardar_config.php`
+
+###  CSS — Limpieza y variables
+- Fusión de 3 CSS idénticos de proyectos en 1 compartido (`proyecto-detalle.css`)
+- +15 variables CSS para colores de estado (`--pendiente`, `--solicitado`, `--terminado`, etc.)
+- Eliminación de duplicados de badges entre `garaje.css`, `admin.css` y `perfil.css`
+- Consolidación de `:focus-visible` (existía en 2 archivos con valores contradictorios)
+- Reemplazo de todos los colores hardcoded por variables CSS
+- Eliminación de `box-sizing: border-box` redundantes (ya definido globalmente)
+- Eliminación de duplicación de reglas `.pie-pagina` en media query
+- Archivo `video.mp4` movido de `img/` a `media/`
+
+###  Accesibilidad (a11y)
+- `aria-expanded` y `aria-controls` añadidos a botones de menú en páginas de proyecto
+- `aria-label` en botones de carrusel (anterior/siguiente)
+- `role="tab"` y `aria-selected` en indicadores de carrusel
+- Textos `alt` de miniaturas mejorados (descriptivos, no genéricos)
+- Soporte de teclado en carrusel (flechas izquierda/derecha)
+- Skip-link garantizado en todas las páginas con ID consistente
+- `id="contenido-principal"` añadido a `perfil.html`
+- Estilos inline extraídos a CSS compartido (`.logo-nombre`, `.logo-apellido`, `.saltar-enlace`, `.auth-logo-img`)
+
+###  Testing
+- +8 tests nuevos cubriendo: `cambiar_estado`, `eliminar`, `DELETE config`, `actualizar config`, cambio de contraseña, rate limiting, y logout sin sesión
+- Cobertura total de endpoints críticos (de ~38 a ~46 tests)
+
+###  Documentación
+- `.env.example` con todas las variables documentadas
+- `.gitignore` actualizado para excluir `.env`

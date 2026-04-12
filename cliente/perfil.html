@@ -7,8 +7,8 @@
     <meta name="description"
         content="Mi Perfil — gestiona tus datos personales, cambia tu contraseña y accede a tu garaje en Midnight Customs.">
     <title>Mi Perfil | Midnight Customs</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=7">
-    <link rel="stylesheet" href="assets/css/animaciones.css?v=7">
+    <link rel="stylesheet" href="assets/css/style.css?v=9">
+    <link rel="stylesheet" href="assets/css/animaciones.css?v=9">
     <!-- Estilos específicos -->
     <link rel="stylesheet" href="assets/css/perfil.css">
 </head>
@@ -18,8 +18,7 @@
         <div class="logo">
             <a href="index.html">
                 <img src="assets/img/icon-Photoroom.png" alt="Logotipo de Midnight Customs">
-                <span style="color:var(--color1);margin-right:5px;">Midnight</span><span
-                    style="color:var(--color2);">Customs</span>
+                <span class="logo-nombre">Midnight</span><span class="logo-apellido">Customs</span>
             </a>
         </div>
         <button class="boton-menu" aria-label="Abrir menú" aria-expanded="false">☰</button>
@@ -36,14 +35,14 @@
         </nav>
     </header>
 
-    <main style="padding-top: 110px;">
+    <main id="contenido-principal" style="padding-top: 110px;">
         <div class="perfil-page">
 
             <!-- Estado de carga inicial -->
             <div id="perfil-loading" class="cargando-perfil">Cargando perfil...</div>
 
             <!-- Contenido real (oculto hasta cargar) -->
-            <div id="perfil-contenido" style="display:none;">
+            <div id="perfil-contenido" class="oculto-inicial">
 
                 <!-- Hero del perfil -->
                 <div class="perfil-hero">
@@ -130,18 +129,18 @@
             </div><!-- /perfil-contenido -->
 
             <!-- Sin sesión -->
-            <div id="perfil-sin-sesion" style="display:none; text-align:center; padding: 4rem 0;">
-                <p style="font-size:1.2rem; color:var(--gris);">Debes iniciar sesión para ver tu perfil.</p>
-                <a href="login.html" class="boton-neon" style="margin-top:1rem;">Iniciar sesión</a>
+            <div id="perfil-sin-sesion" class="oculto-inicial">
+                <p class="perfil-sin-sesion-texto">Debes iniciar sesión para ver tu perfil.</p>
+                <a href="login.html" class="boton-neon">Iniciar sesión</a>
             </div>
 
         </div>
     </main>
 
-    <script src="assets/js/pie-pagina.js?v=7"></script>
+    <script src="assets/js/pie-pagina.js?v=9"></script>
     <script src="assets/js/env.js?v=1"></script>
-    <script type="module" src="assets/js/main.js?v=8"></script>
-    <script type="module" src="assets/js/perfil.js?v=8"></script>
+    <script type="module" src="assets/js/main.js?v=9"></script>
+    <script type="module" src="assets/js/perfil.js?v=9"></script>
 </body>
 
 </html>
