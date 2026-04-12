@@ -3,5 +3,8 @@
 *.log
 error_log
 .env
+.qwen/
+node_modules/
+vendor/
 
 
