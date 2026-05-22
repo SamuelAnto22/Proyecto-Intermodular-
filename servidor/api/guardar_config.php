@@ -28,8 +28,8 @@ if ($method === 'POST') {
     $accion = $input['accion'] ?? 'crear';
     $userId = getUserId();
     // ── Whitelist global para esta acción (aplica a crear y actualizar) ──
-    $modelosPermitidos = ['mini_cooper', 'bmw_serie1', 'audi_a3', 'porsche_cayenne', 'toyota_supra'];
-    $coloresPermitidos = ['rojo', 'azul', 'verde', 'blanco', 'negro'];
+    $modelosPermitidos = ['mini_cooper', 'bmw_serie1', 'audi_a3', 'porsche_cayenne', 'toyota_supra', 'audi_q8', 'bmw_i8'];
+    $coloresPermitidos = ['rojo', 'azul', 'verde', 'blanco', 'negro', 'gris', 'naranja', 'amarillo', 'marron'];
     $llantasPermitidas = ['clasica', 'deportiva', 'competicion', 'multiradio', 'palos'];
 
     if ($accion === 'crear' || $accion === 'actualizar') {

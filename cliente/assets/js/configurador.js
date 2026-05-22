@@ -62,8 +62,9 @@ const CATALOGO = {
             rojo: 'assets/img/audi-a3-rojo.png',
             azul: 'assets/img/audi-a3-azul.png',
             verde: 'assets/img/audi-a3-verde.png',
-            blanco: 'assets/img/audi-a3-blanco.png',
-            negro: 'assets/img/audi-a3-negro.png'
+            blanco: 'assets/img/audi-a3-blanco .png',
+            negro: 'assets/img/audi a3-negro.png',
+            gris: 'assets/img/audi-a3-gris.png'
         },
         ancho: 640, alto: 360,
         carroceria: { top: 0, left: 0, width: '100%', height: '100%' },
@@ -81,7 +82,8 @@ const CATALOGO = {
             azul: 'assets/img/porsche-azul.png',
             verde: 'assets/img/porsche-verde.png',
             blanco: 'assets/img/porsche-blanco.png',
-            negro: 'assets/img/porsche-negro.png'
+            negro: 'assets/img/porsche-negro.png',
+            marron: 'assets/img/porsche-marron.png'
         },
         ancho: 640, alto: 360,
         carroceria: { top: 0, left: 0, width: '100%', height: '100%' },
@@ -108,6 +110,36 @@ const CATALOGO = {
         ruedaTrasera: { top: 37, left: 266, width: 464, height: 317 },
         ruedaDelanteraMovil: { top: 31, left: -311, width: 550, height: 550 },
         ruedaTraseraMovil: { top: 31, left: 111, width: 550, height: 550 }
+    },
+
+    audi_q8: {
+        nombre: 'Audi Q8',
+        colores: {
+            blanco: 'assets/img/audi-q8-blanco.png',
+            naranja: 'assets/img/audi-q8-naranja.png'
+        },
+        ancho: 640, alto: 360,
+        carroceria: { top: 0, left: 0, width: '100%', height: '100%' },
+        carroceriaMovil: { top: -400, left: -213, width: 770, height: 900 },
+        ruedaDelantera: { top: 46, left: -102, width: 479, height: 324 },
+        ruedaTrasera: { top: 44, left: 262, width: 479, height: 324 },
+        ruedaDelanteraMovil: { top: 41, left: -330, width: 568, height: 550 },
+        ruedaTraseraMovil: { top: 41, left: 107, width: 568, height: 550 }
+    },
+
+    bmw_i8: {
+        nombre: 'BMW i8',
+        colores: {
+            amarillo: 'assets/img/bmw-i8-amarillo.png',
+            azul: 'assets/img/bmw-i8-azul.png'
+        },
+        ancho: 640, alto: 360,
+        carroceria: { top: 0, left: 0, width: '100%', height: '100%' },
+        carroceriaMovil: { top: -400, left: -206, width: 760, height: 900 },
+        ruedaDelantera: { top: 41, left: -87, width: 460, height: 311 },
+        ruedaTrasera: { top: 37, left: 266, width: 464, height: 317 },
+        ruedaDelanteraMovil: { top: 31, left: -311, width: 550, height: 550 },
+        ruedaTraseraMovil: { top: 31, left: 111, width: 550, height: 550 }
     }
 };
 
@@ -124,6 +156,7 @@ const RUEDAS = {
 document.addEventListener('DOMContentLoaded', function () {
     cargarDesdeURL();
     setupEventListeners();
+    actualizarOpcionesColor();
     actualizarVista();
     window.addEventListener('resize', actualizarEscala);
 });
@@ -147,22 +180,85 @@ function cargarDesdeURL() {
         if (params.has(field)) {
             const val = params.get(field);
             configuracionActual[field] = val;
-
-            const selectElement = document.getElementById(field);
-            if (selectElement && [...selectElement.options].some(opt => opt.value === val)) {
-                selectElement.value = val;
-            }
         }
     });
+
+    // Sincronizar el select de modelo primero
+    const selectModelo = document.getElementById('modelo');
+    if (selectModelo && [...selectModelo.options].some(opt => opt.value === configuracionActual.modelo)) {
+        selectModelo.value = configuracionActual.modelo;
+    }
+
+    // Actualizar las opciones del select de color según el modelo
+    actualizarOpcionesColor();
+
+    // Sincronizar select de color y llantas
+    const selectColor = document.getElementById('color');
+    if (selectColor && [...selectColor.options].some(opt => opt.value === configuracionActual.color)) {
+        selectColor.value = configuracionActual.color;
+    }
+
+    const selectLlantas = document.getElementById('llantas');
+    if (selectLlantas && [...selectLlantas.options].some(opt => opt.value === configuracionActual.llantas)) {
+        selectLlantas.value = configuracionActual.llantas;
+    }
 }
 
 // ── Event listeners ─────────────────────────────────────────
 function setupEventListeners() {
-    document.getElementById('modelo')?.addEventListener('change', actualizarVista);
+    document.getElementById('modelo')?.addEventListener('change', function() {
+        configuracionActual.modelo = this.value;
+        actualizarOpcionesColor();
+        actualizarVista();
+    });
     document.getElementById('color')?.addEventListener('change', actualizarVista);
     document.getElementById('llantas')?.addEventListener('change', actualizarVista);
 
     document.getElementById('guardarConfig')?.addEventListener('click', guardarConfiguracion);
+}
+
+// ── Actualizar opciones de color basadas en el modelo ────────
+function actualizarOpcionesColor() {
+    const selectColor = document.getElementById('color');
+    if (!selectColor) return;
+
+    const modelo = CATALOGO[configuracionActual.modelo];
+    if (!modelo) return;
+
+    const colorSeleccionadoPreviamente = configuracionActual.color;
+
+    // Limpiar opciones antiguas
+    selectColor.innerHTML = '';
+
+    const nombresColores = {
+        rojo: 'Rojo',
+        azul: 'Azul',
+        verde: 'Verde',
+        blanco: 'Blanco',
+        negro: 'Negro',
+        gris: 'Gris',
+        naranja: 'Naranja',
+        amarillo: 'Amarillo',
+        marron: 'Marrón'
+    };
+
+    // Llenar select con los colores del coche actual
+    Object.keys(modelo.colores).forEach(col => {
+        const opt = document.createElement('option');
+        opt.value = col;
+        opt.textContent = nombresColores[col] || (col.charAt(0).toUpperCase() + col.slice(1));
+        selectColor.appendChild(opt);
+    });
+
+    // Intentar re-seleccionar el color anterior, si está disponible para el nuevo modelo
+    if (modelo.colores[colorSeleccionadoPreviamente]) {
+        selectColor.value = colorSeleccionadoPreviamente;
+        configuracionActual.color = colorSeleccionadoPreviamente;
+    } else {
+        const primerColor = Object.keys(modelo.colores)[0];
+        selectColor.value = primerColor;
+        configuracionActual.color = primerColor;
+    }
 }
 
 // ── Actualizar vista ────────────────────────────────────────
