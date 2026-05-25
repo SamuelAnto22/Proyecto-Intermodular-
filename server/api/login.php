@@ -25,7 +25,7 @@ $_SESSION['login_attempts'] = array_filter(
 );
 
 if (count($_SESSION['login_attempts']) >= $maxIntentos) {
-    header('Location: ../../cliente/login.html?error=' . urlencode('Demasiados intentos. Espera 5 minutos.'));
+    header('Location: ../../login.html?error=' . urlencode('Demasiados intentos. Espera 5 minutos.'));
     exit;
 }
 
@@ -34,7 +34,7 @@ $email    = trim($_POST['email']    ?? '');
 $password = $_POST['password']      ?? '';
 // --- Validaciones básicas ---
 if ($email === '' || $password === '') {
-    header('Location: ../../cliente/login.html?error=' . urlencode('Rellena todos los campos.'));
+    header('Location: ../../login.html?error=' . urlencode('Rellena todos los campos.'));
     exit;
 }
 
@@ -45,7 +45,7 @@ $usuario = $stmt->fetch();
 
 if (!$usuario || !password_verify($password, $usuario['password'])) {
     $_SESSION['login_attempts'][] = time();
-    header('Location: ../../cliente/login.html?error=' . urlencode('Credenciales inválidas.'));
+    header('Location: ../../login.html?error=' . urlencode('Credenciales inválidas.'));
     exit;
 }
 
@@ -58,8 +58,8 @@ $_SESSION['login_attempts'] = []; // Limpiar intentos tras login exitoso
 
 // --- Redirigir según el rol ---
 if ($usuario['rol'] === 'admin') {
-    header('Location: ../../cliente/admin.html');
+    header('Location: ../../admin.html');
 } else {
-    header('Location: ../../cliente/index.html');
+    header('Location: ../../index.html');
 }
 exit;

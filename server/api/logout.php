@@ -36,5 +36,5 @@ exit;
 
 
 // Redirigir al inicio
-header('Location: ../../cliente/index.html');
+header('Location: ../../index.html');
 exit;

@@ -17,9 +17,9 @@ El objetivo pedagógico y técnico del proyecto es:
 2. Levantar los servicios de **Apache** y **MySQL** desde el panel de XAMPP.
 3. Importar la Base de Datos con todos los datos de demostración incluidos.
    - Ir a **phpMyAdmin** (`http://localhost/phpmyadmin`).
-   - Importar el archivo alojado en `servidor/sql/midnight_demo.sql`. Este archivo crea la BD automáticamente y le inserta datos de demostración para no evaluar un sistema en blanco.
-4. Confirmar las credenciales en `servidor/includes/db.php` si tiene configurada otra contraseña en su motor MySQL local (por defecto asume `root` sin contraseña).
-5. Visitar a través de localhost: [http://localhost/Proyecto-Intermodular-/cliente/](http://localhost/Proyecto-Intermodular-/cliente/) *(asegúrese de utilizar la ruta local exacta donde guardó la carpeta)*.
+   - Importar el archivo alojado en `server/sql/midnight_demo.sql`. Este archivo crea la BD automáticamente y le inserta datos de demostración para no evaluar un sistema en blanco.
+4. Confirmar las credenciales en `server/includes/db.php` si tiene configurada otra contraseña en su motor MySQL local (por defecto asume `root` sin contraseña).
+5. Visitar a través de localhost: [http://localhost/Proyecto-Intermodular-/](http://localhost/Proyecto-Intermodular-/) *(acceso directo desde la raíz de la carpeta)*.
 
 ---
 
@@ -64,8 +64,8 @@ Hemos diseñado una experiencia con atención al detalle que pedimos encarecidam
 
 ## Arquitectura de Ficheros
 
-*   `cliente/`: Lógica FrontEnd SPA-Like, interactiva a base de HTML estáticos, Vanilla JS usando asincronismo para las mutaciones y Custom CSS puro sin librerías externas.
-*   `servidor/api/`: Lógica BackEnd de transferencia POST/GET. Cada endpoint es único en `.php` usando cabeceras JSON, devolviendo HTTP Codes y verificaciones de sesión/XSS contra MySQL en formato **PDO** con variables pre-limpiadas preparadas (`?`) anti SQLi.
-*   `servidor/sql/`: Los esquemas y los tests de base de datos automatizados instalables.
+*   `assets/`: Lógica FrontEnd (CSS, JS, imágenes), interactiva a base de HTML estáticos en la raíz, Vanilla JS usando asincronismo para las mutaciones y Custom CSS puro sin librerías externas.
+*   `server/api/`: Lógica BackEnd de transferencia POST/GET. Cada endpoint es único en `.php` usando cabeceras JSON, devolviendo HTTP Codes y verificaciones de sesión/XSS contra MySQL en formato **PDO** con variables pre-limpiadas preparadas (`?`) anti SQLi.
+*   `server/sql/`: Los esquemas y los tests de base de datos automatizados instalables.
 
 ¡Gracias por evaluar este proyecto final! Esperamos que os guste.

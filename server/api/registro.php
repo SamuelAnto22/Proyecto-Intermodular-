@@ -44,7 +44,7 @@ if ($password !== $confirm) {
 if (!empty($errores)) {
     // Redirigir de vuelta al registro con error
     $msg = urlencode(implode(' ', $errores));
-    header("Location: ../../cliente/registro.html?error=$msg");
+    header("Location: ../../registro.html?error=$msg");
     exit;
 }
 
@@ -53,7 +53,7 @@ $stmt = $pdo->prepare('SELECT id FROM usuarios WHERE email = ?');
 $stmt->execute([$email]);
 
 if ($stmt->fetch()) {
-    header('Location: ../../cliente/registro.html?error=' . urlencode('Ese email ya está registrado.'));
+    header('Location: ../../registro.html?error=' . urlencode('Ese email ya está registrado.'));
     exit;
 }
 
@@ -64,5 +64,5 @@ $stmt = $pdo->prepare('INSERT INTO usuarios (nombre, email, password, rol) VALUE
 $stmt->execute([$nombre, $email, $hash, 'cliente']);
 
 // --- Redirigir al login con éxito ---
-header('Location: ../../cliente/login.html?ok=' . urlencode('Cuenta creada correctamente. Inicia sesión.'));
+header('Location: ../../login.html?ok=' . urlencode('Cuenta creada correctamente. Inicia sesión.'));
 exit;
