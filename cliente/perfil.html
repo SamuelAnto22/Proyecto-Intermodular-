@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Mi Perfil — gestiona tus datos personales, cambia tu contraseña y accede a tu garaje en Midnight Customs.">
+    <title>Mi Perfil | Midnight Customs</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=9">
+    <link rel="stylesheet" href="assets/css/animaciones.css?v=9">
+    <!-- Estilos específicos -->
+    <link rel="stylesheet" href="assets/css/perfil.css">
+</head>
+
+<body>
+    <header class="cabecera-principal">
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/img/icon-Photoroom.png" alt="Logotipo de Midnight Customs">
+                <span class="logo-nombre">Midnight</span><span class="logo-apellido">Customs</span>
+            </a>
+        </div>
+        <button class="boton-menu" aria-label="Abrir menú" aria-expanded="false">☰</button>
+        <nav class="navegacion-principal" id="navegacion-principal" aria-label="Navegación principal">
+            <ul>
+
+                <li><a href="index.html#servicios">Servicios</a></li>
+                <li><a href="index.html#proyectos">Proyectos</a></li>
+                <li><a href="index.html#nosotros">Nosotros</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
+                <li><a href="configurador.html" class="boton-neon boton-neon-nav">Configurador</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="contenido-principal" style="padding-top: 110px;">
+        <div class="perfil-page">
+
+            <!-- Estado de carga inicial -->
+            <div id="perfil-loading" class="cargando-perfil">Cargando perfil...</div>
+
+            <!-- Contenido real (oculto hasta cargar) -->
+            <div id="perfil-contenido" class="oculto-inicial">
+
+                <!-- Hero del perfil -->
+                <div class="perfil-hero">
+
+                    <div class="perfil-hero-info">
+                        <h2 id="perfil-nombre-hero">—</h2>
+                        <p id="perfil-email-hero">—</p>
+                        <span class="perfil-badge" id="perfil-rol-hero">cliente</span>
+                    </div>
+                </div>
+
+                <!-- Grid de tarjetas -->
+                <div class="perfil-grid">
+
+                    <!-- Tarjeta: Datos personales -->
+                    <div class="perfil-card">
+                        <div class="perfil-card-titulo">📋 Mis datos</div>
+                        <div class="dato-fila">
+                            <span class="dato-label">Nombre</span>
+                            <span class="dato-valor" id="dato-nombre">—</span>
+                        </div>
+                        <div class="dato-fila">
+                            <span class="dato-label">Email</span>
+                            <span class="dato-valor" id="dato-email">—</span>
+                        </div>
+                        <div class="dato-fila">
+                            <span class="dato-label">Rol</span>
+                            <span class="dato-valor" id="dato-rol">—</span>
+                        </div>
+                        <div class="dato-fila">
+                            <span class="dato-label">Miembro desde</span>
+                            <span class="dato-valor" id="dato-fecha">—</span>
+                        </div>
+                        <div class="dato-fila">
+                            <span class="dato-label">Proyectos guardados</span>
+                            <span class="dato-valor" id="dato-num-configs">—</span>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta: Cambiar contraseña -->
+                    <div class="perfil-card">
+                        <div class="perfil-card-titulo">🔒 Cambiar contraseña</div>
+                        <div id="alerta-password" class="alerta-perfil"></div>
+                        <form id="form-password" novalidate>
+                            <div class="campo-perfil">
+                                <label for="password-actual">Contraseña actual</label>
+                                <input type="password" id="password-actual" placeholder="Tu contraseña actual"
+                                    autocomplete="current-password">
+                            </div>
+                            <div class="campo-perfil">
+                                <label for="password-nuevo">Nueva contraseña</label>
+                                <input type="password" id="password-nuevo" placeholder="Mínimo 8 caracteres"
+                                    autocomplete="new-password">
+                            </div>
+                            <div class="campo-perfil">
+                                <label for="password-confirm">Confirmar nueva contraseña</label>
+                                <input type="password" id="password-confirm" placeholder="Repite la nueva contraseña"
+                                    autocomplete="new-password">
+                            </div>
+                            <button type="submit" class="btn-perfil" id="btn-cambiar-pass">Actualizar
+                                contraseña</button>
+                        </form>
+                    </div>
+
+                    <!-- Tarjeta: Mi garaje (ocupa todo el ancho) -->
+                    <div class="perfil-card garaje-fullcard">
+                        <div class="perfil-card-titulo">Mi Garaje</div>
+
+                        <div class="garaje-acceso-btns">
+                            <a href="garaje.html" class="btn-garaje-ir">Ver garaje completo</a>
+                            <a href="configurador.html" class="btn-garaje-ir btn-configurar-ir">Crear nueva
+                                config</a>
+                        </div>
+
+                        <div id="garaje-mini-grid" class="garaje-mini-grid">
+                            <p id="garaje-vacio" style="display:none;">
+                                No tienes proyectos guardados todavía.
+                                <a href="configurador.html">¡Crea tu primera configuración!</a>
+                            </p>
+                        </div>
+                    </div>
+
+                </div><!-- /perfil-grid -->
+            </div><!-- /perfil-contenido -->
+
+            <!-- Sin sesión -->
+            <div id="perfil-sin-sesion" class="oculto-inicial">
+                <p class="perfil-sin-sesion-texto">Debes iniciar sesión para ver tu perfil.</p>
+                <a href="login.html" class="boton-neon">Iniciar sesión</a>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="assets/js/pie-pagina.js?v=9"></script>
+    <script src="assets/js/env.js?v=1"></script>
+    <script type="module" src="assets/js/main.js?v=9"></script>
+    <script type="module" src="assets/js/perfil.js?v=9"></script>
+</body>
+
+</html>

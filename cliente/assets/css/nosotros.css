@@ -1,0 +1,253 @@
+/* CSS exclusivo para nosotros.html */
+
+.hero-video {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    margin: 2rem auto 4rem;
+    padding: 0 5%;
+}
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--borde-tarjeta);
+    background: #000;
+    cursor: pointer;
+}
+
+.video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.video-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(139, 0, 255, 0.15) 50%, rgba(0, 0, 0, 0.8) 100%);
+    gap: 1.5rem;
+    transition: background 0.3s ease;
+}
+
+.video-wrapper:hover .video-overlay {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(139, 0, 255, 0.25) 50%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+.btn-play {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid var(--color1);
+    background: rgba(139, 0, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    color: var(--color1);
+    box-shadow: 0 0 30px var(--brillo1), 0 0 60px rgba(139, 0, 255, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-wrapper:hover .btn-play {
+    transform: scale(1.1);
+    box-shadow: 0 0 50px var(--brillo1), 0 0 90px rgba(139, 0, 255, 0.4);
+}
+
+.video-caption {
+    text-align: center;
+}
+
+.video-caption p {
+    color: var(--gris);
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.video-caption strong {
+    color: var(--color1);
+    display: block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 4px;
+    text-shadow: 0 0 15px var(--brillo1);
+    line-height: 1;
+    margin-bottom: 0.2rem;
+}
+
+.seccion-filosofia {
+    max-width: 1100px;
+    margin: 0 auto 4rem;
+    padding: 0 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.bloque-filosofia {
+    background: var(--fondo-tarjeta);
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 12px;
+    padding: 2.5rem 3rem;
+    backdrop-filter: blur(10px);
+}
+
+.bloque-filosofia h2 {
+    color: var(--color1);
+    text-shadow: 0 0 10px var(--brillo1);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.bloque-filosofia p {
+    color: var(--gris);
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.bloque-filosofia p:last-child {
+    margin-bottom: 0;
+}
+
+.cuadricula-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.caja-estadistica {
+    background: var(--fondo-tarjeta);
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 12px;
+    padding: 1.8rem 1rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.caja-estadistica:hover {
+    border-color: var(--color1);
+    transform: translateY(-4px);
+}
+
+.caja-estadistica h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--color1);
+    text-shadow: 0 0 15px var(--brillo1);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+}
+
+.caja-estadistica p {
+    color: var(--gris);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.seccion-equipo {
+    max-width: 1300px;
+    margin: 0 auto 4rem;
+    padding: 0 5%;
+}
+
+.seccion-equipo .titulo-seccion {
+    margin-bottom: 2rem;
+}
+
+.cuadricula-equipo {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.tarjeta-equipo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2.5rem 2rem;
+    gap: 0;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    background: var(--fondo-tarjeta);
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+}
+
+.tarjeta-equipo:hover {
+    transform: translateY(-8px);
+    border-color: var(--color1);
+}
+
+.tarjeta-equipo img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--borde-tarjeta);
+    margin-bottom: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tarjeta-equipo:hover img {
+    border-color: var(--color1);
+    box-shadow: 0 0 20px var(--brillo1);
+}
+
+.tarjeta-equipo h3 {
+    color: var(--blanco);
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.cargo-equipo {
+    color: var(--color2);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    text-shadow: 0 0 8px var(--brillo2);
+    font-weight: 600;
+}
+
+.tarjeta-equipo p {
+    color: var(--gris);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+@media (max-width: 1100px) {
+    .cuadricula-equipo {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cuadricula-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .cuadricula-equipo {
+        grid-template-columns: 1fr;
+    }
+
+    .cuadricula-stats {
+        grid-template-columns: 1fr;
+    }
+}

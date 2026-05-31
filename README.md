@@ -13,13 +13,13 @@ El objetivo pedagógico y técnico del proyecto es:
 
 ##  Guía de Instalación para Profesores/Evaluadores
 
-1. Copiar este proyecto en la carpeta del servidor local (e.g. `C:/xampp/htdocs/Proyecto-Intermodular-`).
+1. Copiar este proyecto en la carpeta del servidor local (por ejemplo `C:/xampp/htdocs/mi-carpeta-proyecto`).
 2. Levantar los servicios de **Apache** y **MySQL** desde el panel de XAMPP.
 3. Importar la Base de Datos con todos los datos de demostración incluidos.
    - Ir a **phpMyAdmin** (`http://localhost/phpmyadmin`).
-   - Importar el archivo alojado en `server/sql/midnight_demo.sql`. Este archivo crea la BD automáticamente y le inserta datos de demostración para no evaluar un sistema en blanco.
-4. Confirmar las credenciales en `server/includes/db.php` si tiene configurada otra contraseña en su motor MySQL local (por defecto asume `root` sin contraseña).
-5. Visitar a través de localhost: [http://localhost/Proyecto-Intermodular-/](http://localhost/Proyecto-Intermodular-/) *(acceso directo desde la raíz de la carpeta)*.
+   - Importar el archivo alojado en `servidor/sql/midnight_demo.sql`. Este archivo crea la BD automáticamente y le inserta datos de demostración para no evaluar un sistema en blanco.
+4. Confirmar las credenciales en `servidor/includes/db.php` si tiene configurada otra contraseña en su motor MySQL local (por defecto asume `root` sin contraseña).
+5. Visitar el frontend con la ruta real de su carpeta, por ejemplo: `http://localhost/mi-carpeta-proyecto/cliente/`.
 
 ---
 
@@ -38,6 +38,45 @@ Tiene acceso al configurador interactivo y un garaje donde ve la progresión del
 * **Contraseña:** `cliente123`
 
 ---
+
+
+## Dataset demo oficial (control de versión)
+
+Para evitar desalineaciones entre profesores/equipos durante la evaluación, la demo SQL queda congelada con:
+
+- `dataset_version: demo-2026.04`
+- `dataset_date: 2026-04-08`
+- Archivos fuente: `servidor/sql/midnight_demo.sql` y `servidor/sql/reset_demo_data.sql`
+
+Si se cambia cualquier dato (usuarios, pedidos, estados, etc.), se debe incrementar la versión y actualizar la fecha en ambos scripts.
+
+## Regenerar hashes bcrypt y credenciales (paso a paso exacto)
+
+1. Generar hash para administrador:
+   ```bash
+   php -r "echo password_hash('admin123', PASSWORD_BCRYPT, ['cost' => 12]), PHP_EOL;"
+   ```
+2. Generar hash para cliente:
+   ```bash
+   php -r "echo password_hash('cliente123', PASSWORD_BCRYPT, ['cost' => 12]), PHP_EOL;"
+   ```
+3. Sustituir hashes en:
+   - `servidor/sql/schema.sql`
+   - `servidor/sql/midnight_demo.sql`
+   - `servidor/sql/reset_demo_data.sql`
+4. Verificar que cada hash corresponde a su contraseña:
+   ```bash
+   php -r "var_export(password_verify('admin123', 'AQUI_HASH_ADMIN'));"
+   ```
+   ```bash
+   php -r "var_export(password_verify('cliente123', 'AQUI_HASH_CLIENTE'));"
+   ```
+5. Reimportar datos demo:
+   - Inicial completo: importar `servidor/sql/midnight_demo.sql`
+   - Reseteo rápido (sin recrear tablas):
+     ```bash
+     mysql -u root -p < servidor/sql/reset_demo_data.sql
+     ```
 
 ##  Checklist de Pruebas recomendadas para el Profesor
 
@@ -64,8 +103,314 @@ Hemos diseñado una experiencia con atención al detalle que pedimos encarecidam
 
 ## Arquitectura de Ficheros
 
-*   `assets/`: Lógica FrontEnd (CSS, JS, imágenes), interactiva a base de HTML estáticos en la raíz, Vanilla JS usando asincronismo para las mutaciones y Custom CSS puro sin librerías externas.
-*   `server/api/`: Lógica BackEnd de transferencia POST/GET. Cada endpoint es único en `.php` usando cabeceras JSON, devolviendo HTTP Codes y verificaciones de sesión/XSS contra MySQL en formato **PDO** con variables pre-limpiadas preparadas (`?`) anti SQLi.
-*   `server/sql/`: Los esquemas y los tests de base de datos automatizados instalables.
+*   `cliente/`: Lógica FrontEnd SPA-Like, interactiva a base de HTML estáticos, Vanilla JS usando asincronismo para las mutaciones y Custom CSS puro sin librerías externas.
+*   `servidor/api/`: Lógica BackEnd de transferencia POST/GET. Cada endpoint es único en `.php` usando cabeceras JSON, devolviendo HTTP Codes y verificaciones de sesión/XSS contra MySQL en formato **PDO** con variables pre-limpiadas preparadas (`?`) anti SQLi.
+*   `servidor/sql/`: Los esquemas y los tests de base de datos automatizados instalables.
 
 ¡Gracias por evaluar este proyecto final! Esperamos que os guste.
+
+---
+
+## Convención de nombres y estructura de carpetas
+
+### Convención de nombres
+
+- **HTML (`cliente/*.html`)**: usar nombres en minúsculas y sin espacios (`configurador.html`, `garaje.html`).
+- **JavaScript (`cliente/assets/js/`)**:
+  - Archivos de página en minúsculas y `snake_case` cuando aplique (`configurador.js`, `guardar_config.js`).
+  - Módulos reutilizables en `modules/` y con nombre funcional corto (`nav.js`, `loader.js`).
+- **PHP API (`servidor/api/`)**: endpoints en minúsculas con `snake_case` (`guardar_config.php`, `reset_demo_data.sql`).
+- **SQL (`servidor/sql/`)**: scripts con intención explícita (`schema.sql`, `midnight_demo.sql`, `reset_demo_data.sql`).
+- **CSS (`cliente/assets/css/`)**: nombres en minúsculas, sin espacios, alineados con la página o tema visual.
+
+### Estructura recomendada
+
+```text
+Proyecto-Intermodular-/
+├── cliente/
+│   ├── *.html                  # Vistas estáticas
+│   └── assets/
+│       ├── css/                # Estilos globales y por página
+│       ├── img/                # Recursos gráficos
+│       └── js/
+│           ├── modules/        # Módulos JS reutilizables
+│           └── *.js            # Scripts por página/flujo
+├── servidor/
+│   ├── api/                    # Endpoints HTTP (JSON)
+│   ├── includes/               # Helpers compartidos (DB, auth, headers)
+│   └── sql/                    # Esquema y datasets demo
+└── tests/                      # Pruebas de humo y utilidades de verificación
+```
+
+> Para pasos rápidos de colaboración, consultar también `CONTRIBUTING.md`.
+
+
+---
+
+## Estrategia de rutas Frontend/API (local y hosting)
+
+Para evitar rutas hardcodeadas al nombre de la carpeta del proyecto, el frontend usa una constante global compartida `API_BASE` definida en `cliente/assets/js/env.js`.
+
+- `env.js` calcula dinámicamente la base del backend a partir de `window.location.origin` y del prefijo detectado antes de `/cliente` en la URL actual.
+- El resultado es: `${window.location.origin}/{prefijoProyecto}/servidor/api`.
+- Así, si se renombra la carpeta local (ej. `Proyecto-Intermodular-` -> `midnight-app`), login/sesión/logout y el resto de llamadas `fetch` siguen funcionando sin tocar JS.
+
+### Ejemplos
+- Local XAMPP con carpeta `midnight-app`: `http://localhost/midnight-app/cliente/` -> `API_BASE = http://localhost/midnight-app/servidor/api`
+- Hosting en subcarpeta `coches`: `https://dominio.com/coches/cliente/` -> `API_BASE = https://dominio.com/coches/servidor/api`
+
+Esta estrategia mantiene el código preparado para despliegue local y para mover el proyecto a hosting sin rehacer endpoints frontend.
+
+
+## Contrato común de errores (API)
+
+Todos los endpoints devuelven JSON con la misma forma base:
+
+```json
+{
+  "ok": false,
+  "message": "Mensaje legible para UI",
+  "error": "CODIGO_DE_ERROR"
+}
+```
+
+> En errores de validación (`422`) también se puede devolver `details` con una lista de mensajes.
+
+### `POST /servidor/api/login.php`
+
+| HTTP | ok | error | Uso |
+|---|---|---|---|
+| `200` | `true` | `null` | Login correcto (`redirect` según rol). |
+| `400` | `false` | `MISSING_FIELDS` | Faltan campos obligatorios. |
+| `401` | `false` | `INVALID_CREDENTIALS` / `TOO_MANY_ATTEMPTS` | Credenciales inválidas, retardo progresivo y/o bloqueo temporal por sesión+IP/email. |
+| `422` | `false` | `INVALID_EMAIL` | Formato de email inválido. |
+| `500` | `false` | `INTERNAL_ERROR` | Error interno inesperado. |
+
+### `POST /servidor/api/registro.php`
+
+| HTTP | ok | error | Uso |
+|---|---|---|---|
+| `200` | `true` | `null` | Registro correcto (`redirect` a login). |
+| `409` | `false` | `EMAIL_ALREADY_EXISTS` | El correo ya está registrado. |
+| `422` | `false` | `VALIDATION_ERROR` | Validaciones de nombre/email/contraseña. |
+| `500` | `false` | `INTERNAL_ERROR` | Error interno inesperado. |
+
+---
+
+## Checklist de seguridad Frontend
+
+Antes de cerrar cualquier cambio en la capa cliente, revisar:
+
+1. [ ] **XSS (Cross-Site Scripting)**
+   - Evitar interpolar datos de API con `innerHTML`.
+   - Preferir `createElement`, `setAttribute` y `textContent` para render dinámico.
+   - Si por compatibilidad se usa HTML string, aplicar escaping explícito como fallback.
+
+2. [ ] **CSRF**
+   - Enviar siempre token CSRF en operaciones sensibles (`POST`, `PUT`, `DELETE`), por ejemplo en cabecera `X-CSRF-Token`.
+   - Verificar que el backend rechaza peticiones sin token o con token inválido.
+
+3. [ ] **Escaping y validación de salida**
+   - Tratar como no confiable cualquier texto proveniente de API, query params o storage del navegador.
+   - Confirmar que nombres de usuario, emails, modelos y campos libres se insertan con `textContent`.
+   - Mantener helpers de escape (como `escaparHtml`) únicamente para casos de respaldo puntuales, no como patrón principal de render.
+
+
+## Seguridad: modo local académico vs producción
+
+### Contraseñas (`registro.php`)
+
+- **Regla base (siempre):** longitud entre **8 y 10** caracteres.
+- **Complejidad opcional:** si `PASSWORD_REQUIRE_COMPLEXITY=true`, se exige al menos una mayúscula, una minúscula, un número y un símbolo.
+- Recomendación:
+  - **Local académico:** `PASSWORD_REQUIRE_COMPLEXITY=false` para facilitar pruebas en clase.
+  - **Producción:** `PASSWORD_REQUIRE_COMPLEXITY=true`.
+
+### Login y anti fuerza bruta (`login.php`)
+
+- Se mantiene el límite por sesión (`5` intentos / `5` minutos).
+- Se añade:
+  - **Retardo incremental** por intento fallido (hasta 3s).
+  - **Persistencia en BD** (`login_attempts`) por **IP o email** en ventana de 5 minutos para evitar evasión cerrando sesión o cambiando cookie.
+- Al autenticar correctamente, se limpian los intentos del email/IP.
+
+### Cookies de sesión (`auth.php`)
+
+- Variable `APP_ENV`:
+  - `local` (por defecto): `secure` depende de HTTPS real.
+  - `production`: cookie de sesión con `secure=true` forzado.
+- Variable `SESSION_SAMESITE` (`Lax`, `Strict`, `None`; default `Lax`):
+  - Si se usa `None`, se fuerza `secure=true` (requisito de navegadores modernos).
+- Recomendación de flujo:
+  - Si frontend y backend comparten mismo sitio -> usar `Lax` o `Strict` tras validar UX.
+  - Si hay flujo cross-site (subdominios terceros/embeds) -> evaluar `None` + HTTPS obligatorio.
+
+---
+
+## Mantenimiento (2026-04-08)
+
+- Se verificó la referencia real de `cliente/assets/js/contacto.js` y `cliente/assets/js/nosotros.js` en todos los HTML del frontend: no estaban enlazados ni importados.
+- Se eliminaron ambos archivos JS huérfanos para reducir deuda técnica y evitar confusión en mantenimiento.
+- Se revisó CSS específico (`contacto.css`, `nosotros.css`) frente a `style.css` y se limpió duplicidad en `style.css` para que los estilos de contacto/nosotros vivan solo en sus hojas dedicadas.
+- Revisión manual de navegación completada a nivel de estructura/flujo (enlaces, menú responsive y anclas), sin detectar regresiones funcionales derivadas de esta limpieza.
+
+---
+
+## Pruebas de humo API (automatizadas)
+
+Se añadió un runner único para validar endpoints críticos:
+
+- `servidor/api/sesion.php`
+- `servidor/api/login.php`
+- `servidor/api/registro.php`
+- `servidor/api/guardar_config.php`
+- `servidor/api/pedidos.php`
+
+### Cobertura incluida
+
+El script `tests/smoke_api.php` cubre:
+
+- **Happy path** de `login`, `registro`, `guardar_config` y `pedidos` (admin).
+- Errores esperados:
+  - `400` (campos inválidos / JSON inválido)
+  - `401` (sin sesión o credenciales erróneas)
+  - `403` (sin permisos admin o token CSRF inválido)
+- Validación explícita de `JSON inválido` y `CSRF inválido` en endpoints JSON.
+
+### Aislamiento de datos de prueba
+
+Las pruebas **no dependen de estado manual**:
+
+- Crean usuarios temporales únicos (`cliente` y `admin`) con sufijo aleatorio.
+- Ejecutan pruebas con esos usuarios.
+- Eliminan los datos temporales al terminar (incluyendo relaciones por `ON DELETE CASCADE`).
+
+### Ejecución local (docente/evaluación)
+
+1. Tener **MySQL** activo y la BD `midnight_customs` importada.
+2. Verificar credenciales en `servidor/includes/db.php` (por defecto `root` sin contraseña).
+3. Ejecutar desde la raíz del proyecto:
+
+```bash
+npm run test
+```
+
+---
+
+## Flujo funcional (auth, configuraciones y pedidos)
+
+```mermaid
+flowchart TD
+    A[Usuario abre cliente/login.html] --> B{POST /api/login.php válido?}
+    B -- No --> C[Mostrar error uniforme]
+    B -- Sí --> D[Sesión iniciada + rol]
+    D --> E{Rol admin?}
+    E -- No --> F[Cliente accede a configurador.html]
+    F --> G[POST /api/guardar_config.php]
+    G --> H[Crear/actualizar configuración + pedido]
+    H --> I[garaje.html consulta /api/pedidos.php]
+    E -- Sí --> J[Admin accede a admin.html]
+    J --> K[GET /api/pedidos.php]
+    K --> L[POST cambiar_estado/eliminar]
+    L --> M[Dashboard actualizado]
+```
+
+---
+
+## Roadmap (mejoras futuras)
+
+- **Despliegue**
+  - Pipeline CI/CD (build + smoke tests automáticos).
+  - Entornos separados (`staging` y `production`) con variables por entorno.
+- **Logs y trazabilidad**
+  - Logs estructurados por endpoint (JSON + correlation id).
+  - Rotación y retención de logs para auditoría.
+- **Monitorización**
+  - Métricas básicas (latencia, ratio de errores, uptime).
+  - Alertas por degradación de API y fallos de login anómalos.
+- **Seguridad**
+  - Cabeceras de seguridad reforzadas (CSP más estricta, HSTS en producción).
+  - Revisión periódica de dependencias y políticas de sesión.
+- **Calidad**
+  - Formateo/linting automático para PHP/JS en pre-commit.
+  - Cobertura incremental de pruebas de integración E2E.
+
+---
+
+## Mini checklist de accesibilidad (Frontend)
+
+Antes de dar por cerrado un cambio visual o de formularios:
+
+1. [ ] **Labels y campos**: cada `input/select/textarea` tiene `label` asociado y mensajes inline con `aria-describedby`.
+2. [ ] **Teclado**: todos los elementos interactivos se alcanzan con **TAB** en orden lógico; el foco visible no se pierde.
+3. [ ] **Modales**: se pueden cerrar con `Escape`, atrapan foco mientras están abiertos y devuelven foco al disparador.
+4. [ ] **Lectores de pantalla**: toasts y alertas usan `aria-live` (`polite` para éxito, `assertive` para error).
+5. [ ] **Contraste**: botones neón y textos pequeños mantienen contraste suficiente sobre fondo oscuro.
+
+Alternativa directa (sin npm):
+
+```bash
+php tests/smoke_api.php
+```
+
+### Notas técnicas
+
+- El runner levanta un servidor embebido PHP automáticamente en `127.0.0.1:8099`.
+- Si el puerto está ocupado, se puede cambiar con:
+
+```bash
+SMOKE_PORT=8100 npm run test
+```
+
+---
+
+## Mejoras de calidad aplicadas (post-auditoría)
+
+Tras una auditoría interna exhaustiva, se aplicaron **+50 mejoras** organizadas en 6 fases:
+
+###  Seguridad
+- Credenciales DB externalizadas a variables de entorno (`.env.example` incluido)
+- `declare(strict_types=1)` en todos los archivos PHP
+- Validación de contraseña (máx. 72 chars + coherencia de complejidad) en `perfil.php`
+- `try-catch` añadido a `logout.php` y `sesion.php`
+- Logging de excepciones en todos los catch blocks
+- Corrección de IP spoofing: `REMOTE_ADDR` como fuente principal
+- Constante nombrada `SESSION_EXPIRE_SECONDS` en lugar de magic number
+
+###  Backend — Consistencia
+- Formato JSON unificado con `responder()` en todos los endpoints
+- Query SQL de configuraciones extraída a función helper compartida (`obtenerConfiguracionesUsuario()`)
+- Nombre de BD corregido (`midnight_customs_demo` → `midnight_customs`)
+- Datos sincronizados entre `midnight_demo.sql` y `reset_demo_data.sql`
+- Hashes de contraseña únicos por usuario demo (elena tiene contraseña propia: `elena123`)
+- Índice añadido en `pedidos.estado` + columnas `updated_at` en `configuraciones` y `pedidos`
+- Constraint `UNIQUE` en `pedidos(configuracion_id)` para integridad referencial
+- Validación whitelist movida dentro de cada branch en `guardar_config.php`
+
+###  CSS — Limpieza y variables
+- Fusión de 3 CSS idénticos de proyectos en 1 compartido (`proyecto-detalle.css`)
+- +15 variables CSS para colores de estado (`--pendiente`, `--solicitado`, `--terminado`, etc.)
+- Eliminación de duplicados de badges entre `garaje.css`, `admin.css` y `perfil.css`
+- Consolidación de `:focus-visible` (existía en 2 archivos con valores contradictorios)
+- Reemplazo de todos los colores hardcoded por variables CSS
+- Eliminación de `box-sizing: border-box` redundantes (ya definido globalmente)
+- Eliminación de duplicación de reglas `.pie-pagina` en media query
+- Archivo `video.mp4` movido de `img/` a `media/`
+
+###  Accesibilidad (a11y)
+- `aria-expanded` y `aria-controls` añadidos a botones de menú en páginas de proyecto
+- `aria-label` en botones de carrusel (anterior/siguiente)
+- `role="tab"` y `aria-selected` en indicadores de carrusel
+- Textos `alt` de miniaturas mejorados (descriptivos, no genéricos)
+- Soporte de teclado en carrusel (flechas izquierda/derecha)
+- Skip-link garantizado en todas las páginas con ID consistente
+- `id="contenido-principal"` añadido a `perfil.html`
+- Estilos inline extraídos a CSS compartido (`.logo-nombre`, `.logo-apellido`, `.saltar-enlace`, `.auth-logo-img`)
+
+###  Testing
+- +8 tests nuevos cubriendo: `cambiar_estado`, `eliminar`, `DELETE config`, `actualizar config`, cambio de contraseña, rate limiting, y logout sin sesión
+- Cobertura total de endpoints críticos (de ~38 a ~46 tests)
+
+###  Documentación
+- `.env.example` con todas las variables documentadas
+- `.gitignore` actualizado para excluir `.env`

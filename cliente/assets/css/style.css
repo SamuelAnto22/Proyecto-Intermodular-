@@ -1,0 +1,845 @@
+/* Mi hojota de estilos principal. Aquí le doy color a todo */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;600;800&display=swap');
+
+/* Estas son las variables de los colorines que uso en toda la web para no volverme loco copiando el hex */
+:root {
+    --fondo: #050508;
+    --negro: #000000;
+    --color1: #c052e2;
+    --brillo1: rgba(192, 82, 226, 0.6);
+    --color2: #e68dff;
+    --brillo2: rgba(230, 141, 255, 0.8);
+    --blanco: #ffffff;
+    --gris: #c8c8cf;
+    --fondo-tarjeta: rgba(25, 25, 30, 0.6);
+    --borde-tarjeta: rgba(255, 255, 255, 0.1);
+    --fondo-seccion: #0b0b12;
+    --fondo-pie: #020202;
+    --fondo-modal: #0e0e14;
+    --fondo-opcion: #12121e;
+    --fondo-recibo: #0a0a0f;
+    /* Colores de estado compartidos */
+    --pendiente: #ffb300;
+    --pendiente-bg: rgba(255, 180, 0, 0.15);
+    --pendiente-border: rgba(255, 180, 0, 0.35);
+    --solicitado: #50c8ff;
+    --solicitado-bg: rgba(80, 200, 255, 0.15);
+    --solicitado-border: rgba(80, 200, 255, 0.35);
+    --en-proceso: #8899ff;
+    --en-proceso-bg: rgba(100, 130, 255, 0.15);
+    --en-proceso-border: rgba(100, 130, 255, 0.35);
+    --terminado: #33cc66;
+    --terminado-bg: rgba(50, 200, 100, 0.15);
+    --terminado-border: rgba(50, 200, 100, 0.35);
+    --error: #ff5555;
+    --error-bg: rgba(255, 85, 85, 0.15);
+    --error-border: rgba(255, 85, 85, 0.35);
+    --exito: #33cc66;
+    --exito-bg: rgba(50, 200, 100, 0.15);
+    --exito-border: rgba(50, 200, 100, 0.35);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--fondo);
+    color: var(--blanco);
+    font-family: 'Outfit', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Mejora de Accesibilidad: foco visible con teclado (única definición global) */
+:focus-visible {
+    outline: 3px solid var(--color2);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+
+h1 {
+    font-size: 4.5rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    color: var(--blanco);
+}
+
+h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color2);
+}
+
+p {
+    font-size: 1.1rem;
+    color: var(--gris);
+    margin-bottom: 1.5rem;
+}
+
+.visualmente-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* CABECERA */
+.cabecera-principal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 5%;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: var(--fondo-tarjeta);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--borde-tarjeta);
+    transition: all 0.3s ease;
+}
+
+.logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 2rem;
+    color: var(--blanco);
+    text-shadow: 0 0 10px var(--brillo1);
+}
+
+.logo-nombre {
+    color: var(--color1);
+    margin-right: 5px;
+}
+
+.logo-apellido {
+    color: var(--color2);
+}
+
+.logo img {
+    height: 50px;
+    margin-right: 15px;
+    mix-blend-mode: screen;
+    filter: brightness(1.1) contrast(1.05) drop-shadow(0 0 8px var(--brillo1));
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.navegacion-principal ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.navegacion-principal a {
+    color: var(--blanco);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.navegacion-principal a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--color2);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px var(--brillo2);
+}
+
+/* Enlace de perfil en nav */
+#nav-perfil-link {
+    color: var(--color1) !important;
+    text-shadow: 0 0 8px var(--brillo1);
+}
+
+/* Botón cerrar sesión en nav */
+.nav-logout {
+    color: var(--blanco) !important;
+    border: 1px solid rgba(255, 85, 85, 0.4);
+    border-radius: 6px;
+    padding: 4px 12px !important;
+    font-size: 0.9rem !important;
+    transition: border-color 0.3s, background 0.3s, color 0.3s !important;
+}
+
+.nav-logout:hover {
+    border-color: #ff5555 !important;
+    background: rgba(255, 85, 85, 0.15) !important;
+    color: #ff7777 !important;
+}
+
+.nav-logout::after {
+    display: none !important;
+}
+
+
+/* BOTONES */
+.boton-neon {
+    display: inline-block;
+    padding: 15px 35px;
+    font-size: 1.2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 2px;
+    color: #f9f4ff;
+    text-decoration: none;
+    background: rgba(192, 82, 226, 0.08);
+    border: 2px solid var(--color1);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    z-index: 1;
+    cursor: pointer;
+    box-shadow: 0 0 15px var(--brillo1);
+    font-weight: 700;
+}
+
+.boton-neon:hover,
+.boton-neon:focus-visible {
+    color: var(--blanco);
+    border-color: var(--color2);
+}
+
+.boton-neon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--color1);
+    transition: all 0.4s ease;
+    z-index: -1;
+}
+
+.boton-secundario {
+    border-color: var(--color2);
+    box-shadow: 0 0 15px var(--brillo2);
+}
+
+.boton-secundario::before {
+    background: var(--color2);
+}
+
+/* Variante compacta para el botón del nav */
+.boton-neon-nav {
+    padding: 5px 14px !important;
+    font-size: 0.82rem !important;
+    letter-spacing: 1px;
+    border-width: 1px;
+    box-shadow: 0 0 8px var(--brillo1);
+}
+
+/* Cuando el boton-neon-nav está activo, no expandir ni aplicar underline */
+.boton-neon-nav.activo {
+    padding: 5px 14px !important;
+    font-size: 0.82rem !important;
+    color: var(--blanco) !important;
+}
+
+.boton-neon-nav::after,
+.boton-neon-nav.activo::after {
+    display: none !important;
+}
+
+
+/* LAYOUT */
+main {
+    padding-top: 100px;
+    min-height: calc(100vh - 80px);
+}
+
+section {
+    padding: 6rem 5%;
+}
+
+#servicios,
+#nosotros {
+    background-color: var(--fondo-seccion);
+    /* Un tono ligeramente diferente para separar visualmente las zonas */
+}
+
+.titulo-seccion {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.titulo-seccion h2 {
+    display: inline-block;
+    position: relative;
+}
+
+.titulo-seccion h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 3px;
+    background: var(--color1);
+    box-shadow: 0 0 15px var(--brillo1);
+}
+
+/* PORTADA */
+.portada {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 100px 5% 0 5%;
+    margin-top: 0;
+    background: radial-gradient(circle at center, rgba(192, 82, 226, 0.15) 0%, rgba(5, 5, 8, 1) 70%);
+}
+
+.portada::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://www.c3carecarcenter.com/wp-content/uploads/2025/05/Descubre-el-Futuro-del-Tuning-Automotriz-en-Medellin-2025-1038x576.webp') center/cover no-repeat;
+    opacity: 0.2;
+    z-index: -1;
+}
+
+/* PANTALLA DE CARGA */
+.contenedor-carga {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--fondo);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.girador-neon {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top: 4px solid var(--color1);
+    border-radius: 50%;
+    animation: girarCargador 1s linear infinite;
+    box-shadow: 0 0 15px var(--brillo1);
+    margin-bottom: 2rem;
+}
+
+.contenedor-carga p {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 5px;
+    color: var(--color2);
+    text-shadow: 0 0 10px var(--brillo2);
+    animation: pulsarTexto 1.5s infinite alternate;
+}
+
+.contenido-portada {
+    width: 100%;
+    max-width: 1200px;
+    animation: aparecerFadeIn 1.5s ease-out forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.contenedor-logo {
+    position: relative;
+    z-index: 10;
+    animation: pulsarBrillo 3s infinite alternate;
+}
+
+.logo-principal {
+    width: 800px;
+    max-width: 95vw;
+    height: auto;
+    object-fit: contain;
+    padding: 1rem;
+    mix-blend-mode: screen;
+    filter: brightness(1.05) contrast(1.08) drop-shadow(0 0 25px var(--brillo1)) drop-shadow(0 0 8px var(--brillo2));
+}
+
+.lema-portada {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    margin: 0;
+    animation: aparecerFadeIn 2s ease-out 0.4s both;
+}
+
+.lema-linea {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--blanco);
+    text-shadow: 0 0 12px var(--brillo1);
+    line-height: 1.1;
+}
+
+.lema-destaque {
+    font-size: 3rem;
+    letter-spacing: 8px;
+    background: linear-gradient(90deg, var(--color1), var(--color2), var(--color1));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradienteTexto 4s linear infinite, aparecerFadeIn 2s ease-out 0.8s both;
+    text-shadow: none;
+    filter: drop-shadow(0 0 10px var(--brillo1));
+}
+
+.lema-cta {
+    margin-top: 1.2rem;
+    font-size: 1rem;
+    padding: 12px 30px;
+    letter-spacing: 3px;
+    animation: aparecerFadeIn 2s ease-out 1.2s both;
+}
+
+/* TARJETAS */
+.cuadricula {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.lista-servicios {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.tarjeta-servicio {
+    display: flex;
+    flex-direction: row !important;
+    gap: 3rem;
+    align-items: stretch;
+    min-height: 360px;
+}
+
+.imagen-servicio {
+    flex: 0 0 45%;
+    width: 45%;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 2px solid var(--borde-tarjeta);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
+    align-self: stretch;
+}
+
+.imagen-servicio img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.info-servicio {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info-servicio h2 {
+    color: var(--color1);
+    text-shadow: 0 0 10px var(--brillo1);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.info-servicio ul {
+    list-style-type: none;
+    margin-top: 1.5rem;
+}
+
+.info-servicio li {
+    margin-bottom: 1rem;
+    position: relative;
+    padding-left: 25px;
+    color: var(--blanco);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    /* Cambiado de center para mejorar alineación multilínea */
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.info-servicio li::before {
+    content: '❯';
+    position: absolute;
+    left: 0;
+    color: var(--color2);
+    text-shadow: 0 0 8px var(--brillo2);
+}
+
+.tarjeta-cristal {
+    background: var(--fondo-tarjeta);
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 12px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    display: flex;
+}
+
+.cuadricula .tarjeta-cristal {
+    flex-direction: column;
+}
+
+.tarjeta-cristal img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    object-fit: cover;
+    aspect-ratio: 16/9;
+}
+
+.tarjeta-cristal h3 {
+    margin-bottom: 1rem;
+}
+
+.cuadricula-fila {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.cuadricula-fila::-webkit-scrollbar {
+    display: none;
+}
+
+.tarjeta-servicio-inicio {
+    min-width: 210px;
+    flex: 1 0 210px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    justify-content: space-between;
+}
+
+.tarjeta-servicio-inicio p {
+    flex-grow: 1;
+}
+
+.tarjeta-enlace {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 1.2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--color2);
+    text-shadow: 0 0 8px var(--brillo2);
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.tarjeta-flecha {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.tarjeta-proyecto {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    justify-content: flex-start;
+}
+
+.tarjeta-proyecto img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1.2rem;
+}
+
+.tarjeta-proyecto h3 {
+    margin-bottom: 0.6rem;
+    color: var(--blanco);
+}
+
+.tarjeta-proyecto p {
+    color: var(--gris);
+    font-size: 0.95rem;
+    flex-grow: 1;
+}
+
+/* PRESUPUESTOS */
+.recibo-presupuesto {
+    background: var(--fondo-recibo);
+    border: 1px solid var(--borde-tarjeta);
+    border-left: 4px solid var(--color2);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    animation: aparecerFadeIn 1s ease-out forwards;
+}
+
+.contenedor-antes-despues {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.contenedor-antes-despues img {
+    width: 100%;
+    border-radius: 8px;
+    border: 2px solid var(--borde-tarjeta);
+}
+
+.etiqueta-precio {
+    color: var(--color2);
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+}
+
+/* PIE DE PÁGINA */
+.pie-pagina {
+    background: var(--fondo-pie);
+    padding: 3rem 5%;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.logo-pie {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    /* Asegura que ocupe todo el ancho para centrarse */
+}
+
+.nav-pie ul,
+.redes-sociales ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-pie a,
+.redes-sociales a {
+    color: var(--gris);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fondo-pie {
+    width: 100%;
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--gris);
+    font-size: 0.9rem;
+}
+
+/* RESPONSIVE */
+.boton-menu {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--blanco);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+
+    .contenido-nosotros,
+    .tarjeta-servicio {
+        flex-direction: column !important;
+    }
+
+    .imagen-servicio {
+        width: 100% !important;
+        flex: none !important;
+        aspect-ratio: 16/9;
+    }
+}
+
+@media (max-width: 768px) {
+    .boton-menu {
+        display: block;
+    }
+
+    .navegacion-principal {
+        position: fixed;
+        top: 80px;
+        right: -100%;
+        width: 100%;
+        height: calc(100vh - 80px);
+        background: var(--fondo);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: right 0.4s ease;
+    }
+
+    .navegacion-principal.activo {
+        right: 0;
+    }
+
+    .navegacion-principal ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    p {
+        font-size: 0.95rem;
+    }
+
+    /* Fix portad cover spacing below fixed navbar */
+    .portada {
+        margin-top: 0;
+        padding-top: 100px;
+        padding-top: 120px;
+    }
+
+    /* Fix buttons being too large */
+    .boton-neon,
+    .boton-secundario {
+        padding: 10px 15px;
+        font-size: 1rem;
+    }
+
+    /* Fix services list getting cramped */
+    .info-servicio li {
+        font-size: 0.85rem;
+        margin-bottom: 0.8rem;
+        padding-left: 25px;
+        display: block;
+        /* Cambiado de flex para evitar que la flecha se aleje del texto */
+        text-align: left;
+    }
+
+    .info-servicio li strong {
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    .etiqueta-precio {
+        font-size: 1rem;
+        display: block;
+        margin-top: 0.3rem;
+        color: var(--color2);
+        opacity: 0.9;
+    }
+
+    .contenido-portada {
+        padding: 0 1rem;
+    }
+
+    .contenido-nosotros {
+        flex-direction: column;
+    }
+
+    .estadisticas {
+        width: 100%;
+    }
+
+    .contenedor-antes-despues {
+        grid-template-columns: 1fr;
+    }
+
+    .pie-pagina {
+        flex-direction: column;
+        gap: 2rem;
+        text-align: center;
+        padding: 2rem 5%;
+    }
+
+    .nav-pie ul,
+    .redes-sociales ul {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .fondo-pie {
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+
+    .contenedor-contacto {
+        grid-template-columns: 1fr;
+    }
+
+    .fila-formulario {
+        grid-template-columns: 1fr;
+    }
+}

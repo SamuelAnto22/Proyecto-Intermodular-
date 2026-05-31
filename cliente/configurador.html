@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Configurador de vehículos de Midnight Customs. Personaliza tu coche y guarda tu configuración.">
+    <title>Configurador | Midnight Customs</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=9">
+    <link rel="stylesheet" href="assets/css/animaciones.css?v=9">
+    <!-- Estilos específicos -->
+    <link rel="stylesheet" href="assets/css/configurador-page.css">
+</head>
+
+<body>
+    <header class="cabecera-principal">
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/img/icon-Photoroom.png" alt="Logotipo de Midnight Customs">
+                <span style="color:var(--color1);margin-right:5px;">Midnight</span><span
+                    style="color:var(--color2);">Customs</span>
+            </a>
+        </div>
+        <button class="boton-menu" aria-label="Abrir menú" aria-expanded="false">☰</button>
+        <nav class="navegacion-principal" id="navegacion-principal">
+            <ul>
+
+                <li><a href="index.html#servicios">Servicios</a></li>
+                <li><a href="index.html#proyectos">Proyectos</a></li>
+                <li><a href="index.html#nosotros">Nosotros</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
+                <li><a href="configurador.html" class="boton-neon boton-neon-nav">Configurador</a></li>
+                <li><a href="garaje.html">Mi Garaje</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="configurador-page" style="min-height: 100vh;">
+        <div class="titulo-seccion" style="margin-bottom:2rem; text-align:center;">
+            <h1 id="titulo-configurador">Configura tu Coche</h1>
+        </div>
+
+        <div class="configurador-container">
+            <!-- Visor de visualización -->
+            <div class="vista-coche">
+                <div id="coche-visor"
+                    style="position: relative; width: 100%; max-width: 800px; height: 400px; display: flex; align-items: center; justify-content: center;">
+                    <br>
+                    <div id="contenedor-coche" style="position: relative; width: 640px; height: 360px;">
+                        <!-- La carrocería (z-index: 2). Se añade object-fit:contain y object-position:bottom para normalizar el recorte diferente entre el rojo y el azul -->
+                        <img id="capa-carroceria" src="assets/img/mini-rojo.png" alt="Mini Cooper Carrocería"
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom; z-index: 2; filter: drop-shadow(0 20px 20px rgba(0,0,0,0.8));">
+
+                        <!-- Añadimos object-fit: contain y forzamos proporciones cuadradas (width = height) para no deformar -->
+                        <img id="capa-rueda-delantera" src="assets/img/rueda-clasica.png" alt="Rueda Delantera"
+                            style="position: absolute; top: 62px; left: -79px; width: 445px; height: 304px; z-index: 3; object-fit: contain; border-radius: 50%;">
+                        <img id="capa-rueda-trasera" src="assets/img/rueda-clasica.png" alt="Rueda Trasera"
+                            style="position: absolute; top: 62px; left: 282px; width: 445px; height: 304px; z-index: 3; object-fit: contain; border-radius: 50%;">
+
+                    </div>
+                    <!-- Estilos específicos -->
+                    <link rel="stylesheet" href="assets/css/configurador-page.css">
+                </div>
+            </div>
+
+            <!-- Panel de opciones -->
+            <div class="panel-opciones">
+                <h3>Personalización</h3>
+
+                <div class="opcion-grupo">
+                    <label for="modelo">Modelo</label>
+                    <select id="modelo" aria-describedby="error-modelo">
+                        <option value="mini_cooper">Mini Cooper</option>
+                        <option value="bmw_serie1">BMW Serie 1</option>
+                        <option value="audi_a3">Audi A3</option>
+                        <option value="porsche_cayenne">Porsche Cayenne</option>
+                        <option value="toyota_supra">Toyota Supra</option>
+                    </select>
+                    <span class="campo-ayuda" id="error-modelo" aria-live="polite"></span>
+                </div>
+
+                <div class="opcion-grupo">
+                    <label for="color">Color</label>
+                    <select id="color" aria-describedby="error-color">
+                        <option value="rojo">Rojo (Default)</option>
+                        <option value="azul">Azul</option>
+                        <option value="verde">Verde</option>
+                        <option value="blanco">Blanco</option>
+                        <option value="negro">Negro</option>
+                    </select>
+                    <span class="campo-ayuda" id="error-color" aria-live="polite"></span>
+                </div>
+
+                <div class="opcion-grupo">
+                    <label for="llantas">Llantas</label>
+                    <select id="llantas" aria-describedby="error-llantas">
+                        <option value="clasica">Clásica</option>
+                        <option value="deportiva">Deportiva</option>
+                        <option value="competicion">Competición</option>
+                        <option value="multiradio">Lujo Multi-radio</option>
+                        <option value="palos">Clásica 5 Palos</option>
+                    </select>
+                    <span class="campo-ayuda" id="error-llantas" aria-live="polite"></span>
+                </div>
+
+
+
+                <button class="boton-neon" id="guardarConfig">Guardar Configuración</button>
+                <div id="mensajeGuardado" role="status" aria-live="polite" aria-atomic="true">¡Configuración guardada!
+                </div>
+                <div id="mensajeError" role="alert" aria-live="assertive" aria-atomic="true">Debes iniciar sesión para
+                    guardar. <a href="login.html" style="color:var(--color2);">Ir al login</a></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/pie-pagina.js?v=9"></script>
+    <script src="assets/js/env.js?v=1"></script>
+    <script type="module" src="assets/js/main.js?v=9"></script>
+    <script src="assets/js/configurador.js?v=9"></script>
+</body>
+
+</html>

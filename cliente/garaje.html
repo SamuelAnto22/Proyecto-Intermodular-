@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mi Garaje — tus proyectos de coches guardados en Midnight Customs.">
+    <title>Mi Garaje | Midnight Customs</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=9">
+    <link rel="stylesheet" href="assets/css/animaciones.css?v=9">
+    <!-- Estilos específicos -->
+    <link rel="stylesheet" href="assets/css/garaje.css">
+</head>
+
+<body>
+    <header class="cabecera-principal">
+        <div class="logo">
+            <a href="index.html">
+                <img src="assets/img/icon-Photoroom.png" alt="Logotipo de Midnight Customs">
+                <span class="logo-nombre">Midnight</span><span class="logo-apellido">Customs</span>
+            </a>
+        </div>
+        <button class="boton-menu" aria-label="Abrir menú" aria-expanded="false">☰</button>
+        <nav class="navegacion-principal" id="navegacion-principal" aria-label="Navegación principal">
+            <ul>
+
+                <li><a href="index.html#servicios">Servicios</a></li>
+                <li><a href="index.html#proyectos">Proyectos</a></li>
+                <li><a href="index.html#nosotros">Nosotros</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
+                <li><a href="configurador.html" class="boton-neon boton-neon-nav">Configurador</a></li>
+                <li><a href="garaje.html" class="activo">Mi Garaje</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main style="padding-top: 100px;">
+        <div class="garaje-page">
+            <div class="garaje-header">
+                <div class="titulo-seccion" style="margin-bottom:0; text-align:left;">
+                    <h2 id="titulo-garaje">🚗 Mi Garaje</h2>
+                </div>
+                <div class="garaje-header-actions">
+                    <a href="configurador.html" class="btn-nueva-config">＋ Nueva configuración</a>
+                </div>
+            </div>
+
+            <div id="proyectos-lista" class="grid-proyectos">
+                <!-- Las tarjetas se renderizan aquí por JS -->
+                <div class="garaje-vacio">
+                    <p>Cargando tus proyectos...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal confirmación de borrado -->
+    <div class="modal-overlay" id="modal-borrar" role="dialog" aria-modal="true" aria-labelledby="modal-titulo-texto"
+        aria-describedby="modal-texto-borrar">
+        <div class="modal-box" tabindex="-1">
+            <div class="modal-icono">🗑️</div>
+            <div class="modal-titulo" id="modal-titulo-texto">Eliminar proyecto</div>
+            <p class="modal-texto" id="modal-texto-borrar">¿Seguro que quieres eliminar <strong
+                    id="modal-nombre-proyecto">este proyecto</strong>? Esta acción no se puede deshacer.</p>
+            <div class="modal-btns">
+                <button class="modal-btn modal-btn-cancelar" id="modal-cancelar">Cancelar</button>
+                <button class="modal-btn modal-btn-confirmar" id="modal-confirmar">Sí, eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de notificación -->
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="assets/js/pie-pagina.js?v=9"></script>
+    <script src="assets/js/env.js?v=1"></script>
+    <script type="module" src="assets/js/main.js?v=9"></script>
+    <script type="module" src="assets/js/garaje.js?v=9"></script>
+</body>
+
+</html>
