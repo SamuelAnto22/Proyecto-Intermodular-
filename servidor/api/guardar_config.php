@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 // ============================================================
 // API: Gestión de Configuraciones del Coche
 // POST   — crear / actualizar / solicitar (según campo "accion")
@@ -9,10 +11,11 @@
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Pragma: no-cache');
+require_once __DIR__ . '/../includes/helpers.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
+
+try {
 
 // ─── POST: Crear, Actualizar o Solicitar ─────────────────────
 if ($method === 'POST') {
@@ -26,26 +29,13 @@ if ($method === 'POST') {
         exit;
     }
     $accion = $input['accion'] ?? 'crear';
-    $userId = getUserId();
-    // ── Whitelist global para esta acción (aplica a crear y actualizar) ──
-    $modelosPermitidos = ['mini_cooper', 'bmw_serie1', 'audi_a3', 'porsche_cayenne', 'toyota_supra', 'audi_q8', 'bmw_i8'];
-    $coloresPermitidos = ['rojo', 'azul', 'verde', 'blanco', 'negro', 'gris', 'naranja', 'amarillo', 'marron'];
-    $llantasPermitidas = ['clasica', 'deportiva', 'competicion', 'multiradio', 'palos'];
-
-    if ($accion === 'crear' || $accion === 'actualizar') {
-        $modelo  = trim($input['modelo']  ?? '');
-        $color   = trim($input['color']   ?? '');
-        $llantas = trim($input['llantas'] ?? '');
-
-        if (!in_array($modelo, $modelosPermitidos, true) ||
-            !in_array($color,   $coloresPermitidos, true) ||
-            !in_array($llantas, $llantasPermitidas, true)) {
-            http_response_code(400);
-            echo json_encode(['ok' => false, 'message' => 'Valores no permitidos.']);
-            exit;
-        }
+    $accionesPermitidas = ['crear', 'actualizar', 'solicitar'];
+    if (!in_array($accion, $accionesPermitidas, true)) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'message' => 'Acción no válida.']);
+        exit;
     }
-   
+    $userId = getUserId();
 
     // ── Acción: SOLICITAR (cambiar estado del pedido) ────────
     if ($accion === 'solicitar') {
@@ -77,6 +67,10 @@ if ($method === 'POST') {
 
     // ── Acción: ACTUALIZAR (editar config existente) ─────────
     if ($accion === 'actualizar') {
+        $modelosPermitidos = ['mini_cooper', 'bmw_serie1', 'audi_a3', 'porsche_cayenne', 'toyota_supra'];
+        $coloresPermitidos = ['rojo', 'azul', 'verde', 'blanco', 'negro'];
+        $llantasPermitidas = ['clasica', 'deportiva', 'competicion', 'multiradio', 'palos'];
+
         $id      = (int) ($input['id']     ?? 0);
         $modelo  = substr(trim($input['modelo']    ?? ''), 0, 50);
         $color   = substr(trim($input['color']     ?? ''), 0, 50);
@@ -85,6 +79,14 @@ if ($method === 'POST') {
         if ($id <= 0 || $modelo === '' || $color === '' || $llantas === '') {
             http_response_code(400);
             echo json_encode(['ok' => false, 'message' => 'Faltan campos obligatorios.']);
+            exit;
+        }
+
+        if (!in_array($modelo, $modelosPermitidos, true) ||
+            !in_array($color, $coloresPermitidos, true) ||
+            !in_array($llantas, $llantasPermitidas, true)) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'message' => 'Valores no permitidos.']);
             exit;
         }
 
@@ -109,6 +111,10 @@ if ($method === 'POST') {
     }
 
     // ── Acción: CREAR (nueva configuración — por defecto) ────
+    $modelosPermitidos = ['mini_cooper', 'bmw_serie1', 'audi_a3', 'porsche_cayenne', 'toyota_supra'];
+    $coloresPermitidos = ['rojo', 'azul', 'verde', 'blanco', 'negro'];
+    $llantasPermitidas = ['clasica', 'deportiva', 'competicion', 'multiradio', 'palos'];
+
     $modelo  = substr(trim($input['modelo']  ?? ''), 0, 50);
     $color   = substr(trim($input['color']   ?? ''), 0, 50);
     $llantas = substr(trim($input['llantas'] ?? ''), 0, 50);
@@ -116,6 +122,14 @@ if ($method === 'POST') {
     if ($modelo === '' || $color === '' || $llantas === '') {
         http_response_code(400);
         echo json_encode(['ok' => false, 'message' => 'Faltan campos obligatorios.']);
+        exit;
+    }
+
+    if (!in_array($modelo, $modelosPermitidos, true) ||
+        !in_array($color, $coloresPermitidos, true) ||
+        !in_array($llantas, $llantasPermitidas, true)) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'message' => 'Valores no permitidos.']);
         exit;
     }
 
@@ -141,17 +155,7 @@ if ($method === 'GET') {
     requireLogin();
 
     $userId = getUserId();
-
-    $stmt = $pdo->prepare(
-        'SELECT c.id, c.modelo, c.color, c.llantas, c.created_at,
-                p.estado AS pedido_estado
-         FROM configuraciones c
-         LEFT JOIN pedidos p ON p.configuracion_id = c.id
-         WHERE c.usuario_id = ?
-         ORDER BY c.created_at DESC'
-    );
-    $stmt->execute([$userId]);
-    $configs = $stmt->fetchAll();
+    $configs = obtenerConfiguracionesUsuario($pdo, $userId);
 
     echo json_encode(['ok' => true, 'data' => $configs]);
     exit;
@@ -201,3 +205,10 @@ if ($method === 'DELETE') {
 http_response_code(405);
 echo json_encode(['ok' => false, 'error' => 'METHOD_NOT_ALLOWED']);
 exit;
+
+} catch (Throwable $e) {
+    error_log('[guardar_config.php] ' . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'message' => 'Error interno del servidor.', 'error' => 'INTERNAL_ERROR']);
+    exit;
+}

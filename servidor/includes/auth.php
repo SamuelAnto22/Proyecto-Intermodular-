@@ -1,16 +1,42 @@
 <?php
+declare(strict_types=1);
+
 // ============================================================
 // Helpers de Autenticación (basado en sesiones PHP)
+//
+// Convención de nombres:
+//   - Funciones de lógica de negocio en español (usuarioLogueado, esAdmin,
+//     requireLogin, requireAdmin, requireCsrfToken, getCsrfToken).
+//   - Funciones getters de sesión en inglés (getUserId, getUserName,
+//     getUserRole) por seguir la convención estándar getter de PHP/OOP.
 // ============================================================
 
+function appEnv(): string
+{
+    $env = $_ENV['APP_ENV'] ?? getenv('APP_ENV') ?: 'local';
+    return strtolower(trim((string) $env));
+}
+
 if (session_status() === PHP_SESSION_NONE) {
+    $isProduction = appEnv() === 'production';
+    $sameSite = $_ENV['SESSION_SAMESITE'] ?? getenv('SESSION_SAMESITE') ?: 'Lax';
+    $sameSite = in_array($sameSite, ['Lax', 'Strict', 'None'], true) ? $sameSite : 'Lax';
+
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    $secureCookie = $isProduction ? true : $isHttps;
+
+    // Chrome exige Secure cuando SameSite=None.
+    if ($sameSite === 'None') {
+        $secureCookie = true;
+    }
+
     session_set_cookie_params([
         'lifetime' => 0,
         'path' => '/',
         'domain' => '',
-        'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+        'secure' => $secureCookie,
         'httponly' => true,
-        'samesite' => 'Lax'
+        'samesite' => $sameSite,
     ]);
     session_start();
 

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 // ============================================================
 // API: Perfil de Usuario
 // GET  — devuelve datos del usuario logueado + sus configs
@@ -8,10 +10,11 @@
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Pragma: no-cache');
+require_once __DIR__ . '/../includes/helpers.php';
 
 requireLogin();
+
+try {
 
 $method = $_SERVER['REQUEST_METHOD'];
 $userId = getUserId();
@@ -25,21 +28,12 @@ if ($method === 'GET') {
 
     if (!$usuario) {
         http_response_code(404);
-        echo json_encode(['ok' => false, 'error' => 'Usuario no encontrado.']);
+        echo json_encode(['ok' => false, 'message' => 'Usuario no encontrado.', 'error' => 'USER_NOT_FOUND']);
         exit;
     }
 
     // Configuraciones (garaje)
-    $stmt2 = $pdo->prepare(
-        'SELECT c.id, c.modelo, c.color, c.llantas, c.created_at,
-                p.estado AS pedido_estado
-         FROM configuraciones c
-         LEFT JOIN pedidos p ON p.configuracion_id = c.id
-         WHERE c.usuario_id = ?
-         ORDER BY c.created_at DESC'
-    );
-    $stmt2->execute([$userId]);
-    $configuraciones = $stmt2->fetchAll();
+    $configuraciones = obtenerConfiguracionesUsuario($pdo, $userId);
 
     echo json_encode([
         'ok'      => true,
@@ -70,15 +64,29 @@ if ($method === 'POST') {
         exit;
     }
 
-    if ($passwordNuevo !== $passwordConfirm) {
+    if (strlen($passwordNuevo) < 8 || strlen($passwordNuevo) > 72) {
         http_response_code(400);
-        echo json_encode(['ok' => false, 'message' => 'La nueva contraseña y la confirmación no coinciden.']);
+        echo json_encode(['ok' => false, 'message' => 'La nueva contraseña debe tener entre 8 y 72 caracteres.']);
         exit;
     }
 
-    if (strlen($passwordNuevo) < 8) {
+    // Coherencia de complejidad con registro.php
+    $forzarComplejidad = filter_var($_ENV['PASSWORD_REQUIRE_COMPLEXITY'] ?? getenv('PASSWORD_REQUIRE_COMPLEXITY') ?: '0', FILTER_VALIDATE_BOOL);
+    if ($forzarComplejidad) {
+        $tieneMayus = preg_match('/[A-Z]/', $passwordNuevo) === 1;
+        $tieneMinus = preg_match('/[a-z]/', $passwordNuevo) === 1;
+        $tieneNumero = preg_match('/\d/', $passwordNuevo) === 1;
+        $tieneSimbolo = preg_match('/[^a-zA-Z\d]/', $passwordNuevo) === 1;
+        if (!$tieneMayus || !$tieneMinus || !$tieneNumero || !$tieneSimbolo) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'message' => 'La nueva contraseña debe incluir mayúscula, minúscula, número y símbolo.']);
+            exit;
+        }
+    }
+
+    if ($passwordNuevo !== $passwordConfirm) {
         http_response_code(400);
-        echo json_encode(['ok' => false, 'message' => 'La nueva contraseña debe tener al menos 8 caracteres.']);
+        echo json_encode(['ok' => false, 'message' => 'La nueva contraseña y la confirmación no coinciden.']);
         exit;
     }
 
@@ -108,6 +116,14 @@ if ($method === 'POST') {
     exit;
 }
 
-// ─── Método no soportado ──────────────────────────────────────
+// ─── Método no soportado ──────────────────────────────────────────
 http_response_code(405);
 echo json_encode(['ok' => false, 'error' => 'METHOD_NOT_ALLOWED']);
+exit;
+
+} catch (Throwable $e) {
+    error_log('[perfil.php] ' . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'message' => 'Error interno del servidor.', 'error' => 'INTERNAL_ERROR']);
+    exit;
+}
