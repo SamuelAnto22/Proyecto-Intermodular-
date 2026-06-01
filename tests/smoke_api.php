@@ -359,7 +359,7 @@ $tests[] = function () use ($baseUrl, $registroEmail): void {
         ]),
     ]);
     assertTrue($res->status === 409, 'registro.php devuelve 409 ante email duplicado');
-    assertTrue(($res->json['code'] ?? '') === 'EMAIL_ALREADY_EXISTS', 'registro.php devuelve code EMAIL_ALREADY_EXISTS');
+    assertTrue(($res->json['error'] ?? '') === 'EMAIL_ALREADY_EXISTS', 'registro.php devuelve error EMAIL_ALREADY_EXISTS');
 };
 
 // registro.php: password exceeding 72 chars returns 422
@@ -646,7 +646,7 @@ $tests[] = function () use ($baseUrl): void {
 // ============================================================
 
 // pedidos.php: admin cambiar_estado happy path
-$tests[] = function () use ($baseUrl, $adminEmail, $plainAdminPassword): void {
+$tests[] = function () use ($baseUrl, $adminEmail, $plainAdminPassword, $clienteEmail): void {
     $client = new HttpClient();
     $client->request('POST', $baseUrl . '/servidor/api/login.php', [
         'headers' => ['Content-Type: application/x-www-form-urlencoded'],

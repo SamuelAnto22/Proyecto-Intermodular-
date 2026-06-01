@@ -5,9 +5,13 @@ import { formatFecha, capitalizarPrimera } from './modules/utils.js';
 
 const API_ADMIN = `${window.API_BASE}/pedidos.php`;
 
+let idParaBorrar = null;
+let ultimoElementoEnfocado = null;
+
 document.addEventListener('DOMContentLoaded', function () {
     cargarDashboard();
     iniciarEventosAdmin();
+    iniciarModalBorrar();
 });
 
 function iniciarEventosAdmin() {
@@ -107,7 +111,7 @@ function cargarDashboard() {
                 const detalleCell = document.createElement('td');
                 const detalleConfig = document.createElement('span');
                 detalleConfig.className = 'detalle-config';
-                detalleConfig.textContent = `🎨 ${p.color || ''} · 🛞 ${p.llantas || ''}`;
+                detalleConfig.textContent = `${p.color || ''} · ${p.llantas || ''}`;
                 detalleCell.appendChild(detalleConfig);
 
                 const estadoCell = document.createElement('td');
@@ -188,7 +192,7 @@ function cambiarEstado(id) {
                     badge.className = `badge-estado badge-${nuevoEstado.replace(' ', '-')}`;
                     badge.textContent = capitalizarPrimera(nuevoEstado);
                 }
-                toastAdmin('✅ ' + data.message, 'exito');
+                toastAdmin(data.message, 'exito');
                 // Recargar estadísticas.
                 actualizarStats();
             } else {
@@ -202,7 +206,59 @@ function cambiarEstado(id) {
 // Eliminar pedido
 // ============================================================
 function eliminarPedido(id) {
-    if (!confirm(`¿Eliminar pedido #${String(id).padStart(4, '0')}?`)) return;
+    abrirModalBorrar(id);
+}
+
+function iniciarModalBorrar() {
+    const overlay = document.getElementById('modal-borrar');
+    const modalBox = overlay?.querySelector('.modal-box');
+    const btnCancelar = document.getElementById('modal-cancelar');
+    const btnConfirmar = document.getElementById('modal-confirmar');
+
+    if (!overlay) return;
+
+    btnCancelar.addEventListener('click', cerrarModalBorrar);
+    overlay.addEventListener('click', e => { if (e.target === overlay) cerrarModalBorrar(); });
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && overlay.classList.contains('activo')) cerrarModalBorrar();
+        if (e.key === 'Tab' && overlay.classList.contains('activo')) {
+            atraparFocoModal(e, modalBox);
+        }
+    });
+
+    btnConfirmar.addEventListener('click', () => {
+        if (idParaBorrar !== null) ejecutarBorrado(idParaBorrar);
+    });
+}
+
+function abrirModalBorrar(id) {
+    idParaBorrar = id;
+    ultimoElementoEnfocado = document.activeElement;
+
+    const formattedId = `#${String(id).padStart(4, '0')}`;
+    const strongEl = document.getElementById('modal-nombre-proyecto');
+    if (strongEl) strongEl.textContent = formattedId;
+
+    const overlay = document.getElementById('modal-borrar');
+    if (overlay) overlay.classList.add('activo');
+
+    document.getElementById('modal-cancelar')?.focus();
+}
+
+function cerrarModalBorrar() {
+    const overlay = document.getElementById('modal-borrar');
+    if (overlay) overlay.classList.remove('activo');
+    idParaBorrar = null;
+    if (ultimoElementoEnfocado && typeof ultimoElementoEnfocado.focus === 'function') {
+        ultimoElementoEnfocado.focus();
+    }
+}
+
+function ejecutarBorrado(id) {
+    const btnConfirmar = document.getElementById('modal-confirmar');
+    btnConfirmar.textContent = 'Eliminando...';
+    btnConfirmar.disabled = true;
 
     fetch(API_ADMIN, {
         method: 'POST',
@@ -212,6 +268,10 @@ function eliminarPedido(id) {
     })
         .then(r => r.json())
         .then(data => {
+            cerrarModalBorrar();
+            btnConfirmar.textContent = 'Sí, eliminar';
+            btnConfirmar.disabled = false;
+
             if (data.ok) {
                 const row = document.getElementById(`pedido-${id}`);
                 if (row) {
@@ -222,12 +282,34 @@ function eliminarPedido(id) {
                         actualizarStats();
                     }, 300);
                 }
-                toastAdmin('🗑️ Pedido eliminado.', 'exito');
+                toastAdmin('Pedido eliminado.', 'exito');
             } else {
                 toastAdmin('Error: ' + data.message, 'error');
             }
         })
-        .catch(() => toastAdmin('Error de conexión.', 'error'));
+        .catch(() => {
+            cerrarModalBorrar();
+            btnConfirmar.textContent = 'Sí, eliminar';
+            btnConfirmar.disabled = false;
+            toastAdmin('Error de conexión.', 'error');
+        });
+}
+
+function atraparFocoModal(event, modalBox) {
+    if (!modalBox) return;
+    const focuseables = modalBox.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (!focuseables.length) return;
+
+    const primero = focuseables[0];
+    const ultimo = focuseables[focuseables.length - 1];
+
+    if (event.shiftKey && document.activeElement === primero) {
+        event.preventDefault();
+        ultimo.focus();
+    } else if (!event.shiftKey && document.activeElement === ultimo) {
+        event.preventDefault();
+        primero.focus();
+    }
 }
 
 // ============================================================

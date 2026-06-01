@@ -67,7 +67,7 @@ function cargarProyectos() {
             if (response.status === 401) {
                 lista.innerHTML = `
                     <div class="garaje-vacio">
-                        <p>🔒 Debes iniciar sesión para ver tu garaje.</p>
+                        <p>Debes iniciar sesión para ver tu garaje.</p>
                         <a href="login.html" class="boton-neon" style="margin-top:1.5rem;display:inline-block;">Iniciar sesión</a>
                     </div>`;
                 throw new Error('NO_SESSION');
@@ -78,7 +78,7 @@ function cargarProyectos() {
             if (!data.ok || data.data.length === 0) {
                 lista.innerHTML = `
                     <div class="garaje-vacio">
-                        <p>🚘 No tienes proyectos guardados todavía.</p>
+                        <p>No tienes proyectos guardados todavía.</p>
                         <a href="configurador.html">Crea tu primera configuración →</a>
                     </div>`;
                 return;
@@ -90,7 +90,7 @@ function cargarProyectos() {
         .catch(error => {
             if (error.message !== 'NO_SESSION') {
                 console.error('Error cargando proyectos:', error);
-                lista.innerHTML = '<div class="garaje-vacio"><p>⚠️ Error de conexión con el servidor.</p></div>';
+                lista.innerHTML = '<div class="garaje-vacio"><p>Error de conexión con el servidor.</p></div>';
             }
         });
 }
@@ -145,9 +145,9 @@ function crearTarjeta(p) {
     };
 
     specs.append(
-        crearSpec('🎨 Color', p.color || ''),
-        crearSpec('🛞 Llantas', p.llantas || ''),
-        crearSpec('📋 ID pedido', `#${String(p.id).padStart(4, '0')}`)
+        crearSpec('Color', p.color || ''),
+        crearSpec('Llantas', p.llantas || ''),
+        crearSpec('ID pedido', `#${String(p.id).padStart(4, '0')}`)
     );
 
     const fechaEl = document.createElement('p');
@@ -164,7 +164,7 @@ function crearTarjeta(p) {
     btnEditar.dataset.action = 'editar';
     btnEditar.dataset.id = p.id;
     btnEditar.title = 'Cargar en el configurador para editar';
-    btnEditar.textContent = '✏️ Editar';
+    btnEditar.textContent = 'Editar';
 
     const btnSolicitar = document.createElement('button');
     btnSolicitar.className = 'btn-accion btn-solicitar';
@@ -173,14 +173,14 @@ function crearTarjeta(p) {
     btnSolicitar.dataset.id = p.id;
     btnSolicitar.disabled = !puedesolicitar;
     btnSolicitar.title = puedesolicitar ? 'Enviar solicitud al taller' : 'Ya solicitado';
-    btnSolicitar.textContent = puedesolicitar ? '📤 Solicitar' : '✅ Solicitado';
+    btnSolicitar.textContent = puedesolicitar ? 'Solicitar' : 'Solicitado';
 
     const btnEliminar = document.createElement('button');
     btnEliminar.className = 'btn-accion btn-eliminar';
     btnEliminar.dataset.action = 'eliminar';
     btnEliminar.dataset.id = p.id;
     btnEliminar.title = 'Eliminar proyecto';
-    btnEliminar.textContent = '🗑️ Borrar';
+    btnEliminar.textContent = 'Borrar';
 
     acciones.append(btnEditar, btnSolicitar, btnEliminar);
     card.append(banda, body, acciones);
@@ -241,18 +241,18 @@ function solicitarPedido(configId, btn) {
                         badge.textContent = 'Solicitado';
                     }
                 }
-                btn.textContent = '✅ Solicitado';
-                mostrarToast('📤 ¡Solicitud enviada al taller! Te contactaremos pronto.', 'exito');
+                btn.textContent = 'Solicitado';
+                mostrarToast('¡Solicitud enviada al taller! Te contactaremos pronto.', 'exito');
             } else {
                 btn.disabled = false;
-                btn.textContent = '📤 Solicitar';
+                btn.textContent = 'Solicitar';
                 mostrarToast('Error: ' + (data.message || 'Inténtalo de nuevo.'), 'error');
             }
         })
         .catch(err => {
             console.error('Error en solicitar:', err);
             btn.disabled = false;
-            btn.textContent = '📤 Solicitar';
+            btn.textContent = 'Solicitar';
             mostrarToast('Error de conexión.', 'error');
         });
 }
@@ -329,13 +329,13 @@ function ejecutarBorrado(id) {
                         if (lista.querySelectorAll('.tarjeta-garaje').length === 0) {
                             lista.innerHTML = `
                             <div class="garaje-vacio">
-                                <p>🚘 No tienes proyectos guardados todavía.</p>
+                                <p>No tienes proyectos guardados todavía.</p>
                                 <a href="configurador.html">Crea tu primera configuración →</a>
                             </div>`;
                         }
                     }, 400);
                 }
-                mostrarToast('🗑️ Proyecto eliminado correctamente.', 'exito');
+                mostrarToast('Proyecto eliminado correctamente.', 'exito');
             } else {
                 mostrarToast('Error: ' + (data.message || 'No se pudo eliminar.'), 'error');
             }
@@ -359,7 +359,7 @@ function mostrarToast(mensaje, tipo = 'exito') {
 
     toast.setAttribute('aria-live', tipo === 'error' ? 'assertive' : 'polite');
     toast.setAttribute('role', tipo === 'error' ? 'alert' : 'status');
-    toast.textContent = (tipo === 'exito' ? '✅ ' : '⚠️ ') + mensaje;
+    toast.textContent = mensaje;
     toast.className = `toast ${tipo}`;
 
     // Forzar reflow para reiniciar animación

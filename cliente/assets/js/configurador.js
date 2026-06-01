@@ -136,7 +136,7 @@ function cargarDesdeURL() {
         editandoId = parseInt(params.get('id'), 10);
 
         const btn = document.getElementById('guardarConfig');
-        if (btn) btn.innerHTML = '💾 Actualizar Configuración';
+        if (btn) btn.innerHTML = 'Actualizar Configuración';
 
         const titulo = document.getElementById('titulo-configurador');
         if (titulo) titulo.textContent = 'Editando Proyecto #' + String(editandoId).padStart(4, '0');
@@ -284,7 +284,7 @@ function guardarConfiguracion() {
     }
 
     btn.disabled = true;
-    btn.innerHTML = esEdicion ? '⏳ Actualizando...' : '⏳ Guardando...';
+    btn.innerHTML = esEdicion ? 'Actualizando...' : 'Guardando...';
 
     fetch(API_CONFIG, {
         method: 'POST',
@@ -303,7 +303,7 @@ function guardarConfiguracion() {
             btn.disabled = false;
 
             if (data && data.ok) {
-                const textoExito = esEdicion ? '✅ ¡Configuración actualizada!' : '✅ ¡Guardado en el Garaje!';
+                const textoExito = esEdicion ? '¡Configuración actualizada!' : '¡Guardado en el Garaje!';
                 btn.innerHTML = textoExito;
                 btn.style.backgroundColor = 'rgba(82,226,82,0.2)';
                 btn.style.color = '#52e252';
@@ -317,17 +317,17 @@ function guardarConfiguracion() {
                 }
 
                 setTimeout(() => {
-                    btn.innerHTML = '💾 Actualizar Configuración';
+                    btn.innerHTML = 'Actualizar Configuración';
                     btn.style = '';
                 }, 3000);
             } else {
-                btn.innerHTML = esEdicion ? '💾 Actualizar Configuración' : '💾 Guardar Configuración';
+                btn.innerHTML = esEdicion ? 'Actualizar Configuración' : 'Guardar Configuración';
                 mostrarMensaje('error', data ? data.message : 'Error desconocido.');
             }
         })
         .catch(error => {
             btn.disabled = false;
-            btn.innerHTML = esEdicion ? '💾 Actualizar Configuración' : '💾 Guardar Configuración';
+            btn.innerHTML = esEdicion ? 'Actualizar Configuración' : 'Guardar Configuración';
             if (error.message !== 'NO_SESSION') {
                 console.error('Error:', error);
                 mostrarMensaje('error', 'Error de conexión con el servidor.');

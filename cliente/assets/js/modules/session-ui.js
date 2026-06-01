@@ -64,7 +64,7 @@ function renderLoggedSession(liLogin, sessionData, basePath) {
         href: 'perfil.html',
         id: 'nav-perfil-link',
         title: 'Ver mi perfil',
-        text: `👤 ${sessionData.nombre}`
+        text: sessionData.nombre
     });
 
     const liLogout = createNavItem({

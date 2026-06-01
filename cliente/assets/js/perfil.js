@@ -53,7 +53,7 @@ function cargarPerfil() {
 
                     const titulo = document.createElement('div');
                     titulo.className = 'perfil-card-titulo';
-                    titulo.textContent = '⚙️ Gestión de Plataforma';
+                    titulo.textContent = 'Gestión de Plataforma';
 
                     const desc = document.createElement('p');
                     desc.style.cssText = 'color:var(--gris); font-size: 0.95rem; margin-bottom: 2rem;';
@@ -100,10 +100,10 @@ function renderGarajeMini(configs) {
         h4.textContent = c.modelo;
 
         const pColor = document.createElement('p');
-        pColor.textContent = `🎨 ${c.color}`;
+        pColor.textContent = c.color;
 
         const pLlantas = document.createElement('p');
-        pLlantas.textContent = `🛞 ${c.llantas}`;
+        pLlantas.textContent = c.llantas;
 
         const span = document.createElement('span');
         span.className = `garaje-mini-estado ${claseEstado}`;

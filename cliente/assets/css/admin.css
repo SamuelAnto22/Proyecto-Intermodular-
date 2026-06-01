@@ -345,3 +345,99 @@
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* Modal de confirmacion */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.modal-overlay.activo {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-box {
+    background: var(--fondo-modal);
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 16px;
+    padding: 2.5rem;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.25s ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(192, 82, 226, 0.1);
+}
+
+.modal-overlay.activo .modal-box {
+    transform: scale(1);
+}
+
+.modal-titulo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: #ff5555;
+    text-shadow: 0 0 12px rgba(255, 85, 85, 0.5);
+    margin-bottom: 0.5rem;
+}
+
+.modal-texto {
+    color: var(--gris);
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+}
+
+.modal-texto strong {
+    color: var(--blanco);
+}
+
+.modal-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.modal-btn {
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.25s;
+}
+
+.modal-btn-cancelar {
+    background: transparent;
+    border-color: var(--borde-tarjeta);
+    color: var(--gris);
+}
+
+.modal-btn-cancelar:hover {
+    border-color: var(--gris);
+    color: var(--blanco);
+}
+
+.modal-btn-confirmar {
+    background: transparent;
+    border-color: #ff5555;
+    color: #ff5555;
+}
+
+.modal-btn-confirmar:hover {
+    background: #ff5555;
+    color: var(--blanco);
+    box-shadow: 0 0 20px rgba(255, 85, 85, 0.4);
+}

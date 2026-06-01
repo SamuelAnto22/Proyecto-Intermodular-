@@ -104,6 +104,19 @@
         </div>
     </main>
 
+    <!-- Modal confirmación de borrado -->
+    <div class="modal-overlay" id="modal-borrar" role="dialog" aria-modal="true" aria-labelledby="modal-titulo-texto"
+        aria-describedby="modal-texto-borrar">
+        <div class="modal-box" tabindex="-1">
+            <div class="modal-titulo" id="modal-titulo-texto">Eliminar pedido</div>
+            <p class="modal-texto" id="modal-texto-borrar">¿Seguro que deseas eliminar el pedido <strong id="modal-nombre-proyecto">#0000</strong>? Esta acción no se puede deshacer.</p>
+            <div class="modal-btns">
+                <button class="modal-btn modal-btn-cancelar" id="modal-cancelar">Cancelar</button>
+                <button class="modal-btn modal-btn-confirmar" id="modal-confirmar">Sí, eliminar</button>
+            </div>
+        </div>
+    </div>
+
     <div class="toast-admin" id="toast-admin" role="status"></div>
 
     <script src="assets/js/pie-pagina.js?v=9"></script>
