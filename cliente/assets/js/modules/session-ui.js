@@ -52,7 +52,7 @@ function renderLoggedSession(liLogin, sessionData, basePath) {
 
         const liAdmin = createNavItem({
             href: 'admin.html',
-            text: '⚙️ Panel Admin',
+            text: 'Panel Admin',
             className: 'boton-neon boton-neon-nav',
             style: 'border-color:var(--color2); color:var(--color2); box-shadow: 0 0 10px rgba(80,200,255,0.4)'
         });
